@@ -10,7 +10,7 @@ export default function Category() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get filter values from URL
-  const catFilter = searchParams.get("cat") || "Cheese";
+  const catFilter = searchParams.get("cat") || "all";
   const priceFilter = searchParams.get("price") || "all";
   const madeInFilter = searchParams.get("madein") || "all";
   const dealsFilter = searchParams.get("deals") === "true";
@@ -64,7 +64,7 @@ export default function Category() {
   };
 
   const resetFilters = () => {
-    setSearchParams(new URLSearchParams(`cat=${catFilter}`));
+    setSearchParams(new URLSearchParams(catFilter && catFilter !== "all" ? `cat=${catFilter}` : ""));
   };
 
   let filteredProducts = products;
@@ -258,8 +258,13 @@ export default function Category() {
 
           {/* Category Nav Pills */}
           <div className="category-nav-pills">
+            <Link to="/category" className={`cat-pill ${!catFilter || catFilter === 'all' ? 'active' : ''}`}>
+              <span className="cat-icon">🛍️</span>
+              <span className="cat-name">All</span>
+            </Link>
             {categories.map((cat, i) => (
-              <Link key={i} to={`/category?cat=${cat.name}`} className={`cat-pill ${catFilter === cat.name ? 'active' : ''}`}>
+              <Link key={i} to={`/category?cat=${cat.name}`} className={`cat-pill ${catFilter.toLowerCase() === cat.name.toLowerCase() ? 'active' : ''}`}>
+                <span className="cat-icon">{cat.icon}</span>
                 <span className="cat-name">{cat.name}</span>
               </Link>
             ))}
@@ -280,7 +285,7 @@ export default function Category() {
 
           {/* Product Grid Header */}
           <div className="category-grid-header">
-            <h2>{catFilter}</h2>
+            <h2>{catFilter && catFilter !== "all" ? catFilter : "All Products"}</h2>
             <div className="grid-nav-arrows">
               <button className="nav-btn">‹</button>
               <button className="nav-btn">›</button>
