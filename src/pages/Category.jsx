@@ -259,12 +259,10 @@ export default function Category() {
           {/* Category Nav Pills */}
           <div className="category-nav-pills">
             <Link to="/category" className={`cat-pill ${!catFilter || catFilter === 'all' ? 'active' : ''}`}>
-              <span className="cat-icon">🛍️</span>
               <span className="cat-name">All</span>
             </Link>
             {categories.map((cat, i) => (
               <Link key={i} to={`/category?cat=${cat.name}`} className={`cat-pill ${catFilter.toLowerCase() === cat.name.toLowerCase() ? 'active' : ''}`}>
-                <span className="cat-icon">{cat.icon}</span>
                 <span className="cat-name">{cat.name}</span>
               </Link>
             ))}
