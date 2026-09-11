@@ -1,0 +1,21 @@
+services:
+  pgadmin:
+    image: dpage/pgadmin4:9.10
+    container_name: bi-pgadmin
+    restart: unless-stopped
+    env_file:
+      - .env.pgadmin
+    ports:
+      - "127.0.0.1:5050:80"
+    volumes:
+      - bi_pgadmin_data:/var/lib/pgadmin
+    networks:
+      - bi_default
+
+volumes:
+  bi_pgadmin_data:
+    name: bi_pgadmin_data
+
+networks:
+  bi_default:
+    external: true
