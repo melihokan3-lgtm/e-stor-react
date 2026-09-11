@@ -26,7 +26,6 @@ export default function ProfileLayout() {
     { name: "Notification Setting", path: "/profile/notifications", icon: "bell" },
     { name: "Refer Friends", path: "/profile/refer", icon: "gift" },
     { name: "Coupons", path: "/profile/coupons", icon: "tag" },
-    { name: "My Recipes", path: "/profile/recipes", icon: "file-text" },
     { name: "Account Settings", path: "/profile/settings", icon: "settings" },
     { name: "Help Center", path: "/profile/help", icon: "help-circle" },
   ];

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/AuthContext";
 import { useLocation } from "../context/LocationContext";
@@ -11,13 +11,45 @@ export default function Navbar() {
   const { user, isLoggedIn, openAuthModal } = useContext(AuthContext);
   const { location, openLocationModal } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
+  const [pastSearches, setPastSearches] = useState([]);
+  const [showPastSearches, setShowPastSearches] = useState(false);
+  const searchContainerRef = useRef(null);
   const navigate = useNavigate();
 
-  const handleSearch = () => {
-    if (searchTerm) {
-      navigate(`/search?filter=${encodeURIComponent(searchTerm)}`);
+  useEffect(() => {
+    const saved = localStorage.getItem("pastSearches");
+    if (saved) {
+      setPastSearches(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+        setShowPastSearches(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSearch = (termToSearch = searchTerm) => {
+    if (termToSearch) {
+      const updatedSearches = [termToSearch, ...pastSearches.filter(s => s !== termToSearch)].slice(0, 5);
+      setPastSearches(updatedSearches);
+      localStorage.setItem("pastSearches", JSON.stringify(updatedSearches));
+      setShowPastSearches(false);
+      navigate(`/search?filter=${encodeURIComponent(termToSearch)}`);
     }
   };
+
+  const handleRemoveSearch = (e, searchToRemove) => {
+    e.stopPropagation();
+    const updatedSearches = pastSearches.filter(s => s !== searchToRemove);
+    setPastSearches(updatedSearches);
+    localStorage.setItem("pastSearches", JSON.stringify(updatedSearches));
+  };
+
 
   const handlePriceFilter = (range) => {
     navigate(`/category?price=${range}`);
@@ -113,7 +145,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="nav__center">
+        <div className="nav__center" ref={searchContainerRef}>
           <img src="/img/icon/Frame 28.svg" alt="Search" />
           <input
             type="text"
@@ -121,11 +153,34 @@ export default function Navbar() {
             id="category__input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
+            onFocus={() => setShowPastSearches(true)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button id="search__Btn" onClick={handleSearch}>
+          <button id="search__Btn" onClick={() => handleSearch()}>
             Ara
           </button>
+          
+          {showPastSearches && pastSearches.length > 0 && (
+            <div className="past-searches-dropdown">
+              <ul>
+                {pastSearches.map((search, index) => (
+                  <li key={index} onClick={() => { setSearchTerm(search); handleSearch(search); }}>
+                    <div className="search-text">
+                      <img src="/img/icon/Frame 28.svg" alt="Search" className="past-search-icon" />
+                      <span>{search}</span>
+                    </div>
+                    <button 
+                      className="remove-search-btn"
+                      onClick={(e) => handleRemoveSearch(e, search)}
+                      aria-label="Remove search"
+                    >
+                      &times;
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="nav__right">

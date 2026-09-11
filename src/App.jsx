@@ -17,7 +17,6 @@ import MyPayments from "./pages/profile/MyPayments";
 import NotificationSetting from "./pages/profile/NotificationSetting";
 import ReferFriends from "./pages/profile/ReferFriends";
 import Coupons from "./pages/profile/Coupons";
-import MyRecipes from "./pages/profile/MyRecipes";
 import AccountSettings from "./pages/profile/AccountSettings";
 import HelpCenter from "./pages/profile/HelpCenter";
 
@@ -41,7 +40,6 @@ export default function App() {
           <Route path="notifications" element={<NotificationSetting />} />
           <Route path="refer" element={<ReferFriends />} />
           <Route path="coupons" element={<Coupons />} />
-          <Route path="recipes" element={<MyRecipes />} />
           <Route path="settings" element={<AccountSettings />} />
           <Route path="help" element={<HelpCenter />} />
         </Route>
