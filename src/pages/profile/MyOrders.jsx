@@ -26,6 +26,8 @@ export default function MyOrders() {
   const [editingOrder, setEditingOrder] = useState(null);
   const [toastMessage, setToastMessage] = useState("");
 
+  const [filterTab, setFilterTab] = useState("all"); // 'all', 'pending', 'delivered'
+
   const showToast = (msg) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
@@ -46,7 +48,9 @@ export default function MyOrders() {
   };
 
   const renderOrderList = (orderList) => {
-    if (orderList.length === 0) return null;
+    if (orderList.length === 0) return (
+      <div className="orders-empty-state">Bu kategoride siparişiniz bulunmuyor.</div>
+    );
 
     return (
       <div className="order-list">
@@ -159,7 +163,33 @@ export default function MyOrders() {
 
   return (
     <div className="my-orders-page">
-      <h2 className="profile-page-title">Siparişlerim (My Orders)</h2>
+      <div className="orders-page-header">
+        <h2 className="profile-page-title">Siparişlerim (My Orders)</h2>
+        
+        {/* Filters Tabs */}
+        {orders.length > 0 && (
+          <div className="orders-filter-tabs">
+            <button 
+              className={`order-tab-btn ${filterTab === 'all' ? 'active' : ''}`}
+              onClick={() => setFilterTab('all')}
+            >
+              Tüm Siparişlerim ({orders.length})
+            </button>
+            <button 
+              className={`order-tab-btn ${filterTab === 'pending' ? 'active' : ''}`}
+              onClick={() => setFilterTab('pending')}
+            >
+              Devam Eden / Teslim Edilmeyenler ({pendingOrders.length})
+            </button>
+            <button 
+              className={`order-tab-btn ${filterTab === 'delivered' ? 'active' : ''}`}
+              onClick={() => setFilterTab('delivered')}
+            >
+              Teslim Edilenler ({deliveredOrders.length})
+            </button>
+          </div>
+        )}
+      </div>
 
       {orders.length === 0 ? (
         <div className="orders-empty">
@@ -174,7 +204,7 @@ export default function MyOrders() {
       ) : (
         <div className="orders-container" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           
-          {pendingOrders.length > 0 && (
+          {(filterTab === 'all' || filterTab === 'pending') && (
             <div className="orders-section">
               <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "16px", color: "#111", borderBottom: "2px solid #eaeaea", paddingBottom: "8px" }}>
                 Devam Eden Siparişler (Pending)
@@ -183,7 +213,7 @@ export default function MyOrders() {
             </div>
           )}
 
-          {deliveredOrders.length > 0 && (
+          {(filterTab === 'all' || filterTab === 'delivered') && (
             <div className="orders-section">
               <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "16px", color: "#111", borderBottom: "2px solid #eaeaea", paddingBottom: "8px" }}>
                 Teslim Edilenler / Kargodakiler
