@@ -8,4 +8,4 @@ values
   ('Fresh Cheese', 6.99, 'Soft cheese for breakfast and snacks.', 'Cheese', '/img/cheese2.png'),
   ('Daily Essentials', 8.49, 'A practical grocery essential.', 'Grocery', '/img/image 1.png'),
   ('Healthy Choice', 9.99, 'A quality choice for your kitchen.', 'Grocery', '/img/image 2.png')
-where not exists (select 1 from public.products);
+on conflict do nothing;
