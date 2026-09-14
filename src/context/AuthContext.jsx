@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from "react";
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
 
 export const AuthContext = createContext();
 
@@ -27,6 +28,20 @@ const saveRegisteredUser = (user) => {
   localStorage.setItem(REGISTERED_USER_KEY, JSON.stringify(user));
 };
 
+const mapSupabaseUser = (authUser) => {
+  if (!authUser) return null;
+  const metadata = authUser.user_metadata || {};
+  return {
+    id: authUser.id,
+    email: authUser.email || "",
+    username: metadata.username || authUser.email?.split("@")[0] || "",
+    firstName: metadata.firstName || "",
+    lastName: metadata.lastName || "",
+    image: metadata.avatarUrl || "",
+    phone: metadata.phone || "",
+  };
+};
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
@@ -35,6 +50,31 @@ export function AuthProvider({ children }) {
 
   // Restore session from localStorage on mount
   useEffect(() => {
+    if (isSupabaseConfigured && supabase) {
+      let mounted = true;
+      const restoreSession = async () => {
+        const { data } = await supabase.auth.getSession();
+        if (!mounted) return;
+        const restoredUser = mapSupabaseUser(data.session?.user);
+        setUser(restoredUser);
+        setToken(data.session?.access_token || null);
+        setAuthLoading(false);
+      };
+
+      restoreSession();
+      const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!mounted) return;
+        setUser(mapSupabaseUser(session?.user));
+        setToken(session?.access_token || null);
+        setAuthLoading(false);
+      });
+
+      return () => {
+        mounted = false;
+        listener.subscription.unsubscribe();
+      };
+    }
+
     try {
       const storedUser = localStorage.getItem("auth_user");
       const storedToken = localStorage.getItem("auth_token");
@@ -55,6 +95,19 @@ export function AuthProvider({ children }) {
   // --- LOGIN ---
   const loginUser = async (username, password) => {
     try {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: username.trim().toLowerCase(),
+          password,
+        });
+        if (error) throw new Error(error.message || "Giriş başarısız oldu.");
+        const userData = mapSupabaseUser(data.user);
+        setUser(userData);
+        setToken(data.session?.access_token || null);
+        setIsAuthModalOpen(false);
+        return userData;
+      }
+
       const locallyRegisteredUser = readRegisteredUser();
       const passwordHash = await hashPassword(password);
       const identifier = username.trim().toLowerCase();
@@ -116,6 +169,26 @@ export function AuthProvider({ children }) {
   // --- REGISTER (simulated via /users/add) ---
   const registerUser = async ({ username, email, password, firstName, lastName }) => {
     try {
+      if (isSupabaseConfigured && supabase) {
+        const { data, error } = await supabase.auth.signUp({
+          email: email.trim().toLowerCase(),
+          password,
+          options: {
+            data: { username, firstName, lastName },
+          },
+        });
+        if (error) throw new Error(error.message || "Kayıt işlemi başarısız oldu.");
+        if (!data.user) throw new Error("Kayıt tamamlanamadı.");
+        const userData = mapSupabaseUser(data.user);
+        if (!data.session) {
+          throw new Error("Kayıt tamamlandı. E-posta adresinizi doğrulayıp giriş yapın.");
+        }
+        setUser(userData);
+        setToken(data.session.access_token);
+        setIsAuthModalOpen(false);
+        return userData;
+      }
+
       const res = await fetch(`${AUTH_API}/users/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -191,6 +264,9 @@ export function AuthProvider({ children }) {
 
   // --- LOGOUT ---
   const logout = useCallback(() => {
+    if (isSupabaseConfigured && supabase) {
+      supabase.auth.signOut().catch((error) => console.error("Failed to sign out", error));
+    }
     setUser(null);
     setToken(null);
     localStorage.removeItem("auth_user");

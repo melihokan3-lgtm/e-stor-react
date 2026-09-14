@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
+import { fetchUserOrders, isSupabaseDataEnabled, saveUserOrder, updateUserOrderAddress } from "../services/supabaseData";
 
 export const OrdersContext = createContext();
 
@@ -13,8 +14,17 @@ export function OrdersProvider({ children }) {
 
   useEffect(() => {
     isHydrating.current = true;
-    setOrders(readUserStorage("orders", user, []));
-    hydratedStorageId.current = String(userStorageId);
+    const hydrate = async () => {
+      try {
+        setOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage("orders", user, []));
+      } catch (error) {
+        console.error("Failed to load orders", error);
+        setOrders([]);
+      } finally {
+        hydratedStorageId.current = String(userStorageId);
+      }
+    };
+    hydrate();
   }, [userStorageId]);
 
   useEffect(() => {
@@ -28,10 +38,11 @@ export function OrdersProvider({ children }) {
   }, [orders, user, userStorageId]);
 
   const addOrder = (order) => {
-    setOrders((prev) => [
-      { ...order, userId: user?.id ?? user?.email ?? user?.username },
-      ...prev,
-    ]);
+    const nextOrder = { ...order, userId: user?.id ?? user?.email ?? user?.username };
+    setOrders((prev) => [nextOrder, ...prev]);
+    if (isSupabaseDataEnabled(user)) {
+      saveUserOrder(user, nextOrder).catch((error) => console.error("Failed to save order", error));
+    }
   };
 
   const updateOrderAddress = (orderId, newAddress) => {
@@ -42,7 +53,9 @@ export function OrdersProvider({ children }) {
         }
         return order;
       });
-      writeUserStorage("orders", user, updated);
+      if (isSupabaseDataEnabled(user)) {
+        updateUserOrderAddress(user, orderId, newAddress).catch((error) => console.error("Failed to update order address", error));
+      } else writeUserStorage("orders", user, updated);
       return updated;
     });
   };

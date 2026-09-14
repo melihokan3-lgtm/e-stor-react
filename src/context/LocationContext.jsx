@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
+import { deleteUserAddress, fetchUserAddresses, isSupabaseDataEnabled, saveUserAddress } from "../services/supabaseData";
 
 export const DEFAULT_LOCATION = "Bursa, Türkiye";
 export const LOCATION_OPTIONS = [
@@ -34,8 +35,17 @@ export function LocationProvider({ children }) {
 
   useEffect(() => {
     isHydrating.current = true;
-    setAddresses(readUserStorage("addresses", user, []));
-    hydratedStorageId.current = String(userStorageId);
+    const hydrate = async () => {
+      try {
+        setAddresses(isSupabaseDataEnabled(user) ? await fetchUserAddresses(user) : readUserStorage("addresses", user, []));
+      } catch (error) {
+        console.error("Failed to load addresses", error);
+        setAddresses([]);
+      } finally {
+        hydratedStorageId.current = String(userStorageId);
+      }
+    };
+    hydrate();
   }, [userStorageId]);
 
   useEffect(() => {
@@ -43,7 +53,7 @@ export function LocationProvider({ children }) {
       isHydrating.current = false;
       return;
     }
-    if (hydratedStorageId.current === String(userStorageId)) {
+    if (hydratedStorageId.current === String(userStorageId) && !isSupabaseDataEnabled(user)) {
       writeUserStorage("addresses", user, addresses);
     }
   }, [addresses, user, userStorageId]);
@@ -64,11 +74,17 @@ export function LocationProvider({ children }) {
       address: normalizedAddress,
     };
     setAddresses((previous) => [nextAddress, ...previous]);
+    if (isSupabaseDataEnabled(user)) {
+      saveUserAddress(user, nextAddress).catch((error) => console.error("Failed to save address", error));
+    }
     selectLocation(normalizedAddress);
   };
 
   const removeAddress = (addressId) => {
     setAddresses((previous) => previous.filter((item) => item.id !== addressId));
+    if (isSupabaseDataEnabled(user)) {
+      deleteUserAddress(user, addressId).catch((error) => console.error("Failed to delete address", error));
+    }
   };
 
   return (

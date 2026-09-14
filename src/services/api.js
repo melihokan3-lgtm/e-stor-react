@@ -1,3 +1,5 @@
+import { isSupabaseConfigured, supabase } from "../lib/supabase";
+
 const BASE_URL = "https://fakestoreapi.com";
 
 const requestJson = async (url, options = {}) => {
@@ -17,6 +19,11 @@ const requestJson = async (url, options = {}) => {
 };
 
 export const fetchProducts = async () => {
+  if (isSupabaseConfigured && supabase) {
+    const { data, error } = await supabase.from("products").select("id,title,price,description,category,image").order("id", { ascending: false });
+    if (error) throw error;
+    if (data?.length) return data;
+  }
   const data = await requestJson(`${BASE_URL}/products`);
   if (!Array.isArray(data)) throw new Error("Ürün verisi geçersiz.");
   return data;
@@ -24,6 +31,11 @@ export const fetchProducts = async () => {
 
 export const fetchProductById = async (id) => {
   if (!id || !String(id).trim()) return null;
+  if (isSupabaseConfigured && supabase) {
+    const { data, error } = await supabase.from("products").select("id,title,price,description,category,image").eq("id", id).maybeSingle();
+    if (error) throw error;
+    if (data) return data;
+  }
   try {
     return await requestJson(`${BASE_URL}/products/${encodeURIComponent(id)}`);
   } catch (error) {

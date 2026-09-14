@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
+import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../services/supabaseData";
 
 export const CartContext = createContext();
 
@@ -13,8 +14,17 @@ export const CartProvider = ({ children }) => {
 
   useEffect(() => {
     isHydrating.current = true;
-    setCart(readUserStorage("cart", user, []));
-    hydratedStorageId.current = String(userStorageId);
+    const hydrate = async () => {
+      try {
+        setCart(isSupabaseDataEnabled(user) ? await fetchUserCart(user) : readUserStorage("cart", user, []));
+      } catch (error) {
+        console.error("Failed to load cart", error);
+        setCart([]);
+      } finally {
+        hydratedStorageId.current = String(userStorageId);
+      }
+    };
+    hydrate();
   }, [userStorageId]);
 
   // Save to local storage whenever cart changes
@@ -23,9 +33,10 @@ export const CartProvider = ({ children }) => {
       isHydrating.current = false;
       return;
     }
-    if (hydratedStorageId.current === String(userStorageId)) {
-      writeUserStorage("cart", user, cart);
-    }
+    if (hydratedStorageId.current !== String(userStorageId)) return;
+    if (isSupabaseDataEnabled(user)) {
+      saveUserCart(user, cart).catch((error) => console.error("Failed to save cart", error));
+    } else writeUserStorage("cart", user, cart);
   }, [cart, user, userStorageId]);
 
   const addToCart = (product) => {
