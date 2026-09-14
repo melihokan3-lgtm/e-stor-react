@@ -83,9 +83,9 @@ export default function ProfileLayout() {
           </div>
 
           <nav className="profile-nav">
-            {sidebarLinks.map((link, index) => (
+            {sidebarLinks.map((link) => (
               <NavLink
-                key={index}
+                key={link.path}
                 to={link.path}
                 className={({ isActive }) => (isActive ? "profile-nav-item active" : "profile-nav-item")}
               >

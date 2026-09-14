@@ -54,11 +54,11 @@ export default function MyOrders() {
 
     return (
       <div className="order-list">
-        {orderList.map((order, idx) => {
+        {orderList.map((order) => {
           const isEditable = canEditOrderAddress(order.status);
 
           return (
-            <div key={idx} className="order-card">
+            <div key={order.id} className="order-card">
               {/* Header */}
               <div className="order-header">
                 <div className="order-header-left">
@@ -113,7 +113,7 @@ export default function MyOrders() {
 
             {/* Items */}
             <div className="order-items">
-              {order.items.map((item, i) => {
+              {order.items.map((item) => {
                 const categorySlug =
                   (typeof item.category === "string" ? item.category : item.category?.name)
                     ?.toLowerCase()
@@ -122,7 +122,7 @@ export default function MyOrders() {
 
                 return (
                   <Link
-                    key={i}
+                    key={`${item.id || item.title}-${item.qty || 0}`}
                     to={itemUrl}
                     className="order-item"
                     onClick={(e) => {

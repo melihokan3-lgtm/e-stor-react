@@ -115,7 +115,7 @@ export default function ProductDetail() {
             <div className="image__area">
               {images.map((imgUrl, idx) => (
                 <img
-                  key={idx}
+                  key={`${imgUrl}-${idx}`}
                   src={cleanImageUrl(imgUrl)}
                   alt=""
                   onClick={() => setActiveImgIndex(idx)}

@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 import { useLocation } from "../context/LocationContext";
 import AuthModal from "./AuthModal";
 import LocationModal from "./LocationModal";
+import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 
 export default function Navbar() {
   const { totalItems } = useContext(CartContext);
@@ -17,11 +18,8 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const saved = localStorage.getItem("pastSearches");
-    if (saved) {
-      setPastSearches(JSON.parse(saved));
-    }
-  }, []);
+    setPastSearches(readUserStorage("pastSearches", user, []));
+  }, [user]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,7 +35,7 @@ export default function Navbar() {
     if (termToSearch) {
       const updatedSearches = [termToSearch, ...pastSearches.filter(s => s !== termToSearch)].slice(0, 5);
       setPastSearches(updatedSearches);
-      localStorage.setItem("pastSearches", JSON.stringify(updatedSearches));
+      writeUserStorage("pastSearches", user, updatedSearches);
       setShowPastSearches(false);
       navigate(`/search?filter=${encodeURIComponent(termToSearch)}`);
     }
@@ -47,7 +45,7 @@ export default function Navbar() {
     e.stopPropagation();
     const updatedSearches = pastSearches.filter(s => s !== searchToRemove);
     setPastSearches(updatedSearches);
-    localStorage.setItem("pastSearches", JSON.stringify(updatedSearches));
+    writeUserStorage("pastSearches", user, updatedSearches);
   };
 
 

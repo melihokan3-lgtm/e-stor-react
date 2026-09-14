@@ -266,10 +266,10 @@ export default function Checkout() {
             </div>
             <div className="checkout-card-body review-images">
               <div className="review-images-row">
-                {cart.slice(0, 6).map((item, index) => {
+                {cart.slice(0, 6).map((item) => {
                   const imageSrc = cleanImageUrl(item.data.image) || FALLBACK_IMG;
                   return (
-                    <div key={index} className="review-img-box">
+                    <div key={item.data.id} className="review-img-box">
                       <img
                         src={imageSrc}
                         alt={item.data.title}
@@ -336,9 +336,9 @@ export default function Checkout() {
               <p className="tip-desc">Your delivery person keeps 100% of tips.</p>
 
               <div className="tip-buttons-row">
-                {[5, 10, 15, 20, 30].map((tip, idx) => (
+                {[5, 10, 15, 20, 30].map((tip) => (
                   <button
-                    key={idx}
+                    key={tip}
                     className={`tip-btn ${activeTip === tip ? "active" : ""}`}
                     onClick={() => setActiveTip(activeTip === tip ? null : tip)}
                   >

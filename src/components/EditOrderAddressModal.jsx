@@ -102,9 +102,9 @@ export default function EditOrderAddressModal({
           <div className="address-quick-options">
             <span className="quick-options-label">Kayıtlı & Önerilen Adresler:</span>
             <div className="quick-pills-row">
-              {uniqueQuickOptions.map((opt, i) => (
+              {uniqueQuickOptions.map((opt) => (
                 <button
-                  key={i}
+                  key={opt}
                   type="button"
                   className={`quick-pill-btn ${addressInput === opt ? "active" : ""}`}
                   onClick={() => {
