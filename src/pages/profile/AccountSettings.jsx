@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { readUserStorage, writeUserStorage, removeUserStorage } from "../../utils/userStorage";
 
 const DEFAULT_SETTINGS = {
   firstName: "",
@@ -17,25 +20,20 @@ const DEFAULT_SETTINGS = {
 };
 
 export default function AccountSettings() {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("account");
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
 
   // Load from local storage
   useEffect(() => {
-    const saved = localStorage.getItem("user_settings");
-    if (saved) {
-      try {
-        setSettings({ ...DEFAULT_SETTINGS, ...JSON.parse(saved) });
-      } catch (err) {
-        console.error("Failed to parse settings", err);
-      }
-    }
-  }, []);
+    setSettings({ ...DEFAULT_SETTINGS, ...readUserStorage("settings", user, {}) });
+  }, [user]);
 
   // Save to local storage when changed
   const saveSettings = (newSettings) => {
     setSettings(newSettings);
-    localStorage.setItem("user_settings", JSON.stringify(newSettings));
+    writeUserStorage("settings", user, newSettings);
   };
 
   const handleInputChange = (e) => {
@@ -50,8 +48,9 @@ export default function AccountSettings() {
     );
     if (confirmed) {
       alert("Hesabınız silindi (Simülasyon).");
-      localStorage.clear();
-      window.location.href = "/";
+      ["cart", "orders", "addresses", "settings"].forEach((key) => removeUserStorage(key, user));
+      logout();
+      navigate("/", { replace: true });
     }
   };
 

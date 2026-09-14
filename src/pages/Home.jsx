@@ -1,34 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
-import { fetchProducts } from "../services/api";
+import useProducts from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import WeeklyProductCard from "../components/WeeklyProductCard";
 
 export default function Home() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading, error } = useProducts();
 
   // Filters
   const [selectedTrendCat, setSelectedTrendCat] = useState("");
   const [selectedWeeklyCat, setSelectedWeeklyCat] = useState("");
 
-  useEffect(() => {
-    fetchProducts().then((data) => {
-      setProducts(data);
-      const cats = Array.from(
-        new Set(data.map((p) => typeof p.category === 'string' ? p.category : p.category?.name).filter(Boolean)),
-      );
-      setCategories(cats);
-      if (cats.length > 0) {
-        setSelectedTrendCat(cats[0]);
-        setSelectedWeeklyCat(cats[0]);
-      }
-      setLoading(false);
-    });
-  }, []);
+  const categories = Array.from(
+    new Set(products.map((p) => typeof p.category === "string" ? p.category : p.category?.name).filter(Boolean)),
+  );
+
+  const selectedTrend = selectedTrendCat || categories[0] || "";
+  const selectedWeekly = selectedWeeklyCat || categories[0] || "";
 
   const bannerRow1 = [
     "/img/Frame 33.png",
@@ -50,18 +40,19 @@ export default function Home() {
   const bannerRow2Slides = [...bannerRow2, ...bannerRow2, ...bannerRow2, ...bannerRow2];
 
 
-  const trendProducts = selectedTrendCat
-    ? products.filter((p) => (typeof p.category === 'string' ? p.category : p.category?.name) === selectedTrendCat)
+  const trendProducts = selectedTrend
+    ? products.filter((p) => (typeof p.category === "string" ? p.category : p.category?.name) === selectedTrend)
     : products;
 
-  const weeklyProducts = selectedWeeklyCat
-    ? products.filter((p) => (typeof p.category === 'string' ? p.category : p.category?.name) === selectedWeeklyCat)
+  const weeklyProducts = selectedWeekly
+    ? products.filter((p) => (typeof p.category === "string" ? p.category : p.category?.name) === selectedWeekly)
     : products;
 
 
   return (
     <main className="premium-home">
       <div className="home-container">
+        {error && <p className="no-category-msg">{error}</p>}
 
         {/* ─── 1. TOP BANNER SWIPER ─── */}
         <section className="">
@@ -176,7 +167,7 @@ export default function Home() {
                       <button
                         key={cat}
                         onClick={() => setSelectedWeeklyCat(cat)}
-                        className={`filter-pill ${selectedWeeklyCat === cat ? "active" : ""}`}
+                        className={`filter-pill ${selectedWeekly === cat ? "active" : ""}`}
                       >
                         {cat}
                       </button>
@@ -236,7 +227,7 @@ export default function Home() {
                 <button
                   key={cat}
                   onClick={() => setSelectedTrendCat(cat)}
-                  className={`filter-pill ${selectedTrendCat === cat ? "active" : ""}`}
+                  className={`filter-pill ${selectedTrend === cat ? "active" : ""}`}
                 >
                   {cat}
                 </button>

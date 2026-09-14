@@ -8,6 +8,8 @@ import {
   FALLBACK_IMG,
 } from "../services/api";
 import { CartContext } from "../context/CartContext";
+import { AuthContext } from "../context/AuthContext";
+import { readUserStorage } from "../utils/userStorage";
 import ProductCard from "../components/ProductCard";
 
 const StarIcon = ({ filled = true, width = 14, height = 14 }) => (
@@ -19,6 +21,7 @@ const StarIcon = ({ filled = true, width = 14, height = 14 }) => (
 export default function ProductDetail() {
   const { categorySlug, productId } = useParams();
   const { addToCart } = useContext(CartContext);
+  const { user } = useContext(AuthContext);
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -44,7 +47,7 @@ export default function ProductDetail() {
               setProduct(found);
             } else {
               // Fallback: The product might be in the cart (localStorage) but removed from API
-              const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+              const localCart = readUserStorage("cart", user, []);
               const cartFound = localCart.find(
                 (item) =>
                   item.data.id.toString() === productId ||
@@ -67,7 +70,7 @@ export default function ProductDetail() {
     fetchProducts().then((all) => {
       setRecommended(all.slice(0, 10));
     });
-  }, [productId]);
+  }, [productId, user]);
 
   if (loading)
     return (

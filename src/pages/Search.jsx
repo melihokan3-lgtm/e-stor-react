@@ -1,24 +1,15 @@
-import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { fetchProducts } from "../services/api";
+import useProducts from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 import SearchProductCard from "../components/SearchProductCard";
 
 export default function Search() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading, error } = useProducts();
   const [searchParams] = useSearchParams();
   const filterQuery =
     searchParams.get("filter")?.toLowerCase() ||
     searchParams.get("q")?.toLowerCase() ||
     "";
-
-  useEffect(() => {
-    fetchProducts().then((data) => {
-      setProducts(data);
-      setLoading(false);
-    });
-  }, []);
 
   const filteredProducts = products.filter(
     (p) =>
@@ -32,6 +23,8 @@ export default function Search() {
         <h2 className="search-page-title">{filterQuery || "Search"}</h2>
         {loading ? (
           <p>Loading products...</p>
+        ) : error ? (
+          <p>{error}</p>
         ) : (
           <div className="search-grid">
             {filteredProducts.length > 0 ? (

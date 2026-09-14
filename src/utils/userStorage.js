@@ -19,3 +19,7 @@ export const readUserStorage = (prefix, user, fallback) => {
 export const writeUserStorage = (prefix, user, value) => {
   localStorage.setItem(getUserStorageKey(prefix, user), JSON.stringify(value));
 };
+
+export const removeUserStorage = (prefix, user) => {
+  localStorage.removeItem(getUserStorageKey(prefix, user));
+};

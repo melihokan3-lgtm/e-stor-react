@@ -1,12 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
-import { fetchProducts } from "../services/api";
+import useProducts from "../hooks/useProducts";
 import ProductCard from "../components/ProductCard";
 
 export default function Category() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading, error } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Get filter values from URL
@@ -17,16 +15,7 @@ export default function Category() {
   const newFilter = searchParams.get("new") === "true";
   const nearFilter = searchParams.get("near") === "true";
 
-  useEffect(() => {
-    fetchProducts().then((data) => {
-      setProducts(data);
-      
-      // Extract unique categories from data
-      const categoryNames = Array.from(new Set(data.map(p => 
-        typeof p.category === 'string' ? p.category : p.category?.name
-      ))).filter(Boolean);
-      
-      const iconMap = {
+  const iconMap = {
         "bread": "🍞",
         "cheese": "🧀",
         "alcohol": "🍹",
@@ -41,17 +30,15 @@ export default function Category() {
         "jewelery": "💍",
         "electronics": "💻",
         "women's clothing": "👗"
-      };
+  };
 
-      const dynamicCategories = categoryNames.map(name => ({
-        name,
-        icon: iconMap[name.toLowerCase()] || "🛒"
-      }));
-
-      setCategories(dynamicCategories);
-      setLoading(false);
-    });
-  }, []);
+  const categoryNames = Array.from(new Set(products.map((p) =>
+    typeof p.category === "string" ? p.category : p.category?.name,
+  ))).filter(Boolean);
+  const categories = categoryNames.map((name) => ({
+    name,
+    icon: iconMap[name.toLowerCase()] || "🛒",
+  }));
 
   const updateFilter = (key, value) => {
     const newParams = new URLSearchParams(searchParams);
@@ -293,6 +280,8 @@ export default function Category() {
           {/* Product Grid */}
           {loading ? (
             <p>Loading products...</p>
+          ) : error ? (
+            <p>{error}</p>
           ) : (
             <div className="category__container" id="category-Conteiner">
               {filteredProducts.length > 0 ? (
