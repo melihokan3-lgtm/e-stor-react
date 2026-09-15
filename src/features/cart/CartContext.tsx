@@ -91,7 +91,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart([]);
   };
 
-  const dismissCartToast = (): void => setLastAddedProduct(null);
+  const dismissCartToast = useCallback((): void => setLastAddedProduct(null), []);
 
   return (
     <CartContext.Provider
