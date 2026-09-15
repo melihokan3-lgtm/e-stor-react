@@ -1,7 +1,8 @@
 import { useSearchParams } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
-import ProductCard from "../components/product/ProductCard";
 import SearchProductCard from "../components/product/SearchProductCard";
+import LoadingState from "../components/common/LoadingState";
+import { EmptyState, ErrorState } from "../components/common/ui/FeedbackState";
 
 export default function Search() {
   const { products, loading, error } = useProducts();
@@ -14,7 +15,7 @@ export default function Search() {
   const filteredProducts = products.filter(
     (p) =>
       p.title?.toLowerCase().includes(filterQuery) ||
-      p.category?.name?.toLowerCase().includes(filterQuery),
+      p.category?.toLowerCase().includes(filterQuery),
   );
 
   return (
@@ -22,9 +23,9 @@ export default function Search() {
       <div className="search-page-container">
         <h2 className="search-page-title">{filterQuery || "Search"}</h2>
         {loading ? (
-          <p>Loading products...</p>
+          <LoadingState message="Loading products..." />
         ) : error ? (
-          <p>{error}</p>
+          <ErrorState message={error} />
         ) : (
           <div className="search-grid">
             {filteredProducts.length > 0 ? (
@@ -32,7 +33,7 @@ export default function Search() {
                 <SearchProductCard key={product.id} product={product} />
               ))
             ) : (
-              <p>No products found.</p>
+              <EmptyState message="No products found." />
             )}
           </div>
         )}
