@@ -7,6 +7,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { fetchProducts } from "../services/api/productApi";
 import ProductCard from "../components/product/ProductCard";
+import type { FormEvent } from "react";
+import type { Product } from "../types/product";
 
 const promoBanners = [
   { img: "/img/Frame 33.png", alt: "Special Deals", link: "/category?deals=true" },
@@ -17,7 +19,7 @@ const promoBanners = [
 ];
 
 export default function Category() {
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [categorySearch, setCategorySearch] = useState("");
@@ -43,9 +45,9 @@ export default function Category() {
 
   // Compute category list with counts
   const categoryStats = useMemo(() => {
-    const stats = {};
+    const stats: Record<string, number> = {};
     products.forEach((p) => {
-      const name = typeof p.category === "string" ? p.category : p.category?.name;
+      const name = p.category;
       if (name) {
         stats[name] = (stats[name] || 0) + 1;
       }
@@ -53,17 +55,17 @@ export default function Category() {
     return Object.entries(stats).map(([name, count]) => ({ name, count }));
   }, [products]);
 
-  const updateFilter = (key, value) => {
+  const updateFilter = (key: string, value: string | boolean | number) => {
     const newParams = new URLSearchParams(searchParams);
     if (value === "all" || value === false || value === "" || value === 0) {
       newParams.delete(key);
     } else {
-      newParams.set(key, value);
+      newParams.set(key, String(value));
     }
     setSearchParams(newParams);
   };
 
-  const handleCustomPriceSubmit = (e) => {
+  const handleCustomPriceSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const min = minPriceInput ? Number(minPriceInput) : 0;
     const max = maxPriceInput ? Number(maxPriceInput) : 100000;
@@ -86,8 +88,8 @@ export default function Category() {
   // Category
   if (catFilter && catFilter !== "all") {
     filtered = filtered.filter((p) => {
-      const name = typeof p.category === "string" ? p.category : p.category?.name;
-      const slug = p.category?.slug || name?.toLowerCase().replace(/\s+/g, "-") || p.category;
+      const name = p.category;
+      const slug = name?.toLowerCase().replace(/\s+/g, "-");
       return (
         slug?.toLowerCase() === catFilter.toLowerCase() ||
         name?.toLowerCase() === catFilter.toLowerCase()
