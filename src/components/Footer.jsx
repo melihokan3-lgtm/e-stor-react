@@ -1,46 +1,40 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   return (
     <footer>
       <div className="footer__up">
-        <img src="/img/icon/Logo.svg" alt="E-Storee" />
+        <Link to="/">
+          <img src="/img/icon/Logo.svg" alt="E-Storee" />
+        </Link>
         <div className="footer__link">
-          <a href="#">
-            <h5>About</h5>
-          </a>
-          <a href="#">About Us</a>
-          <a href="#">Our Branches</a>
-          <a href="#">Changelog</a>
+          <h5>About</h5>
+          <Link to="/profile/help">About Us</Link>
+          <Link to="/profile/help">Our Branches</Link>
+          <Link to="/profile/help">Changelog</Link>
         </div>
         <div className="footer__link">
-          <a href="#">
-            <h5>Quick Links</h5>
-          </a>
-          <a href="#">FAQs</a>
-          <a href="#">Recipes</a>
-          <a href="#">Contact Us</a>
+          <h5>Quick Links</h5>
+          <Link to="/profile/help">FAQs</Link>
+          <Link to="/category">Recipes</Link>
+          <Link to="/profile/help">Contact Us</Link>
         </div>
         <div className="footer__link">
-          <a href="#">
-            <h5>Help & Support</h5>
-          </a>
-          <a href="#">Terms of Privacy</a>
-          <a href="#">Privacy Policy</a>
-          <a href="#">Security</a>
+          <h5>Help & Support</h5>
+          <Link to="/profile/settings">Terms of Privacy</Link>
+          <Link to="/profile/settings">Privacy Policy</Link>
+          <Link to="/profile/settings">Security</Link>
         </div>
         <div className="footer__link">
-          <a href="#">
-            <h5>Company</h5>
-          </a>
-          <a href="#">Blog</a>
-          <a href="#">Contact</a>
+          <h5>Company</h5>
+          <Link to="/profile/help">Blog</Link>
+          <Link to="/profile/help">Contact</Link>
         </div>
         <div className="footer__link">
-          <a href="#">
-            <h5>Social</h5>
-          </a>
-          <a href="#">Facebook</a>
-          <a href="#">Instagram</a>
-          <a href="#">X</a>
+          <h5>Social</h5>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">X</a>
         </div>
       </div>
       <div className="footer__down">
