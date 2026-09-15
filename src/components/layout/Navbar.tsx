@@ -17,6 +17,7 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
+  const avatarSrc = user?.image?.trim() || "https://ui-avatars.com/api/?name=User&background=b6349a&color=fff";
 
   useEffect(() => {
     setPastSearches(readUserStorage<string[]>("pastSearches", user, []));
@@ -193,7 +194,7 @@ export default function Navbar() {
           {isLoggedIn && user ? (
             <Link to="/profile/details" className="flex items-center gap-2 text-sm font-medium text-[#333]">
               <img
-                src={user.image}
+                src={avatarSrc}
                 alt={user.firstName}
                 className="h-8 w-8 rounded-full object-cover"
               />
