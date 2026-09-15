@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
 import ProductCard from "../components/product/ProductCard";
 import WeeklyProductCard from "../components/product/WeeklyProductCard";
+import type { Product } from "../types/product";
 
 export default function Home() {
   const { products, loading, error } = useProducts();
@@ -13,9 +14,7 @@ export default function Home() {
   const [selectedTrendCat, setSelectedTrendCat] = useState("");
   const [selectedWeeklyCat, setSelectedWeeklyCat] = useState("");
 
-  const categories = Array.from(
-    new Set(products.map((p) => typeof p.category === "string" ? p.category : p.category?.name).filter(Boolean)),
-  );
+  const categories = Array.from(new Set(products.map((product: Product) => product.category).filter(Boolean)));
 
   const selectedTrend = selectedTrendCat || categories[0] || "";
   const selectedWeekly = selectedWeeklyCat || categories[0] || "";
@@ -41,11 +40,11 @@ export default function Home() {
 
 
   const trendProducts = selectedTrend
-    ? products.filter((p) => (typeof p.category === "string" ? p.category : p.category?.name) === selectedTrend)
+    ? products.filter((product) => product.category === selectedTrend)
     : products;
 
   const weeklyProducts = selectedWeekly
-    ? products.filter((p) => (typeof p.category === "string" ? p.category : p.category?.name) === selectedWeekly)
+    ? products.filter((product) => product.category === selectedWeekly)
     : products;
 
 
@@ -113,7 +112,7 @@ export default function Home() {
             <p className="no-category-msg">Kategori bulunamadı</p>
           ) : (
             <div className="category-pills-scroll">
-              {categories.map((cat, i) => (
+              {categories.map((cat) => (
                 <Link key={cat} to={`/category?cat=${cat}`} className="category-pill">
                   <span className="pill-text">{cat}</span>
                 </Link>
