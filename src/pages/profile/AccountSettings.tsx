@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../features/auth/AuthContext";
+import { useAuth } from "../../features/auth/AuthContext";
 import { readUserStorage, writeUserStorage, removeUserStorage } from "../../utils/userStorage";
 
 const DEFAULT_SETTINGS = {
@@ -19,26 +19,30 @@ const DEFAULT_SETTINGS = {
   personalizedAds: true,
 };
 
+type Settings = typeof DEFAULT_SETTINGS;
+type SettingsTab = "account" | "security" | "notifications" | "privacy" | "danger";
+
 export default function AccountSettings() {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("account");
-  const [settings, setSettings] = useState(DEFAULT_SETTINGS);
+  const [activeTab, setActiveTab] = useState<SettingsTab>("account");
+  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
 
   // Load from local storage
   useEffect(() => {
-    setSettings({ ...DEFAULT_SETTINGS, ...readUserStorage("settings", user, {}) });
+    setSettings({ ...DEFAULT_SETTINGS, ...readUserStorage<Partial<Settings>>("settings", user, {}) });
   }, [user]);
 
   // Save to local storage when changed
-  const saveSettings = (newSettings) => {
+  const saveSettings = (newSettings: Settings) => {
     setSettings(newSettings);
     writeUserStorage("settings", user, newSettings);
   };
 
-  const handleInputChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const val = type === "checkbox" ? checked : value;
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const target = e.currentTarget;
+    const { name, value } = target;
+    const val = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : value;
     saveSettings({ ...settings, [name]: val });
   };
 

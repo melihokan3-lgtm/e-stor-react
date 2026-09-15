@@ -1,11 +1,12 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { OrdersContext } from "../../features/orders/OrdersContext";
+import { useOrders } from "../../features/orders/OrdersContext";
 import { FALLBACK_IMG } from "../../services/api/productApi";
 import EditOrderAddressModal from "../../components/profile/EditOrderAddressModal";
+import type { Order } from "../../types/order";
 
 // Returns true if order has NOT yet been shipped or completed
-export const canEditOrderAddress = (status = "") => {
+export const canEditOrderAddress = (status: string = "") => {
   const s = String(status).toLowerCase().trim();
   const shippedStatuses = [
     "shipped",
@@ -22,18 +23,18 @@ export const canEditOrderAddress = (status = "") => {
 };
 
 export default function MyOrders() {
-  const { orders, updateOrderAddress } = useContext(OrdersContext);
-  const [editingOrder, setEditingOrder] = useState(null);
+  const { orders, ordersLoading, ordersError, updateOrderAddress } = useOrders();
+  const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [toastMessage, setToastMessage] = useState("");
 
-  const [filterTab, setFilterTab] = useState("all"); // 'all', 'pending', 'delivered'
+  const [filterTab, setFilterTab] = useState<"all" | "pending" | "delivered">("all");
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  const isPending = (status) => {
+  const isPending = (status: string) => {
     const s = String(status).toLowerCase();
     return s === "pending" || s === "processing" || s === "order placed" || s === "hazırlanıyor";
   };
@@ -41,13 +42,13 @@ export default function MyOrders() {
   const pendingOrders = orders.filter((order) => isPending(order.status));
   const deliveredOrders = orders.filter((order) => !isPending(order.status));
 
-  const handleSaveNewAddress = (orderId, newAddress) => {
+  const handleSaveNewAddress = (orderId: Order["id"], newAddress: string) => {
     if (!orderId) return;
     updateOrderAddress(orderId, newAddress);
     showToast("✨ Teslimat adresi başarıyla güncellendi!");
   };
 
-  const renderOrderList = (orderList) => {
+  const renderOrderList = (orderList: Order[]) => {
     if (orderList.length === 0) return (
       <div className="orders-empty-state">Bu kategoride siparişiniz bulunmuyor.</div>
     );
@@ -67,7 +68,7 @@ export default function MyOrders() {
                     {order.status}
                   </span>
                 </div>
-                <span className="order-date">{order.date}</span>
+                <span className="order-date">{order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString("tr-TR") : "")}</span>
               </div>
 
               {/* Address Section */}
@@ -114,10 +115,7 @@ export default function MyOrders() {
             {/* Items */}
             <div className="order-items">
               {order.items.map((item) => {
-                const categorySlug =
-                  (typeof item.category === "string" ? item.category : item.category?.name)
-                    ?.toLowerCase()
-                    .replace(/\s+/g, "-") || "product";
+                const categorySlug = item.category?.toLowerCase().replace(/\s+/g, "-") || "product";
                 const itemUrl = item.id ? `/${categorySlug}/${item.id}` : "#";
 
                 return (
@@ -134,8 +132,8 @@ export default function MyOrders() {
                       alt={item.title}
                       className="order-item-img"
                       onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = FALLBACK_IMG;
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = FALLBACK_IMG;
                       }}
                     />
                     <div className="order-item-info">
@@ -167,7 +165,7 @@ export default function MyOrders() {
         <h2 className="profile-page-title">Siparişlerim (My Orders)</h2>
         
         {/* Filters Tabs */}
-        {orders.length > 0 && (
+        {!ordersLoading && !ordersError && orders.length > 0 && (
           <div className="orders-filter-tabs">
             <button 
               className={`order-tab-btn ${filterTab === 'all' ? 'active' : ''}`}
@@ -191,7 +189,11 @@ export default function MyOrders() {
         )}
       </div>
 
-      {orders.length === 0 ? (
+      {ordersLoading ? (
+        <div className="orders-empty">Siparişler yükleniyor...</div>
+      ) : ordersError ? (
+        <div className="orders-empty" role="alert">{ordersError}</div>
+      ) : orders.length === 0 ? (
         <div className="orders-empty">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>

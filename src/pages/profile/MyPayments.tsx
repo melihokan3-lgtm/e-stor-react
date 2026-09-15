@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../features/auth/AuthContext";
+import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { useAuth } from "../../features/auth/AuthContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+import type { PaymentCard } from "../../types/payment";
 import {
   CARD_THEMES,
   DEFAULT_DEMO_CARDS,
@@ -8,26 +9,36 @@ import {
   maskCardNumber,
 } from "../../utils/cardUtils";
 
+interface CardForm {
+  cardHolder: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+  theme: string;
+}
+
+type CardFormErrors = Partial<Record<"cardHolder" | "cardNumber" | "expiry" | "cvv", string>>;
+
 export default function MyPayments() {
-  const { user } = useContext(AuthContext);
-  const [cards, setCards] = useState([]);
+  const { user } = useAuth();
+  const [cards, setCards] = useState<PaymentCard[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [cardToDelete, setCardToDelete] = useState(null);
+  const [cardToDelete, setCardToDelete] = useState<PaymentCard | null>(null);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CardForm>({
     cardHolder: "",
     cardNumber: "",
     expiry: "",
     cvv: "",
     theme: "purple",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<CardFormErrors>({});
   const [toastMessage, setToastMessage] = useState("");
 
   // Load cards from localStorage on mount / user change
   useEffect(() => {
-    const saved = readUserStorage("savedCards", user, null);
+    const saved = readUserStorage<PaymentCard[] | null>("savedCards", user, null);
     if (saved !== null && Array.isArray(saved)) {
       setCards(saved);
     } else {
@@ -38,29 +49,29 @@ export default function MyPayments() {
   }, [user]);
 
   // Show temporary toast notification
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
   };
 
   // Live input handlers with formatting
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Only accept letters, spaces and common Turkish characters
     const val = e.target.value.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ\s]/g, "").toUpperCase();
     setFormData((prev) => ({ ...prev, cardHolder: val }));
-    if (errors.cardHolder) setErrors((prev) => ({ ...prev, cardHolder: null }));
+    if (errors.cardHolder) setErrors((prev) => ({ ...prev, cardHolder: undefined }));
   };
 
-  const handleCardNumberChange = (e) => {
+  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Keep only digits, max 16 digits
     const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 16);
     // Split into chunks of 4 separated by spaces
     const formatted = rawDigits.match(/.{1,4}/g)?.join(" ") || rawDigits;
     setFormData((prev) => ({ ...prev, cardNumber: formatted }));
-    if (errors.cardNumber) setErrors((prev) => ({ ...prev, cardNumber: null }));
+    if (errors.cardNumber) setErrors((prev) => ({ ...prev, cardNumber: undefined }));
   };
 
-  const handleExpiryChange = (e) => {
+  const handleExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Digits only, max 4 digits (MMYY)
     const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 4);
     let formatted = rawDigits;
@@ -68,19 +79,19 @@ export default function MyPayments() {
       formatted = `${rawDigits.slice(0, 2)}/${rawDigits.slice(2)}`;
     }
     setFormData((prev) => ({ ...prev, expiry: formatted }));
-    if (errors.expiry) setErrors((prev) => ({ ...prev, expiry: null }));
+    if (errors.expiry) setErrors((prev) => ({ ...prev, expiry: undefined }));
   };
 
-  const handleCvvChange = (e) => {
+  const handleCvvChange = (e: ChangeEvent<HTMLInputElement>) => {
     // Digits only, max 3 digits
     const val = e.target.value.replace(/\D/g, "").slice(0, 3);
     setFormData((prev) => ({ ...prev, cvv: val }));
-    if (errors.cvv) setErrors((prev) => ({ ...prev, cvv: null }));
+    if (errors.cvv) setErrors((prev) => ({ ...prev, cvv: undefined }));
   };
 
   // Validation function
   const validateForm = () => {
-    const errs = {};
+    const errs: CardFormErrors = {};
     const rawNumber = formData.cardNumber.replace(/\s/g, "");
 
     if (!formData.cardHolder.trim() || formData.cardHolder.trim().length < 3) {
@@ -115,7 +126,7 @@ export default function MyPayments() {
   };
 
   // Form Submit
-  const handleAddCardSubmit = (e) => {
+  const handleAddCardSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -123,7 +134,7 @@ export default function MyPayments() {
     const cardType = detectCardType(rawNumber);
     const maskedNumber = maskCardNumber(rawNumber);
 
-    const newCard = {
+    const newCard: PaymentCard = {
       id: "card_" + Date.now(),
       cardHolder: formData.cardHolder.trim(),
       maskedNumber: maskedNumber,
@@ -149,11 +160,11 @@ export default function MyPayments() {
     });
     setErrors({});
     setIsModalOpen(false);
-    showToast("✨ Yeni kartınız başarıyla güvenli bir şekilde kaydedildi!");
+    showToast("Kart görünümü kaydedildi (demo). Gerçek ödeme alınmaz.");
   };
 
   // Set as Default Card
-  const handleSetDefault = (cardId) => {
+  const handleSetDefault = (cardId: PaymentCard["id"]) => {
     const updated = cards.map((c) => ({
       ...c,
       isDefault: c.id === cardId,
@@ -164,7 +175,7 @@ export default function MyPayments() {
   };
 
   // Delete Card: Open Confirmation Modal
-  const handlePromptDelete = (card) => {
+  const handlePromptDelete = (card: PaymentCard) => {
     setCardToDelete(card);
   };
 
@@ -175,22 +186,19 @@ export default function MyPayments() {
     const targetId = cardToDelete.id;
     const last4 = cardToDelete.last4 || cardToDelete.maskedNumber?.slice(-4) || "kartı";
 
-    setCards((prev) => {
-      let filtered = prev.filter((c) => String(c.id) !== String(targetId));
-      // If we deleted the default card, set the first remaining one as default
-      if (filtered.length > 0 && !filtered.some((c) => c.isDefault)) {
-        filtered = filtered.map((c, i) => (i === 0 ? { ...c, isDefault: true } : c));
-      }
-      writeUserStorage("savedCards", user, filtered);
-      return filtered;
-    });
+    let filtered = cards.filter((c) => String(c.id) !== String(targetId));
+    if (filtered.length > 0 && !filtered.some((c) => c.isDefault)) {
+      filtered = filtered.map((c, i) => (i === 0 ? { ...c, isDefault: true } : c));
+    }
+    setCards(filtered);
+    writeUserStorage("savedCards", user, filtered);
 
     setCardToDelete(null);
     showToast(`Sonu ${last4} ile biten kart başarıyla silindi.`);
   };
 
   // Render SVG Logos
-  const renderCardLogo = (type) => {
+  const renderCardLogo = (type: PaymentCard["cardType"]) => {
     if (type === "mastercard") {
       return (
         <svg className="card-brand-svg" width="46" height="30" viewBox="0 0 46 30" fill="none">
@@ -208,7 +216,7 @@ export default function MyPayments() {
   };
 
   // Active theme gradient helper
-  const getThemeGradient = (themeId) => {
+  const getThemeGradient = (themeId: string) => {
     const found = CARD_THEMES.find((t) => t.id === themeId);
     return found ? found.gradient : CARD_THEMES[0].gradient;
   };
@@ -238,7 +246,7 @@ export default function MyPayments() {
         <div>
           <h2 className="profile-page-title">Ödeme Yöntemlerim (My Payments)</h2>
           <p className="payments-subtitle">
-            Kayıtlı banka ve kredi kartlarınızı yönetin, tek tıkla hızlı ve güvenli ödeme yapın.
+            Demo kart görünümlerinizi yönetin. Bu ekranda gerçek ödeme yapılmaz.
           </p>
         </div>
         <button
@@ -374,6 +382,9 @@ export default function MyPayments() {
         {/* Add Card Interactive Dashed Placeholder */}
         <div
           className="add-card-placeholder"
+          role="button"
+          tabIndex={0}
+          aria-label="Yeni Kart Ekle"
           onClick={() => {
             setFormData({
               cardHolder: "",
@@ -384,6 +395,12 @@ export default function MyPayments() {
             });
             setErrors({});
             setIsModalOpen(true);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              e.currentTarget.click();
+            }
           }}
         >
           <div className="add-card-icon-circle">
@@ -406,9 +423,9 @@ export default function MyPayments() {
           </svg>
         </div>
         <div className="notice-text">
-          <strong>PCI-DSS & 256-Bit SSL Güvenli Kart Saklama Standardı</strong>
+          <strong>Demo Kart Görünümü</strong>
           <p>
-            Kart bilgileriniz uçtan uca şifrelenir. Tam kart numarası ve CVV kodunuz asla sunucularımızda veya tarayıcınızda düz metin olarak saklanmaz. Yalnızca son 4 hane maskelenerek referans tutulur.
+            Yalnızca maskelenmiş kart numarası ve son 4 hane tarayıcıda saklanır. Gerçek kart bilgisi girmeyin; bu ekran ödeme sağlayıcısına bağlı değildir.
           </p>
         </div>
       </div>
@@ -619,7 +636,7 @@ export default function MyPayments() {
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                     <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                   </svg>
-                  Kartı Güvenle Kaydet
+                  Demo Kartı Kaydet
                 </button>
               </div>
             </form>

@@ -1,9 +1,23 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../features/auth/AuthContext";
+import { useAuth } from "../../features/auth/AuthContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 
-const INITIAL_NOTIFICATIONS = [
+type NotificationType = "shipping" | "discount" | "security" | "delivered" | "coupon";
+
+interface ProfileNotification {
+  id: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  time: string;
+  isRead: boolean;
+  badgeColor: string;
+  actionText: string;
+  actionUrl: string;
+}
+
+const INITIAL_NOTIFICATIONS: ProfileNotification[] = [
   {
     id: "notif_1",
     type: "shipping",
@@ -62,14 +76,14 @@ const INITIAL_NOTIFICATIONS = [
 ];
 
 export default function NotificationSetting() {
-  const { user } = useContext(AuthContext);
-  const [notifications, setNotifications] = useState([]);
-  const [activeFilter, setActiveFilter] = useState("all"); // 'all' | 'unread'
+  const { user } = useAuth();
+  const [notifications, setNotifications] = useState<ProfileNotification[]>([]);
+  const [activeFilter, setActiveFilter] = useState<"all" | "unread">("all");
   const [toastMessage, setToastMessage] = useState("");
 
   // Load notifications from localStorage
   useEffect(() => {
-    const saved = readUserStorage("notifications", user, null);
+    const saved = readUserStorage<ProfileNotification[] | null>("notifications", user, null);
     if (saved !== null && Array.isArray(saved)) {
       setNotifications(saved);
     } else {
@@ -78,13 +92,13 @@ export default function NotificationSetting() {
     }
   }, [user]);
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3000);
   };
 
   // Mark a single notification as read/unread
-  const handleToggleRead = (id) => {
+  const handleToggleRead = (id: ProfileNotification["id"]) => {
     const updated = notifications.map((n) =>
       n.id === id ? { ...n, isRead: !n.isRead } : n
     );
@@ -101,7 +115,7 @@ export default function NotificationSetting() {
   };
 
   // Delete a notification
-  const handleDelete = (id) => {
+  const handleDelete = (id: ProfileNotification["id"]) => {
     const updated = notifications.filter((n) => n.id !== id);
     setNotifications(updated);
     writeUserStorage("notifications", user, updated);
@@ -126,7 +140,7 @@ export default function NotificationSetting() {
   });
 
   // Render SVG icons according to notification type
-  const renderIcon = (type) => {
+  const renderIcon = (type: NotificationType) => {
     switch (type) {
       case "shipping":
         return (
