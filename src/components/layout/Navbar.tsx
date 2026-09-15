@@ -97,40 +97,43 @@ export default function Navbar() {
             <span className="h-0.5 w-6 bg-[#333]"></span>
             <span className="h-0.5 w-6 bg-[#333]"></span>
           </label>
-          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col gap-4 rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:static md:flex md:flex-row md:items-center md:gap-6 md:bg-transparent md:p-0 md:shadow-none" : "hidden md:flex md:flex-row md:items-center md:gap-6"}>
-            <div className="flex items-center gap-4">
-              <h3 className="text-sm font-semibold text-[#222]">Filters</h3>
-              <div className="flex flex-wrap items-center gap-3">
+          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:static md:flex md:bg-transparent md:p-0 md:shadow-none" : "hidden md:flex"}>
+            <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#f8f7f8] p-4 md:w-[250px]">
+              <h3 className="text-base font-semibold text-[#222]">Filters</h3>
+              <div className="flex flex-col gap-3">
                 <h4 className="text-sm font-semibold text-[#222]">Price</h4>
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
+                <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#555]">
                     <input
-                      className="h-4 w-4 accent-[#b6349a]"
+                      className="peer sr-only"
                       value="0-50"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    Under $50
+                    <span className="relative inline-block h-[34px] w-[60px] rounded-[34px] bg-[#ccc] transition-colors peer-checked:bg-[#a0cfc1] peer-focus-visible:ring-2 peer-focus-visible:ring-[#a0cfc1] before:absolute before:bottom-1 before:left-1 before:h-[26px] before:w-[26px] before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-[26px]"></span>
+                    <span>Under $50</span>
                 </label>
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
+                <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#555]">
                     <input
-                      className="h-4 w-4 accent-[#b6349a]"
+                      className="peer sr-only"
                       value="50-100"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    $50 - $100
+                    <span className="relative inline-block h-[34px] w-[60px] rounded-[34px] bg-[#ccc] transition-colors peer-checked:bg-[#a0cfc1] peer-focus-visible:ring-2 peer-focus-visible:ring-[#a0cfc1] before:absolute before:bottom-1 before:left-1 before:h-[26px] before:w-[26px] before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-[26px]"></span>
+                    <span>$50 - $100</span>
                 </label>
-                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
+                <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#555]">
                     <input
-                      className="h-4 w-4 accent-[#b6349a]"
+                      className="peer sr-only"
                       value="100-10000"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    Over $100
+                    <span className="relative inline-block h-[34px] w-[60px] rounded-[34px] bg-[#ccc] transition-colors peer-checked:bg-[#a0cfc1] peer-focus-visible:ring-2 peer-focus-visible:ring-[#a0cfc1] before:absolute before:bottom-1 before:left-1 before:h-[26px] before:w-[26px] before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-[26px]"></span>
+                    <span>Over $100</span>
                 </label>
               </div>
             </div>

@@ -185,40 +185,8 @@ aside {
 
 /* Temporary Profile/Cart Media Queries (To be organized in Phase 5) */
 
-@media (width<=900px) {
-  @supports (animation-timeline: view()) {
-  }
-}
-
-@keyframes reveal-on-scroll {
-  0% {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@media (width>=768px) {
-  .menu {
-    display: none;
-  }
-}
-
 /* Swiper core and navigation styles have been removed.
    They are correctly imported in main.jsx via 'import "swiper/css/bundle"' */
-
-/* CUSTOMER REVIEWS SECTION */
-
-/* ACCORDION SECTION */
-
-/* Specific styling to reset border for the reviews details */
-
-@media (max-width: 768px) {
-}
 
 .card-title {
   font-size: 13px;
@@ -237,8 +205,6 @@ aside {
 /* --- Left Column --- */
 
 /* Local Market Header */
-
-@media (max-width: 640px) {}
 
 /* Recommendations */
 
