@@ -11,6 +11,8 @@ export interface CartContextValue {
   removeFromCart: (id: Product["id"]) => void;
   updateQuantity: (id: Product["id"], delta: number) => void;
   clearCart: () => void;
+  lastAddedProduct: string | null;
+  dismissCartToast: () => void;
   totalItems: number;
   totalPrice: number;
   tax: number;

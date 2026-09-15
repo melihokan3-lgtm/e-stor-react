@@ -18,6 +18,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const user = auth?.user ?? null;
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [lastAddedProduct, setLastAddedProduct] = useState<string | null>(null);
   const hydratedStorageId = useRef<string | null>(null);
   const isHydrating = useRef(false);
 
@@ -49,6 +50,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, [cart, user, userStorageId]);
 
   const addToCart = (product: Product): void => {
+    setLastAddedProduct(product.title);
     setCart((prev) => {
       const existingItem = prev.find((item) => item.data.id === product.id);
       if (existingItem) {
@@ -89,6 +91,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart([]);
   };
 
+  const dismissCartToast = (): void => setLastAddedProduct(null);
+
   return (
     <CartContext.Provider
       value={{
@@ -97,6 +101,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         removeFromCart,
         updateQuantity,
         clearCart,
+        lastAddedProduct,
+        dismissCartToast,
         totalItems,
         totalPrice,
         tax,
