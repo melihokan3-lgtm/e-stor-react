@@ -43,16 +43,16 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer>
-      <div className="footer__up">
-        <Link to="/">
+    <footer className="flex flex-col border-t border-[var(--border-light)] px-20 py-[60px] [@media(max-width:768px)]:px-5 [@media(max-width:768px)]:py-[30px]">
+      <div className="flex items-start justify-between [@media(max-width:768px)]:grid [@media(max-width:768px)]:grid-cols-2 [@media(max-width:768px)]:gap-[30px] [@media(max-width:768px)]:place-items-start [@media(max-width:768px)]:text-left">
+        <Link to="/" className="text-[var(--text-secondary)]">
           <img src="/img/icon/Logo.svg" alt="E-Storee" />
         </Link>
         {footerGroups.map((group) => <FooterLinkGroup key={group.title} {...group} />)}
         <div className="flex flex-col gap-4">
-          <h5>Social</h5>
+          <h5 className="text-[var(--text-primary)]">Social</h5>
           {socialLinks.map((link) => (
-            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer">
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)]">
               {link.label}
             </a>
           ))}
