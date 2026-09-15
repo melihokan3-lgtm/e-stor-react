@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
@@ -7,69 +7,79 @@ import {
   cleanImageUrl,
   FALLBACK_IMG,
 } from "../services/api/productApi";
-import { CartContext } from "../features/cart/CartContext";
-import { AuthContext } from "../features/auth/AuthContext";
+import { useCart } from "../features/cart/CartContext";
+import { useAuth } from "../features/auth/AuthContext";
 import { readUserStorage } from "../utils/userStorage";
 import ProductCard from "../components/product/ProductCard";
+import type { CartItem } from "../types/cart";
+import type { Product } from "../types/product";
 
-const StarIcon = ({ filled = true, width = 14, height = 14 }) => (
+const StarIcon = ({ filled = true, width = 14, height = 14 }: { filled?: boolean; width?: number; height?: number }) => (
   <svg width={width} height={height} viewBox="0 0 24 24" fill={filled ? "#ffc107" : "none"} stroke={filled ? "#ffc107" : "#ddd"} strokeWidth="2" xmlns="http://www.w3.org/0000/svg">
     <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" strokeLinecap="round" strokeLinejoin="round"/>
   </svg>
 );
 
 export default function ProductDetail() {
-  const { categorySlug, productId } = useParams();
-  const { addToCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext);
-  const [product, setProduct] = useState(null);
+  const { productId } = useParams();
+  const { addToCart } = useCart();
+  const { user } = useAuth();
+  const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [activeImgIndex, setActiveImgIndex] = useState(0);
 
-  const [recommended, setRecommended] = useState([]);
+  const [recommended, setRecommended] = useState<Product[]>([]);
 
   useEffect(() => {
+    let active = true;
     window.scrollTo(0, 0);
     setLoading(true);
     setError(false);
+    setProduct(null);
+    setActiveImgIndex(0);
+
+    if (!productId) {
+      setError(true);
+      setLoading(false);
+      return;
+    }
 
     fetchProductById(productId)
-      .then((data) => {
-        if (!data || data.length === 0 || Object.keys(data).length === 0) {
-          return fetchProducts().then((all) => {
-            const found = all.find(
-              (p) =>
-                p.id.toString() === productId ||
-                p.title?.toLowerCase().replace(/\s+/g, "-") === productId,
-            );
-            if (found) {
-              setProduct(found);
-            } else {
-              // Fallback: The product might be in the cart (localStorage) but removed from API
-              const localCart = readUserStorage("cart", user, []);
-              const cartFound = localCart.find(
-                (item) =>
-                  item.data.id.toString() === productId ||
-                  item.data.title?.toLowerCase().replace(/\s+/g, "-") === productId
-              );
-              if (cartFound) {
-                setProduct(cartFound.data);
-              } else {
-                setError(true);
-              }
-            }
-          });
-        } else {
-          setProduct(Array.isArray(data) ? data[0] : data);
-        }
-      })
-      .catch(() => setError(true))
-      .finally(() => setLoading(false));
+      .then(async (data) => {
+        if (!data) {
+          const all = await fetchProducts();
+          const found = all.find(
+            (p) =>
+              p.id.toString() === productId ||
+              p.title?.toLowerCase().replace(/\s+/g, "-") === productId,
+          );
+          if (found) return found;
 
-    fetchProducts().then((all) => {
-      setRecommended(all.slice(0, 10));
-    });
+          // Fallback: The product might be in the cart (localStorage) but removed from API
+          const localCart = readUserStorage<CartItem[]>("cart", user, []);
+          const cartFound = localCart.find(
+            (item) =>
+              item.data.id.toString() === productId ||
+              item.data.title?.toLowerCase().replace(/\s+/g, "-") === productId,
+          );
+          return cartFound?.data ?? null;
+        }
+        return data;
+      })
+      .then((data) => {
+        if (!active) return;
+        if (data) setProduct(data);
+        else setError(true);
+      })
+      .catch(() => { if (active) setError(true); })
+      .finally(() => { if (active) setLoading(false); });
+
+    fetchProducts()
+      .then((all) => { if (active) setRecommended(all.slice(0, 10)); })
+      .catch(() => { if (active) setRecommended([]); });
+
+    return () => { active = false; };
   }, [productId, user]);
 
   if (loading)
@@ -108,8 +118,8 @@ export default function ProductDetail() {
               src={mainImg}
               alt={product.title}
               onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = FALLBACK_IMG;
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = FALLBACK_IMG;
               }}
             />
             <div className="image__area">
@@ -120,8 +130,8 @@ export default function ProductDetail() {
                   alt=""
                   onClick={() => setActiveImgIndex(idx)}
                   onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = FALLBACK_IMG;
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = FALLBACK_IMG;
                   }}
                   style={{
                     cursor: "pointer",
@@ -335,7 +345,7 @@ export default function ProductDetail() {
           <div className="home__section__header">
             <h2>Recomended For You</h2>
             <Link 
-              to={`/category?cat=${typeof product?.category === 'string' ? product.category : (product?.category?.slug || product?.category?.name || 'all')}`} 
+              to={`/category?cat=${encodeURIComponent(product.category || "all")}`}
               className="view__all__btn" 
               style={{ padding: "10px 20px", display: "inline-block" }}
             >
