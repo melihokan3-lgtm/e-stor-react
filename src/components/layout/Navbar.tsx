@@ -97,7 +97,7 @@ export default function Navbar() {
             <span className="h-0.5 w-6 bg-[#333]"></span>
             <span className="h-0.5 w-6 bg-[#333]"></span>
           </label>
-          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:static md:flex md:bg-transparent md:p-0 md:shadow-none" : "hidden md:flex"}>
+          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:hidden" : "hidden"}>
             <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#f8f7f8] p-4 md:w-[250px]">
               <h3 className="text-base font-semibold text-[#222]">Filters</h3>
               <div className="flex flex-col gap-3">
