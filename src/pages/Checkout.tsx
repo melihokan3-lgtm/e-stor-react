@@ -203,24 +203,24 @@ export default function Checkout() {
   };
 
   return (
-    <main className="main-checkout">
-      <div className="checkout-container">
+    <main className="mx-auto max-w-[1400px] bg-[#fafafa] px-[60px] py-10 max-[768px]:px-6 max-[768px]:py-6">
+      <div className="grid grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] items-start gap-10 max-[1024px]:grid-cols-1">
 
         {/* LEFT COLUMN */}
-        <div className="checkout-left">
+        <div className="flex min-w-0 flex-col gap-4">
 
           {/* HEADER ROW */}
-          <div className="checkout-header-row">
-            <div className="checkout-header-title">
-              <div className="checkout-header-icon">
+          <div className="mb-1 flex items-center justify-between gap-5 max-[640px]:items-start max-[640px]:gap-2">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                   <line x1="2" y1="10" x2="22" y2="10"></line>
                 </svg>
               </div>
-              <h2>Checkout</h2>
+              <h2 className="text-2xl font-bold text-[#111]">Checkout</h2>
             </div>
-            <div className="checkout-header-date">
+            <div className="flex max-w-[55%] items-center gap-2 truncate text-sm text-[#555] max-[640px]:text-xs">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -231,7 +231,7 @@ export default function Checkout() {
 
           {/* INFO CARD 1: Delivery info */}
           <div
-            className="checkout-info-card checkout-info-card--interactive"
+            className="cursor-pointer rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition hover:border-[#b6349a] hover:shadow-[0_8px_24px_rgba(182,52,154,0.08)] focus:outline-none focus-visible:border-[#b6349a] focus-visible:ring-2 focus-visible:ring-[#b6349a]/20"
             role="button"
             tabIndex={0}
             onClick={openLocationModal}
@@ -243,34 +243,34 @@ export default function Checkout() {
             }}
             aria-label={`Teslimat adresini değiştir. Mevcut adres: ${location}`}
           >
-            <div className="checkout-card-header">
-              <div className="checkout-card-title">
-                <h3>Delivery info</h3>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-[#111]">Delivery info</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
               </div>
-              <div className="checkout-chevron">
+              <div className="flex items-center">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
             </div>
-            <div className="checkout-card-body">
-              <span className="checkout-sub-label">Deliver to</span>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="text-xs font-semibold text-[#777]">Deliver to</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
-              <span className="checkout-sub-value pink-text">{location}</span>
+              <span className="truncate text-sm font-semibold text-[#b6349a]">{location}</span>
             </div>
           </div>
 
           {/* INFO CARD 2: Payment Method */}
           <div
-            className="checkout-info-card checkout-info-card--interactive"
+            className="cursor-pointer rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition hover:border-[#b6349a] hover:shadow-[0_8px_24px_rgba(182,52,154,0.08)] focus:outline-none focus-visible:border-[#b6349a] focus-visible:ring-2 focus-visible:ring-[#b6349a]/20"
             role="button"
             tabIndex={0}
             onClick={() => setIsPaymentModalOpen(true)}
@@ -282,54 +282,54 @@ export default function Checkout() {
             }}
             aria-label={`Ödeme yöntemini seç veya yeni kart ekle. Seçili kart: ${cardDisplayName}`}
           >
-            <div className="checkout-card-header">
-              <div className="checkout-card-title">
-                <h3>Payment Method</h3>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-[#111]">Payment Method</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
               </div>
-              <div className="checkout-chevron">
+              <div className="flex items-center">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
             </div>
-            <div className="checkout-card-body">
-              <span className="checkout-sub-label">Pay With</span>
+            <div className="mt-4 flex items-center gap-2">
+              <span className="text-xs font-semibold text-[#777]">Pay With</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                 <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
-              <span className="checkout-sub-value pink-text">{cardDisplayName}</span>
+              <span className="text-sm font-semibold text-[#b6349a]">{cardDisplayName}</span>
             </div>
           </div>
 
           {/* INFO CARD 3: Review Order */}
-          <div className="checkout-info-card review-card">
-            <div className="checkout-card-header">
-              <div className="checkout-card-title">
-                <h3>Review Order</h3>
+          <div className="rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold text-[#111]">Review Order</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
                   <line x1="12" y1="8" x2="12.01" y2="8"></line>
                 </svg>
               </div>
-              <div className="checkout-chevron">
+              <div className="flex items-center">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
               </div>
             </div>
-            <div className="checkout-card-body review-images">
-              <div className="review-images-row">
+            <div className="mt-4">
+              <div className="flex flex-wrap gap-3">
                 {cart.slice(0, 6).map((item) => {
                   const imageSrc = cleanImageUrl(item.data.image) || FALLBACK_IMG;
                   return (
-                    <div key={item.data.id} className="review-img-box">
+                    <div key={item.data.id} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2">
                       <img
                         src={imageSrc}
                         alt={item.data.title}
@@ -342,20 +342,15 @@ export default function Checkout() {
                   );
                 })}
                 {cart.length > 6 && (
-                  <div className="review-img-box more-box">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#fdf5fb] text-sm font-bold text-[#b6349a]">
                     +{cart.length - 6}
                   </div>
                 )}
                 {/* Fallback dummy images if cart is empty, so layout matches exact mockup */}
                 {cart.length === 0 && (
                   <>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box"><img src={FALLBACK_IMG} alt="dummy" /></div>
-                    <div className="review-img-box more-box">+12</div>
+                    {Array.from({ length: 6 }).map((_, index) => <div key={index} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2"><img src={FALLBACK_IMG} alt="dummy" /></div>)}
+                    <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#fdf5fb] text-sm font-bold text-[#b6349a]">+12</div>
                   </>
                 )}
               </div>
@@ -365,50 +360,50 @@ export default function Checkout() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="checkout-right">
-          <div className="order-summary-box">
+        <div className="min-w-0">
+          <div className="rounded-2xl bg-white p-7 shadow-[0_4px_24px_rgba(0,0,0,0.05)] max-[640px]:p-5">
 
-            <h3 className="summary-title-main">Order Summary</h3>
+            <h3 className="mb-6 text-xl font-bold text-[#111]">Order Summary</h3>
 
-            <div className="summary-lines">
-              <div className="summary-line">
-                <span className="s-label">Delivery fee</span>
-                <span className="s-value">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[#888]">Delivery fee</span>
+                <span className="font-semibold text-[#111]">
                   {appliedCoupon?.discountType === "shipping" ? (
-                    <><s style={{color:'#9ca3af',marginRight:4}}>${deliveryFee.toFixed(2)}</s> <span style={{color:'#059669',fontWeight:700}}>FREE</span></>
+                    <><s className="mr-1 text-gray-400">${deliveryFee.toFixed(2)}</s> <span className="font-bold text-emerald-600">FREE</span></>
                   ) : (
                     `$${deliveryFee.toFixed(2)}`
                   )}
                 </span>
               </div>
-              <div className="summary-line">
-                <span className="s-label">Service fee</span>
-                <span className="s-value">${itemsTotal.toFixed(2)}</span>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[#888]">Service fee</span>
+                <span className="font-semibold text-[#111]">${itemsTotal.toFixed(2)}</span>
               </div>
-              <div className="summary-line">
-                <span className="s-label">Items total</span>
-                <span className="s-value">${itemsTotal.toFixed(2)}</span>
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[#888]">Items total</span>
+                <span className="font-semibold text-[#111]">${itemsTotal.toFixed(2)}</span>
               </div>
             </div>
 
-            <div className="delivery-tip-section">
-              <h4 className="tip-title">Delivery Tip</h4>
-              <p className="tip-desc">Your delivery person keeps 100% of tips.</p>
+            <div className="mt-7 border-t border-[#f0f0f0] pt-6">
+              <h4 className="mb-1 text-sm font-bold text-[#111]">Delivery Tip</h4>
+              <p className="mb-3 text-xs text-[#999]">Your delivery person keeps 100% of tips.</p>
 
-              <div className="tip-buttons-row">
+              <div className="flex flex-wrap gap-2">
                 {[5, 10, 15, 20, 30].map((tip) => (
                   <button
                     key={tip}
-                    className={`tip-btn ${activeTip === tip ? "active" : ""}`}
+                    className={`rounded-[30px] border px-3 py-2 text-xs font-semibold transition ${activeTip === tip ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#ddd] bg-white text-[#555] hover:border-[#b6349a] hover:text-[#b6349a]"}`}
                     onClick={() => setActiveTip(activeTip === tip ? null : tip)}
                   >
                     ${tip}
                   </button>
                 ))}
               </div>
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="mt-2 flex items-center gap-2">
                 <button
-                  className={`tip-btn other ${activeTip === 'Other' ? "active" : ""}`}
+                  className={`rounded-[30px] border px-3 py-2 text-xs font-semibold transition ${activeTip === 'Other' ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#ddd] bg-white text-[#555] hover:border-[#b6349a] hover:text-[#b6349a]"}`}
                   onClick={() => setActiveTip(activeTip === 'Other' ? null : 'Other')}
                 >
                   Other
@@ -421,34 +416,27 @@ export default function Checkout() {
                     placeholder="Enter amount"
                     value={customTip}
                     onChange={(e) => setCustomTip(e.target.value)}
-                    style={{
-                      padding: '8px 12px',
-                      borderRadius: '30px',
-                      border: '1px solid #ddd',
-                      outline: 'none',
-                      width: '120px',
-                      fontSize: '13px'
-                    }}
+                    className="w-[120px] rounded-[30px] border border-[#ddd] px-3 py-2 text-[13px] outline-none focus:border-[#b6349a]"
                   />
                 )}
               </div>
             </div>
 
             {/* COUPON ROW */}
-            <div className="coupon-row" style={{ position: 'relative' }}>
-              <span className="coupon-label">Coupon</span>
+            <div className="relative mt-7 flex items-center justify-between border-t border-[#f0f0f0] pt-6">
+              <span className="text-sm font-semibold text-[#555]">Coupon</span>
 
               {appliedCoupon ? (
-                <div className="applied-coupon-tag">
-                  <span className="applied-coupon-icon">{COUPON_ICONS[appliedCoupon.type]}</span>
-                  <span className="applied-coupon-code">{appliedCoupon.code}</span>
-                  <span className="applied-coupon-discount">
+                <div className="flex items-center gap-2 rounded-lg bg-[#fdf5fb] px-2.5 py-1.5 text-xs">
+                  <span>{COUPON_ICONS[appliedCoupon.type]}</span>
+                  <span className="font-semibold text-[#b6349a]">{appliedCoupon.code}</span>
+                  <span className="font-bold text-emerald-600">
                     {appliedCoupon.discountType === "percent" && `-${appliedCoupon.discountValue}%`}
                     {appliedCoupon.discountType === "fixed" && `-$${appliedCoupon.discountValue}`}
                     {appliedCoupon.discountType === "shipping" && "Free Shipping"}
                   </span>
                   <button
-                    className="applied-coupon-remove"
+                    className="text-[#999] transition hover:text-red-500"
                     onClick={handleRemoveCoupon}
                     aria-label="Kuponu kaldır"
                   >
@@ -460,7 +448,7 @@ export default function Checkout() {
                 </div>
               ) : (
                 <button
-                  className="add-coupon-btn"
+                  className="flex items-center gap-1.5 text-sm font-semibold text-[#b6349a] transition hover:text-[#831843]"
                   onClick={() => setIsCouponPanelOpen(!isCouponPanelOpen)}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -473,11 +461,11 @@ export default function Checkout() {
 
               {/* COUPON DROPDOWN PANEL */}
               {isCouponPanelOpen && (
-                <div className="coupon-dropdown-panel">
-                  <div className="coupon-dropdown-header">
-                    <h4>Kuponlarım</h4>
+                <div className="absolute right-0 top-full z-20 mt-2 w-[min(360px,calc(100vw-3rem))] overflow-hidden rounded-xl border border-[#eee] bg-white shadow-[0_12px_32px_rgba(0,0,0,0.12)]">
+                  <div className="flex items-center justify-between border-b border-[#f0f0f0] px-4 py-3">
+                    <h4 className="text-sm font-bold text-[#111]">Kuponlarım</h4>
                     <button
-                      className="coupon-dropdown-close"
+                      className="text-[#777] hover:text-[#111]"
                       onClick={() => setIsCouponPanelOpen(false)}
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -486,37 +474,35 @@ export default function Checkout() {
                       </svg>
                     </button>
                   </div>
-                  <div className="coupon-dropdown-list">
+                  <div className="flex max-h-[320px] flex-col overflow-y-auto">
                     {AVAILABLE_COUPONS.map((coupon) => {
                       const isEligible = itemsTotal >= coupon.minOrder;
                       return (
                         <div
                           key={coupon.id}
-                          className={`coupon-dropdown-item ${!isEligible ? "disabled" : ""}`}
+                          className={`relative flex gap-3 border-b border-[#f4f4f4] p-3 transition last:border-0 ${isEligible ? "cursor-pointer hover:bg-[#fdf5fb]" : "cursor-not-allowed opacity-50"}`}
                           onClick={() => isEligible && handleApplyCoupon(coupon)}
                         >
-                          <div className={`coupon-dropdown-accent ${coupon.type}`}></div>
-                          <div className="coupon-dropdown-icon">
+                          <div className={`absolute bottom-0 left-0 top-0 w-1 ${coupon.type === "discount" ? "bg-orange-500" : coupon.type === "shipping" ? "bg-[#b6349a]" : "bg-emerald-500"}`}></div>
+                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#fdf5fb] text-lg">
                             {COUPON_ICONS[coupon.type]}
                           </div>
-                          <div className="coupon-dropdown-info">
-                            <div className="coupon-dropdown-title">{coupon.title}</div>
-                            <div className="coupon-dropdown-desc">{coupon.description}</div>
-                            <div className="coupon-dropdown-meta">
-                              <span className="coupon-dropdown-code-tag">{coupon.code}</span>
-                              <span className="coupon-dropdown-expiry">
+                          <div className="min-w-0 flex-1">
+                            <div className="text-sm font-semibold text-[#111]">{coupon.title}</div>
+                            <div className="mt-0.5 text-xs text-[#888]">{coupon.description}</div>
+                            <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-[#888]">
+                              <span className="rounded bg-[#fdf5fb] px-1.5 py-0.5 font-semibold text-[#b6349a]">{coupon.code}</span>
+                              <span className="flex items-center gap-1">
                                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                   <circle cx="12" cy="12" r="10"></circle>
                                   <polyline points="12 6 12 12 16 14"></polyline>
                                 </svg>
                                 {formatDate(coupon.expiry)}
                               </span>
-                              {coupon.minOrder > 0 && (
-                                <span className="coupon-dropdown-min">Min. ${coupon.minOrder}</span>
-                              )}
+                              {coupon.minOrder > 0 && <span>Min. ${coupon.minOrder}</span>}
                             </div>
                             {!isEligible && (
-                              <div className="coupon-dropdown-warning">
+                              <div className="mt-2 text-[11px] font-semibold text-red-500">
                                 Min. ${coupon.minOrder} sipariş tutarına ulaşmanız gerekiyor
                               </div>
                             )}
@@ -531,27 +517,27 @@ export default function Checkout() {
 
             {/* COUPON DISCOUNT LINE */}
             {appliedCoupon && couponDiscount > 0 && (
-              <div className="summary-line coupon-discount-line">
-                <span className="s-label" style={{color:'#059669'}}>
+              <div className="mt-4 flex items-center justify-between text-sm">
+                <span className="font-semibold text-emerald-600">
                   🏷️ Kupon İndirimi ({appliedCoupon.code})
                 </span>
-                <span className="s-value" style={{color:'#059669',fontWeight:700}}>
+                <span className="font-bold text-emerald-600">
                   -${couponDiscount.toFixed(2)}
                 </span>
               </div>
             )}
 
-            <div className="total-row">
-              <span className="total-label">Total</span>
-              <span className="total-value">${finalTotal.toFixed(2)}</span>
+            <div className="mt-6 flex items-center justify-between border-t border-[#f0f0f0] pt-5">
+              <span className="text-lg font-bold text-[#111]">Total</span>
+              <span className="text-xl font-extrabold text-[#b6349a]">${finalTotal.toFixed(2)}</span>
             </div>
 
-            <p className="terms-text">
-              By placing this order, you are agreeing to <a href="#">Terms and Conditions</a>.
+            <p className="mt-4 text-xs leading-5 text-[#999]">
+              By placing this order, you are agreeing to <a className="text-[#b6349a] underline" href="#">Terms and Conditions</a>.
             </p>
 
             <button
-              className="place-order-btn"
+              className="mt-5 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#de57c4] disabled:cursor-not-allowed disabled:opacity-50"
               onClick={() => { void handlePlaceOrder(); }}
               disabled={isSubmitting || ordersLoading}
             >
@@ -574,7 +560,7 @@ export default function Checkout() {
       />
 
       {/* COUPON TOAST */}
-      {couponToast && <div className="coupon-toast">{couponToast}</div>}
+      {couponToast && <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">{couponToast}</div>}
     </main>
   );
 }
