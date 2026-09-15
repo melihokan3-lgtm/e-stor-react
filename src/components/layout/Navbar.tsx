@@ -98,8 +98,35 @@ export default function Navbar() {
             <span className="h-0.5 w-6 bg-[#333]"></span>
             <span className="h-0.5 w-6 bg-[#333]"></span>
           </label>
-          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:hidden" : "hidden"}>
-            <div className="flex w-full flex-col gap-6 rounded-[20px] bg-[#f8f7f8] p-4 md:w-[250px]">
+          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex max-h-[calc(100vh-100px)] flex-col gap-4 overflow-y-auto rounded-[18px] bg-white p-4 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:hidden" : "hidden"}>
+            <div className="grid grid-cols-2 gap-3 border-b border-[#eee] pb-4">
+              <Link to="/cart" onClick={() => setMenuOpen(false)} className="flex min-h-[72px] flex-col items-center justify-center gap-2 rounded-[14px] bg-[#fef5fd] text-sm font-semibold text-[#333] transition hover:bg-[#fbe8f7]">
+                <span className="relative">
+                  <img src="/img/icon/Buy.svg" alt="" className="h-6 w-6" />
+                  <span className="absolute -right-3 -top-2 text-[11px] font-bold text-[#b6349a]">{totalItems}</span>
+                </span>
+                <span>Cart</span>
+              </Link>
+              {isLoggedIn && user ? (
+                <Link to="/profile/details" onClick={() => setMenuOpen(false)} className="flex min-h-[72px] flex-col items-center justify-center gap-2 rounded-[14px] bg-[#f8f7f8] text-sm font-semibold text-[#333] transition hover:bg-[#f1edf1]">
+                  <img src={avatarSrc} alt="" className="h-7 w-7 rounded-full object-cover" />
+                  <span>My Account</span>
+                </Link>
+              ) : (
+                <button type="button" onClick={() => { setMenuOpen(false); openAuthModal(); }} className="flex min-h-[72px] flex-col items-center justify-center gap-2 rounded-[14px] border border-[#d73f98] bg-white text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc]">
+                  <img src="/img/icon/2 User.svg" alt="" className="h-6 w-6" />
+                  <span>Login</span>
+                </button>
+              )}
+            </div>
+
+            <button type="button" onClick={() => { setMenuOpen(false); openLocationModal(); }} className="flex items-center gap-3 rounded-[14px] border border-[#eee] px-4 py-3 text-left text-sm font-medium text-[#333] transition hover:border-[#b6349a] hover:text-[#b6349a]">
+              <img src="/img/icon/Location.svg" alt="" className="h-5 w-5" />
+              <span className="min-w-0 flex-1 truncate">{displayLocation || "Select delivery location"}</span>
+              <span aria-hidden="true">›</span>
+            </button>
+
+            <div className="flex w-full flex-col gap-6 rounded-[14px] bg-[#f8f7f8] p-4">
               <h3 className="text-base font-semibold text-[#222]">Filters</h3>
               <div className="flex flex-col gap-3">
                 <h4 className="text-sm font-semibold text-[#222]">Price</h4>
@@ -180,7 +207,7 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="order-3 ml-2 flex gap-5 md:ml-0">
+        <div className="order-3 ml-2 hidden gap-5 md:flex md:ml-0">
 
 
           <Link to="/cart" className="flex items-center justify-center gap-2 rounded-[30px] bg-[#fef5fd] px-5 py-2.5 text-center font-medium">
