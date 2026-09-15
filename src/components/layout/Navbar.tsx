@@ -14,6 +14,7 @@ export default function Navbar() {
   const [searchTerm, setSearchTerm] = useState("");
   const [pastSearches, setPastSearches] = useState<string[]>([]);
   const [showPastSearches, setShowPastSearches] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 
@@ -68,14 +69,14 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="navbar">
-        <div className="nav__left">
+      <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-evenly md:px-0">
+        <div className="order-1 flex w-auto items-center gap-4 md:w-[290px]">
           <Link to="/">
             <img src="/img/icon/logo2.svg" alt="E-Storee" />
           </Link>
           <button
             type="button"
-            className="nav__left__location"
+            className="hidden cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a] md:flex"
             onClick={openLocationModal}
             aria-label={`Change delivery location. Current location: ${location}`}
             title={location}
@@ -85,90 +86,84 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="menu">
-          <input type="checkbox" id="menu-state" className="css-toggle" />
+        <div className="order-2 md:order-3">
           <label
-            htmlFor="menu-state"
-            className="menu-toggle"
+            className="flex cursor-pointer flex-col gap-1.5 p-2 md:hidden"
             aria-label="Open menu or close menu"
-            aria-expanded="false"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((open) => !open)}
           >
-            <span></span>
-            <span></span>
-            <span></span>
+            <span className="h-0.5 w-6 bg-[#333]"></span>
+            <span className="h-0.5 w-6 bg-[#333]"></span>
+            <span className="h-0.5 w-6 bg-[#333]"></span>
           </label>
-          <div className="main-nav">
-            <div className="filters__area">
-              <h3>Filters</h3>
-              <div className="filter__group">
-                <h4>Price</h4>
-                <div className="filter__selected">
-                  <label className="switch switch__price">
+          <div className={menuOpen ? "absolute left-5 right-5 top-[84px] z-30 flex flex-col gap-4 rounded-[18px] bg-white p-6 shadow-[0_12px_35px_rgba(0,0,0,0.15)] md:static md:flex md:flex-row md:items-center md:gap-6 md:bg-transparent md:p-0 md:shadow-none" : "hidden md:flex md:flex-row md:items-center md:gap-6"}>
+            <div className="flex items-center gap-4">
+              <h3 className="text-sm font-semibold text-[#222]">Filters</h3>
+              <div className="flex flex-wrap items-center gap-3">
+                <h4 className="text-sm font-semibold text-[#222]">Price</h4>
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
                     <input
+                      className="h-4 w-4 accent-[#b6349a]"
                       value="0-50"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    <span className="slider round"></span>
-                  </label>
-                  <h4>Under $50</h4>
-                </div>
-                <div className="filter__selected">
-                  <label className="switch switch__price">
+                    Under $50
+                </label>
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
                     <input
+                      className="h-4 w-4 accent-[#b6349a]"
                       value="50-100"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    <span className="slider round"></span>
-                  </label>
-                  <h4>$50 - $100</h4>
-                </div>
-                <div className="filter__selected">
-                  <label className="switch switch__price">
+                    $50 - $100
+                </label>
+                <label className="flex cursor-pointer items-center gap-2 text-sm text-[#555]">
                     <input
+                      className="h-4 w-4 accent-[#b6349a]"
                       value="100-10000"
                       type="radio"
                       name="grup__price"
                       onChange={(e) => handlePriceFilter(e.target.value)}
                     />
-                    <span className="slider round"></span>
-                  </label>
-                  <h4>Over $100</h4>
-                </div>
+                    Over $100
+                </label>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="nav__center" ref={searchContainerRef}>
+        <div className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:order-2 md:w-[40%]" ref={searchContainerRef}>
           <img src="/img/icon/Frame 28.svg" alt="Search" />
           <input
             type="text"
             placeholder="Search products..."
             id="category__input"
+            className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onFocus={() => setShowPastSearches(true)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
-          <button id="search__Btn" onClick={() => handleSearch()}>
+          <button className="rounded-[20px] bg-[#d73f98] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:opacity-90" onClick={() => handleSearch()}>
             Search
           </button>
           
           {showPastSearches && pastSearches.length > 0 && (
-            <div className="past-searches-dropdown">
-              <ul>
+            <div className="absolute left-0 top-[calc(100%+8px)] z-30 w-full overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white py-2 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
+              <ul className="m-0 list-none p-0">
                 {pastSearches.map((search) => (
-                  <li key={search} onClick={() => { setSearchTerm(search); handleSearch(search); }}>
-                    <div className="search-text">
-                      <img src="/img/icon/Frame 28.svg" alt="Search" className="past-search-icon" />
+                  <li className="flex cursor-pointer items-center justify-between px-4 py-2 text-sm hover:bg-[#fff5fc]" key={search} onClick={() => { setSearchTerm(search); handleSearch(search); }}>
+                    <div className="flex items-center gap-2">
+                      <img src="/img/icon/Frame 28.svg" alt="Search" className="h-4 w-4" />
                       <span>{search}</span>
                     </div>
                     <button 
-                      className="remove-search-btn"
+                      className="border-0 bg-transparent px-2 text-lg text-[#999] hover:text-[#d73f98]"
                       onClick={(e) => handleRemoveSearch(e, search)}
                       aria-label="Remove search"
                     >
@@ -181,30 +176,30 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="nav__right">
+        <div className="order-3 ml-2 flex gap-5 md:ml-0">
 
 
-          <Link to="/cart" className="shopping__cart">
-            <div>
-              <img src="/img/icon/Buy.svg" alt="Cart" />
-              <p className="shopping__cart__img">{totalItems}</p>
+          <Link to="/cart" className="flex items-center justify-center gap-2 rounded-[30px] bg-[#fef5fd] px-5 py-2.5 text-center font-medium">
+            <div className="relative flex items-center">
+              <img src="/img/icon/Buy.svg" alt="Cart" className="h-5 w-5" />
+              <p className="absolute -right-2 -top-2 text-[11px] text-[#d73f98]">{totalItems}</p>
             </div>
             <p>Cart</p>
           </Link>
 
           {isLoggedIn && user ? (
-            <Link to="/profile/details" className="nav-user-greeting">
+            <Link to="/profile/details" className="flex items-center gap-2 text-sm font-medium text-[#333]">
               <img
                 src={user.image}
                 alt={user.firstName}
-                className="nav-user-avatar"
+                className="h-8 w-8 rounded-full object-cover"
               />
-              <span className="nav-user-name">
+              <span className="hidden md:inline">
                 Merhaba, {user.firstName}
               </span>
             </Link>
           ) : (
-            <button className="nav__right__login" onClick={handleLoginClick}>
+            <button className="flex items-center gap-2 rounded-[22px] border border-[#d73f98] bg-white px-5 py-2 text-sm font-medium text-[#333] transition hover:bg-[#fff5fc]" onClick={handleLoginClick}>
               <img src="/img/icon/2 User.svg" alt="Login" />
               <p>Login</p>
             </button>

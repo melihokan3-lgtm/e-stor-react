@@ -85,7 +85,7 @@ export default function ProductDetail() {
   if (loading)
     return (
       <main>
-        <div className="category__container__div">
+        <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Loading product details...</p>
         </div>
       </main>
@@ -93,7 +93,7 @@ export default function ProductDetail() {
   if (error || !product)
     return (
       <main>
-        <div className="category__container__div">
+        <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Product not found.</p>
         </div>
       </main>
@@ -104,16 +104,16 @@ export default function ProductDetail() {
     images.length > 0 ? cleanImageUrl(images[activeImgIndex]) : FALLBACK_IMG;
 
   return (
-    <main id="main__details">
-      <section className="details__link">
+    <main id="main__details" className="mx-auto w-full max-w-7xl px-5 py-8">
+      <section className="mb-6 flex items-center gap-1 text-sm text-[#777]">
         <Link to="/"> Home &gt; &nbsp; </Link>
         <Link to="/category"> Settings &gt; &nbsp; </Link>
         <p style={{ color: "#b6349a" }}> Team </p>
       </section>
 
-      <div className="details-container">
-        <div className="details__prodocts">
-          <div className="images__area" >
+      <div className="space-y-10">
+        <div className="grid gap-10 lg:grid-cols-2">
+          <div className="space-y-4">
             <img
               src={mainImg}
               alt={product.title}
@@ -122,7 +122,7 @@ export default function ProductDetail() {
                 e.currentTarget.src = FALLBACK_IMG;
               }}
             />
-            <div className="image__area">
+            <div className="flex gap-3 overflow-x-auto">
               {images.map((imgUrl, idx) => (
                 <img
                   key={`${imgUrl}-${idx}`}
@@ -133,65 +133,40 @@ export default function ProductDetail() {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = FALLBACK_IMG;
                   }}
-                  style={{
-                    cursor: "pointer",
-                    border:
-                      activeImgIndex === idx
-                        ? "2px solid #b6349a"
-                        : "1px solid transparent",
-                    borderRadius: "16px",
-                    padding: "4px",
-                  }}
+                  className={`h-20 w-20 cursor-pointer rounded-2xl border-2 object-contain p-1 ${activeImgIndex === idx ? "border-[#b6349a]" : "border-transparent"}`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="products__description">
-            <div className="product__description">
+          <div className="flex flex-col justify-center">
+            <div>
               <h2
-                className="product__description__title"
-                style={{ color: "#000", fontWeight: "bold" }}
+                className="text-3xl font-bold text-black"
               >
                 {product.title}
               </h2>
               {product.description && (
-                <p style={{ color: "#555", marginTop: "12px", marginBottom: "16px", lineHeight: "1.5" }}>
+                <p className="mt-3 mb-4 leading-6 text-[#555]">
                   {product.description}
                 </p>
               )}
-              <div className="product__description__prices">
-                <p style={{ color: "#888", marginBottom: "8px", fontSize: "14px" }}>$2.71/lb</p>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "10px" }}
-                >
+              <div className="mt-5">
+                <p className="mb-2 text-sm text-[#888]">$2.71/lb</p>
+                <div className="flex items-center gap-2.5">
                   <h3
-                    className="product__description__mony"
-                    style={{
-                      fontSize: "32px",
-                      fontWeight: "bold",
-                      color: "#000",
-                    }}
+                    className="text-[32px] font-bold text-black"
                   >
                     ${product.price}
                   </h3>
                   <span
-                    style={{
-                      textDecoration: "line-through",
-                      color: "#888",
-                      fontSize: "18px",
-                    }}
+                    className="text-lg text-[#888] line-through"
                   >
                     $99.99
                   </span>
                 </div>
                 <p
-                  style={{
-                    color: "#b6349a",
-                    fontWeight: "bold",
-                    marginTop: "8px",
-                    fontSize: "14px",
-                  }}
+                  className="mt-2 text-sm font-bold text-[#b6349a]"
                 >
                   12 Left
                 </p>
@@ -199,11 +174,11 @@ export default function ProductDetail() {
             </div>
 
             <button
-              className="products__description__button"
+              className="mt-7 inline-flex w-fit items-center gap-2 rounded-xl bg-[#b6349a] px-6 py-3 font-semibold text-white transition hover:bg-[#98277f]"
               onClick={() => addToCart(product)}
             >
               <svg
-                className="products__description__button__svg"
+                className="h-6 w-6"
                 width="24"
                 height="24"
                 viewBox="0 0 24 24"
@@ -246,22 +221,22 @@ export default function ProductDetail() {
               Add To Cart
             </button>
 
-            <div className="about__product">
-              <h3 className="about__product__title">About Product</h3>
-              <div className="about__product__item">
-                <div className="about__product__icon about__product__icon--pink">
+            <div className="mt-8 border-t border-[#eee] pt-6">
+              <h3 className="mb-4 text-lg font-semibold">About Product</h3>
+              <div className="mb-3 flex items-center gap-3">
+                <div className="grid h-8 w-8 place-items-center rounded-full bg-[#fff0fa] text-[#b6349a]">
                   🏆
                 </div>
-                <p className="about__product__text">Best Seller Product</p>
-                <a href="#" className="about__product__link">
+                <p className="text-sm font-medium">Best Seller Product</p>
+                <a href="#" className="ml-auto text-sm text-[#b6349a]">
                   View More &gt;
                 </a>
               </div>
-              <div className="about__product__item">
-                <div className="about__product__icon about__product__icon--green">
+              <div className="flex items-center gap-3">
+                <div className="grid h-8 w-8 place-items-center rounded-full bg-[#effbf4] text-[#2d9f62]">
                   ✔
                 </div>
-                <p className="about__product__text">
+                <p className="text-sm font-medium">
                   100% satisfaction guarantee
                 </p>
               </div>
@@ -270,45 +245,45 @@ export default function ProductDetail() {
         </div>
 
         {/* CUSTOMER REVIEWS SECTION */}
-        <section className="customer-reviews-section">
-          <div className="customer-reviews-grid">
-            <div className="reviews-summary">
-              <h3 style={{ fontSize: "24px", marginBottom: "10px" }}>Customer Reviews</h3>
-              <p className="average-rating">Average rating: 4.5 (5391)</p>
-              <div className="rating-bars">
+        <section className="rounded-2xl border border-[#eee] p-6">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <h3 className="mb-2.5 text-2xl">Customer Reviews</h3>
+              <p className="text-sm text-[#777]">Average rating: 4.5 (5391)</p>
+              <div className="mt-5 space-y-3">
                 {[5, 4, 3, 2, 1].map((star) => (
-                  <div key={star} className="rating-bar-row">
-                    <span className="star-label">{star} <StarIcon filled={false} /></span>
-                    <div className="progress-bar-bg">
-                      <div className="progress-bar-fill" style={{ width: `${star * 20}%` }}></div>
+                  <div key={star} className="flex items-center gap-3">
+                    <span className="flex w-10 items-center gap-1 text-sm">{star} <StarIcon filled={false} /></span>
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#eee]">
+                      <div className="h-full bg-[#b6349a]" style={{ width: `${star * 20}%` }}></div>
                     </div>
-                    <span className="rating-count">4.28K</span>
+                    <span className="text-xs text-[#777]">4.28K</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div className="reviews-list">
-              <details className="reviews-list-details" open>
-                <summary className="reviews-header">
-                  <h3>Reviews</h3>
-                  <span className="recent-filter">Recent</span>
+            <div>
+              <details open>
+                <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#eee] pb-3">
+                  <h3 className="font-semibold">Reviews</h3>
+                  <span className="text-sm text-[#777]">Recent</span>
                 </summary>
                 
-                <div className="review-items-container">
-                  <div className="review-item">
-                    <h4>Perfect Combination!!</h4>
-                    <div className="review-stars">
+                <div className="space-y-5 pt-4">
+                  <div className="border-b border-[#eee] pb-5">
+                    <h4 className="font-semibold">Perfect Combination!!</h4>
+                    <div className="my-2 flex gap-1">
                       <StarIcon/><StarIcon/><StarIcon/><StarIcon/><StarIcon filled={false}/>
                     </div>
-                    <p>This review was collected as part of a promotion.) I forgot to post my photos from my review! So here is my review again. A perfect combination of softness, strength, and proper friction to make any user leaving clean and spotless!! I have been purchasing for years and Angel Soft isn't too thick where you think you are using a towel and it's not too thin leaving you with unexpected tears during use!! Some say I have an addition to Angel Soft, I say it's dedication for a great product!! See the attached photos from my last purchase!</p>
+                    <p className="text-sm leading-6 text-[#666]">This review was collected as part of a promotion.) I forgot to post my photos from my review! So here is my review again. A perfect combination of softness, strength, and proper friction to make any user leaving clean and spotless!!</p>
                   </div>
 
-                  <div className="review-item">
-                    <h4>Perfect Combination!!</h4>
-                    <div className="review-stars">
+                  <div>
+                    <h4 className="font-semibold">Perfect Combination!!</h4>
+                    <div className="my-2 flex gap-1">
                       <StarIcon/><StarIcon/><StarIcon/><StarIcon/><StarIcon filled={false}/>
                     </div>
-                    <p>This review was collected as part of a promotion.) I forgot to post my photos from my review! So here is my review again. A perfect combination of softness, strength, and proper friction to make any user leaving clean and spotless!! I have been purchasing for years and Angel Soft isn't too thick where you think you are using a towel and it's not too thin leaving you with unexpected tears during use!! Some say I have an addition to Angel Soft, I say it's dedication for a great product!! See the attached photos from my last purchase!</p>
+                    <p className="text-sm leading-6 text-[#666]">This review was collected as part of a promotion.) A perfect combination of softness, strength, and proper friction for a clean result.</p>
                   </div>
                 </div>
               </details>
@@ -317,22 +292,22 @@ export default function ProductDetail() {
         </section>
 
         {/* ACCORDION SECTION */}
-        <section className="product-accordions">
-          <details open>
-            <summary>Details</summary>
-            <div className="accordion-content">
+        <section className="space-y-2">
+          <details className="rounded-xl border border-[#eee] p-4" open>
+            <summary className="cursor-pointer font-semibold">Details</summary>
+            <div className="pt-3 text-sm leading-6 text-[#666]">
               {product.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
             </div>
           </details>
-          <details>
-            <summary>Conservation and storage</summary>
-            <div className="accordion-content">
+          <details className="rounded-xl border border-[#eee] p-4">
+            <summary className="cursor-pointer font-semibold">Conservation and storage</summary>
+            <div className="pt-3 text-sm leading-6 text-[#666]">
               Store in a cool, dry place. Keep away from direct sunlight.
             </div>
           </details>
-          <details>
-            <summary>Ingredients</summary>
-            <div className="accordion-content">
+          <details className="rounded-xl border border-[#eee] p-4">
+            <summary className="cursor-pointer font-semibold">Ingredients</summary>
+            <div className="pt-3 text-sm leading-6 text-[#666]">
               100% Natural ingredients.
             </div>
           </details>
@@ -340,14 +315,13 @@ export default function ProductDetail() {
 
       </div>
 
-      <section className="product__area" style={{ marginTop: "50px" }}>
-        <section className="home__section">
-          <div className="home__section__header">
-            <h2>Recomended For You</h2>
+      <section className="mt-12">
+        <section>
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-2xl font-semibold">Recomended For You</h2>
             <Link 
               to={`/category?cat=${encodeURIComponent(product.category || "all")}`}
-              className="view__all__btn" 
-              style={{ padding: "10px 20px", display: "inline-block" }}
+              className="rounded-lg border border-[#b6349a] px-5 py-2.5 text-sm font-semibold text-[#b6349a]"
             >
               View All &rarr;
             </Link>
@@ -360,7 +334,7 @@ export default function ProductDetail() {
               700: { slidesPerView: 4, spaceBetween: 30 },
               1024: { slidesPerView: 5, spaceBetween: 30 },
             }}
-            className="mySwiper__recomended"
+            className="!overflow-visible"
           >
             {recommended.map((rec) => (
               <SwiperSlide key={rec.id}>
