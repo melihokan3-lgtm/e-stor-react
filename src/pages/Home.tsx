@@ -49,8 +49,8 @@ export default function Home() {
 
 
   return (
-    <main className="mx-auto flex max-w-[1600px] bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
-      <div className="mx-auto max-w-[1600px]">
+    <main className="mx-auto flex max-w-[1600px] overflow-x-hidden bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
+      <div className="mx-auto w-full max-w-[1600px]">
         {error && <p className="text-center text-[15px] text-[#888]">{error}</p>}
 
         {/* ─── 1. TOP BANNER SWIPER ─── */}
@@ -73,7 +73,7 @@ export default function Home() {
           >
             {bannerRow1Slides.map((src, i) => (
               <SwiperSlide key={`r1-${i}`} className="w-auto!">
-                <div className="flex h-[250px] cursor-grab overflow-hidden rounded-[20px] bg-[#f8f8f8] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-[250ms] hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:cursor-grabbing">
+                <div className="flex h-[250px] cursor-grab overflow-hidden rounded-[20px] bg-[#f8f8f8] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-[250ms] hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:cursor-grabbing [@media(max-width:640px)]:h-[160px] [@media(max-width:480px)]:h-[135px]">
                   <img src={src} alt="Kampanya Banner" className="pointer-events-none block h-full w-auto max-w-full select-none rounded-[20px] object-cover [-webkit-user-drag:none]" />
                 </div>
               </SwiperSlide>
@@ -98,7 +98,7 @@ export default function Home() {
           >
             {bannerRow2Slides.map((src, i) => (
               <SwiperSlide key={`r2-${i}`} className="w-auto!">
-                <div className="flex h-[250px] cursor-grab overflow-hidden rounded-[20px] bg-[#f8f8f8] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-[250ms] hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:cursor-grabbing">
+                <div className="flex h-[250px] cursor-grab overflow-hidden rounded-[20px] bg-[#f8f8f8] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-[250ms] hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:cursor-grabbing [@media(max-width:640px)]:h-[160px] [@media(max-width:480px)]:h-[135px]">
                   <img src={src} alt="Kampanya Banner" className="pointer-events-none block h-full w-auto max-w-full select-none rounded-[20px] object-cover [-webkit-user-drag:none]" />
                 </div>
               </SwiperSlide>
@@ -258,7 +258,7 @@ export default function Home() {
         </section>
 
         {/* ─── 5. MIDDLE PROMO ─── */}
-        <section className="mb-[60px] rounded-[24px] bg-[#fef9fc] p-10 [@media(max-width:480px)]:p-6">
+        <section className="mb-[60px] rounded-[24px] bg-[#fef9fc] p-10 [@media(max-width:768px)]:p-6 [@media(max-width:480px)]:p-4">
           <div className="flex items-center gap-10 [@media(max-width:1024px)]:flex-col-reverse">
             <div className="grid min-w-0 flex-[2] grid-cols-3 gap-5 [@media(max-width:1024px)]:w-full [@media(max-width:768px)]:grid-cols-2 [@media(max-width:480px)]:grid-cols-1!">
               {products.slice(2, 5).map((p) => (
@@ -267,7 +267,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className="min-w-[260px] flex-1">
+            <div className="min-w-0 flex-1 [@media(max-width:1024px)]:w-full">
               <p className="mb-[10px] text-[14px] font-bold text-[#b6349a]">Get 10% OFF On Your First Order</p>
               <h2 className="mb-6 text-[34px] font-extrabold leading-[1.2] text-[#111] [@media(max-width:480px)]:text-[26px]">Order Now Your Grocery!</h2>
               <div className="flex flex-wrap gap-[10px]">
@@ -282,7 +282,7 @@ export default function Home() {
         </section>
 
         {/* ─── 7. BOTTOM PROMO ─── */}
-        <section className="mb-[60px] rounded-[24px] bg-[#fdf5f8] p-10 [@media(max-width:480px)]:p-6">
+        <section className="mb-[60px] rounded-[24px] bg-[#fdf5f8] p-10 [@media(max-width:768px)]:p-6 [@media(max-width:480px)]:p-4">
           <div className="flex items-center gap-10 [@media(max-width:1024px)]:flex-col-reverse">
             <div className="grid min-w-0 flex-[2] grid-cols-3 gap-5 [@media(max-width:1024px)]:w-full [@media(max-width:768px)]:grid-cols-2 [@media(max-width:480px)]:grid-cols-1!">
               {products.slice(5, 8).map((p) => (
@@ -291,7 +291,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <div className="min-w-[260px] flex-1">
+            <div className="min-w-0 flex-1 [@media(max-width:1024px)]:w-full">
               <p className="mb-[10px] text-[14px] font-bold text-[#b6349a]">Get 10% OFF On Your First Order</p>
               <h2 className="mb-6 text-[34px] font-extrabold leading-[1.2] text-[#111] [@media(max-width:480px)]:text-[26px]">Order Now Your Grocery!</h2>
               <div className="mb-7 flex gap-7">
