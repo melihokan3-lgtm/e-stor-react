@@ -16,6 +16,7 @@ export default function Navbar() {
   const [showPastSearches, setShowPastSearches] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const avatarSrc = user?.image?.trim() || "https://ui-avatars.com/api/?name=User&background=b6349a&color=fff";
 
@@ -32,6 +33,17 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const handleMenuOutsideClick = (event: globalThis.MouseEvent): void => {
+      if (menuOpen && menuRef.current && !(event.target instanceof Node && menuRef.current.contains(event.target))) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleMenuOutsideClick);
+    return () => document.removeEventListener("mousedown", handleMenuOutsideClick);
+  }, [menuOpen]);
 
   const handleSearch = (termToSearch: string = searchTerm): void => {
     if (termToSearch) {
@@ -87,7 +99,7 @@ export default function Navbar() {
           </button>
         </div>
 
-        <div className="order-2 md:order-3">
+        <div className="order-2 md:order-3" ref={menuRef}>
           <label
             className="flex cursor-pointer flex-col gap-1.5 p-2 md:hidden"
             aria-label="Open menu or close menu"
