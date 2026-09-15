@@ -1,16 +1,14 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api";
-import { CartContext } from "../context/CartContext";
+import { useCart } from "../context/CartContext";
+import type { Product } from "../types/product";
 
-export default function WeeklyProductCard({ product }) {
-  const categoryName =
-    typeof product.category === "string" ? product.category : product.category?.name;
-  const categorySlug = categoryName?.toLowerCase().replace(/\s+/g, "-") || "category";
+export default function WeeklyProductCard({ product }: { product: Product }) {
+  const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";
   const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
   const oldPrice = (product.price * 1.2).toFixed(2);
   const stockLeft = (product.id % 15) + 1;
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
 
   return (
     <Link
@@ -42,7 +40,7 @@ export default function WeeklyProductCard({ product }) {
         className="quick-add-btn"
         onClick={(e) => {
           e.preventDefault();
-          addToCart({ ...product, unit: 1 });
+          addToCart(product);
         }}
       >
         Add to Cart

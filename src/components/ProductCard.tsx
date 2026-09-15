@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api";
-import { CartContext } from "../context/CartContext";
+import { useCart } from "../context/CartContext";
+import type { Product } from "../types/product";
 
-export default function ProductCard({ product, className = "premium-product-card" }) {
-  const categorySlug =
-    (typeof product.category === 'string' ? product.category : product.category?.name)?.toLowerCase().replace(/\s+/g, "-") ||
-    "category";
+interface ProductCardProps {
+  product: Product;
+  className?: string;
+}
+
+export default function ProductCard({ product, className = "premium-product-card" }: ProductCardProps) {
+  const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";
   const productId = product.id;
-  const { addToCart } = useContext(CartContext);
+  const { addToCart } = useCart();
   
   // Fake Store API uses `image` instead of `images` array
   const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
@@ -16,7 +19,7 @@ export default function ProductCard({ product, className = "premium-product-card
   // Fake old price and stock for UI purposes to match design
   const oldPrice = (product.price * 1.2).toFixed(2);
   const stockLeft = (product.id % 15) + 1; // Fake stock just for visual
-  const brand = (typeof product.category === 'string' ? product.category : product.category?.name) || "Zelle";
+  const brand = product.category || "Zelle";
 
   return (
     <Link to={`/${categorySlug}/${productId}`} className={className}>
@@ -24,9 +27,9 @@ export default function ProductCard({ product, className = "premium-product-card
         <img
           src={imageSrc}
           alt={product.title}
-          onError={(e) => {
-            e.target.onerror = null;
-            e.target.src = FALLBACK_IMG;
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = FALLBACK_IMG;
           }}
         />
       </div>
@@ -45,7 +48,7 @@ export default function ProductCard({ product, className = "premium-product-card
           className="quick-add-btn" 
           onClick={(e) => {
             e.preventDefault();
-            addToCart({ ...product, unit: 1 });
+            addToCart(product);
           }}
         >
           Add to Cart

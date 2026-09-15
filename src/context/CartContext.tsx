@@ -7,6 +7,12 @@ import type { Product } from "../types/product";
 
 export const CartContext = createContext<CartContextValue | null>(null);
 
+export const useCart = (): CartContextValue => {
+  const context = useContext(CartContext);
+  if (!context) throw new Error("useCart must be used inside CartProvider.");
+  return context;
+};
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
