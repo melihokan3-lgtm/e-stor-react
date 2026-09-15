@@ -116,19 +116,19 @@ export default function AccountDetails() {
   };
 
   return (
-    <div className="account-details-page">
-      <h2 className="profile-page-title">Account Details</h2>
+    <div className="w-full">
+      <h2 className="mb-10 text-[28px] font-extrabold text-[#111]">Account Details</h2>
 
-      <div className="account-details-box">
+      <div className="flex flex-col rounded-[20px] border border-[#f2f2f2] px-[30px] max-md:px-4">
         {/* ROW 1: Full Name */}
-        <div className="account-field-row">
+        <div className="flex items-center justify-between border-b border-[#f2f2f2] py-[30px] max-md:items-start max-md:gap-4">
           {editingField === "name" ? (
-            <div className="account-field-edit-wrapper">
-              <span className="account-field-label">Edit Full Name</span>
-              <div className="account-edit-inputs-row">
+            <div className="flex w-full flex-col gap-3">
+              <span className="text-[15px] font-bold text-[#111]">Edit Full Name</span>
+              <div className="flex w-full flex-wrap gap-3">
                 <input
                   type="text"
-                  className={`account-inline-input ${error ? "has-error" : ""}`}
+                  className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
                   placeholder="First Name (Ad)"
                   value={formData.firstName}
                   onChange={(e) => {
@@ -140,7 +140,7 @@ export default function AccountDetails() {
                 />
                 <input
                   type="text"
-                  className={`account-inline-input ${error ? "has-error" : ""}`}
+                  className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
                   placeholder="Last Name (Soyad)"
                   value={formData.lastName}
                   onChange={(e) => {
@@ -150,11 +150,11 @@ export default function AccountDetails() {
                   onKeyDown={(e) => handleKeyDown(e, "name")}
                 />
               </div>
-              {error && <span className="account-edit-error">{error}</span>}
-              <div className="account-edit-actions">
+              {error && <span className="text-xs font-medium text-red-500">{error}</span>}
+              <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
-                  className="account-save-btn"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#b6349a] to-[#831843] px-[18px] py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(182,52,154,0.25)] transition hover:-translate-y-px hover:opacity-95 hover:shadow-[0_4px_12px_rgba(182,52,154,0.35)]"
                   onClick={() => handleSave("name")}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -164,7 +164,7 @@ export default function AccountDetails() {
                 </button>
                 <button
                   type="button"
-                  className="account-cancel-btn"
+                  className="inline-flex items-center rounded-lg bg-gray-100 px-[14px] py-2 text-[13px] font-semibold text-gray-600 transition hover:bg-gray-200 hover:text-gray-900"
                   onClick={cancelEditing}
                 >
                   Cancel
@@ -173,13 +173,13 @@ export default function AccountDetails() {
             </div>
           ) : (
             <>
-              <div className="account-field-info">
-                <span className="account-field-label">Full Name</span>
-                <span className="account-field-value">{fullName}</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[15px] font-bold text-[#111]">Full Name</span>
+                <span className="text-sm font-medium text-[#aaa]">{fullName}</span>
               </div>
               <button
                 type="button"
-                className="account-edit-btn"
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]"
                 onClick={() => startEditing("name")}
                 aria-label="Edit Full Name"
               >
@@ -194,14 +194,14 @@ export default function AccountDetails() {
         </div>
 
         {/* ROW 2: Username */}
-        <div className="account-field-row">
+        <div className="flex items-center justify-between border-b border-[#f2f2f2] py-[30px] max-md:items-start max-md:gap-4">
           {editingField === "username" ? (
-            <div className="account-field-edit-wrapper">
-              <span className="account-field-label">Edit Username</span>
-              <div className="account-edit-inputs-row">
+            <div className="flex w-full flex-col gap-3">
+              <span className="text-[15px] font-bold text-[#111]">Edit Username</span>
+              <div className="flex w-full flex-wrap gap-3">
                 <input
                   type="text"
-                  className={`account-inline-input ${error ? "has-error" : ""}`}
+                  className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
                   placeholder="Username (Kullanıcı Adı)"
                   value={formData.username}
                   onChange={(e) => {
@@ -212,11 +212,11 @@ export default function AccountDetails() {
                   autoFocus
                 />
               </div>
-              {error && <span className="account-edit-error">{error}</span>}
-              <div className="account-edit-actions">
+              {error && <span className="text-xs font-medium text-red-500">{error}</span>}
+              <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
-                  className="account-save-btn"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#b6349a] to-[#831843] px-[18px] py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(182,52,154,0.25)] transition hover:-translate-y-px hover:opacity-95 hover:shadow-[0_4px_12px_rgba(182,52,154,0.35)]"
                   onClick={() => handleSave("username")}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -226,7 +226,7 @@ export default function AccountDetails() {
                 </button>
                 <button
                   type="button"
-                  className="account-cancel-btn"
+                  className="inline-flex items-center rounded-lg bg-gray-100 px-[14px] py-2 text-[13px] font-semibold text-gray-600 transition hover:bg-gray-200 hover:text-gray-900"
                   onClick={cancelEditing}
                 >
                   Cancel
@@ -235,13 +235,13 @@ export default function AccountDetails() {
             </div>
           ) : (
             <>
-              <div className="account-field-info">
-                <span className="account-field-label">Username</span>
-                <span className="account-field-value">@{user.username}</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[15px] font-bold text-[#111]">Username</span>
+                <span className="text-sm font-medium text-[#aaa]">@{user.username}</span>
               </div>
               <button
                 type="button"
-                className="account-edit-btn"
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]"
                 onClick={() => startEditing("username")}
                 aria-label="Edit Username"
               >
@@ -256,14 +256,14 @@ export default function AccountDetails() {
         </div>
 
         {/* ROW 3: Email Address */}
-        <div className="account-field-row">
+        <div className="flex items-center justify-between border-b border-[#f2f2f2] py-[30px] max-md:items-start max-md:gap-4">
           {editingField === "email" ? (
-            <div className="account-field-edit-wrapper">
-              <span className="account-field-label">Edit Email Address</span>
-              <div className="account-edit-inputs-row">
+            <div className="flex w-full flex-col gap-3">
+              <span className="text-[15px] font-bold text-[#111]">Edit Email Address</span>
+              <div className="flex w-full flex-wrap gap-3">
                 <input
                   type="email"
-                  className={`account-inline-input ${error ? "has-error" : ""}`}
+                  className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={(e) => {
@@ -274,11 +274,11 @@ export default function AccountDetails() {
                   autoFocus
                 />
               </div>
-              {error && <span className="account-edit-error">{error}</span>}
-              <div className="account-edit-actions">
+              {error && <span className="text-xs font-medium text-red-500">{error}</span>}
+              <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
-                  className="account-save-btn"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#b6349a] to-[#831843] px-[18px] py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(182,52,154,0.25)] transition hover:-translate-y-px hover:opacity-95 hover:shadow-[0_4px_12px_rgba(182,52,154,0.35)]"
                   onClick={() => handleSave("email")}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -288,7 +288,7 @@ export default function AccountDetails() {
                 </button>
                 <button
                   type="button"
-                  className="account-cancel-btn"
+                  className="inline-flex items-center rounded-lg bg-gray-100 px-[14px] py-2 text-[13px] font-semibold text-gray-600 transition hover:bg-gray-200 hover:text-gray-900"
                   onClick={cancelEditing}
                 >
                   Cancel
@@ -297,13 +297,13 @@ export default function AccountDetails() {
             </div>
           ) : (
             <>
-              <div className="account-field-info">
-                <span className="account-field-label">Email Address</span>
-                <span className="account-field-value">{user.email}</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[15px] font-bold text-[#111]">Email Address</span>
+                <span className="text-sm font-medium text-[#aaa]">{user.email}</span>
               </div>
               <button
                 type="button"
-                className="account-edit-btn"
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]"
                 onClick={() => startEditing("email")}
                 aria-label="Edit Email Address"
               >
@@ -318,14 +318,14 @@ export default function AccountDetails() {
         </div>
 
         {/* ROW 4: Phone Number */}
-        <div className="account-field-row border-none">
+        <div className="flex items-center justify-between py-[30px] max-md:items-start max-md:gap-4">
           {editingField === "phone" ? (
-            <div className="account-field-edit-wrapper">
-              <span className="account-field-label">Edit Phone Number</span>
-              <div className="account-edit-inputs-row">
+            <div className="flex w-full flex-col gap-3">
+              <span className="text-[15px] font-bold text-[#111]">Edit Phone Number</span>
+              <div className="flex w-full flex-wrap gap-3">
                 <input
                   type="tel"
-                  className={`account-inline-input ${error ? "has-error" : ""}`}
+                  className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
                   placeholder="+90 5XX XXX XX XX"
                   value={formData.phone}
                   onChange={(e) => {
@@ -336,11 +336,11 @@ export default function AccountDetails() {
                   autoFocus
                 />
               </div>
-              {error && <span className="account-edit-error">{error}</span>}
-              <div className="account-edit-actions">
+              {error && <span className="text-xs font-medium text-red-500">{error}</span>}
+              <div className="mt-1 flex items-center gap-2">
                 <button
                   type="button"
-                  className="account-save-btn"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-br from-[#b6349a] to-[#831843] px-[18px] py-2 text-[13px] font-semibold text-white shadow-[0_2px_8px_rgba(182,52,154,0.25)] transition hover:-translate-y-px hover:opacity-95 hover:shadow-[0_4px_12px_rgba(182,52,154,0.35)]"
                   onClick={() => handleSave("phone")}
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -350,7 +350,7 @@ export default function AccountDetails() {
                 </button>
                 <button
                   type="button"
-                  className="account-cancel-btn"
+                  className="inline-flex items-center rounded-lg bg-gray-100 px-[14px] py-2 text-[13px] font-semibold text-gray-600 transition hover:bg-gray-200 hover:text-gray-900"
                   onClick={cancelEditing}
                 >
                   Cancel
@@ -359,13 +359,13 @@ export default function AccountDetails() {
             </div>
           ) : (
             <>
-              <div className="account-field-info">
-                <span className="account-field-label">Phone Number</span>
-                <span className="account-field-value">{user.phone || "Not provided"}</span>
+              <div className="flex flex-col gap-2">
+                <span className="text-[15px] font-bold text-[#111]">Phone Number</span>
+                <span className="text-sm font-medium text-[#aaa]">{user.phone || "Not provided"}</span>
               </div>
               <button
                 type="button"
-                className="account-edit-btn"
+                className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]"
                 onClick={() => startEditing("phone")}
                 aria-label="Edit Phone Number"
               >
@@ -382,7 +382,7 @@ export default function AccountDetails() {
 
       {/* Toast Feedback */}
       {toastMessage && (
-        <div className="payments-toast-notification">
+        <div className="fixed right-5 top-5 z-[1000] rounded-xl border border-[#b6349a]/20 bg-white px-5 py-3 text-sm font-semibold text-[#b6349a] shadow-[0_8px_24px_rgba(182,52,154,0.18)]">
           {toastMessage}
         </div>
       )}
