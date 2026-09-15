@@ -215,7 +215,7 @@ export default function Home() {
         </section>
 
         {/* ─── 4. TRENDING STORE FAVORITES ─── */}
-        <section className="mb-[60px] rounded-[24px] bg-[#faf9fa] px-6 py-7 [@media(max-width:768px)]:px-4 [@media(max-width:640px)]:rounded-[18px] [@media(max-width:640px)]:py-5">
+        <section className="mb-[60px] rounded-[24px] bg-transparent px-6 py-7 [@media(max-width:768px)]:px-4 [@media(max-width:640px)]:rounded-[18px] [@media(max-width:640px)]:py-5">
           <div className="mb-6 flex items-center justify-between [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:items-start [@media(max-width:768px)]:gap-3">
             <h2 className="m-0 text-[24px] font-bold tracking-normal text-[#111] [@media(max-width:640px)]:text-[20px]">Trending Store Favorites</h2>
             <Link to="/category" className="inline-flex items-center rounded-[30px] border border-[#b6349a] bg-white px-4 py-2 text-[13px] font-semibold text-[#b6349a] transition-colors duration-200 hover:bg-[#b6349a] hover:text-white">View All →</Link>
