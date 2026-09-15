@@ -1,11 +1,13 @@
-import { useContext, useState } from "react";
-import { AuthContext } from "../../features/auth/AuthContext";
+import { useState, type KeyboardEvent } from "react";
+import { useAuth } from "../../features/auth/AuthContext";
+
+type EditableField = "name" | "username" | "email" | "phone";
 
 export default function AccountDetails() {
-  const { user, updateUser } = useContext(AuthContext);
+  const { user, updateUser } = useAuth();
 
   // Tracks which field is currently being edited: null | "name" | "username" | "email" | "phone"
-  const [editingField, setEditingField] = useState(null);
+  const [editingField, setEditingField] = useState<EditableField | null>(null);
 
   // Form states for editing
   const [formData, setFormData] = useState({
@@ -23,12 +25,12 @@ export default function AccountDetails() {
 
   const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Belirtilmemiş";
 
-  const showToast = (msg) => {
+  const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  const startEditing = (field) => {
+  const startEditing = (field: EditableField) => {
     setEditingField(field);
     setError("");
     setFormData({
@@ -45,7 +47,7 @@ export default function AccountDetails() {
     setError("");
   };
 
-  const handleSave = (field) => {
+  const handleSave = (field: EditableField) => {
     setError("");
 
     if (field === "name") {
@@ -104,7 +106,7 @@ export default function AccountDetails() {
     }
   };
 
-  const handleKeyDown = (e, field) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, field: EditableField) => {
     if (e.key === "Enter") {
       e.preventDefault();
       handleSave(field);

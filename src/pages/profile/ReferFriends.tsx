@@ -1,8 +1,37 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../../features/auth/AuthContext";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+
+interface ReferralHistoryItem {
+  name: string;
+  status: string;
+  type: "pending" | "success" | "idle";
+}
+
+interface ReferralData {
+  totalEarned: number;
+  friendsInvited: number;
+  pendingApprovals: number;
+  history: ReferralHistoryItem[];
+}
+
+const INITIAL_REFERRAL_DATA: ReferralData = {
+  totalEarned: 300,
+  friendsInvited: 5,
+  pendingApprovals: 2,
+  history: [
+    { name: "Ahmet Y.", status: "Üye Oldu (Beklemede)", type: "pending" },
+    { name: "Ayşe K.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
+    { name: "Mehmet D.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
+    { name: "Zeynep T.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
+    { name: "Can S.", status: "Kayıt Bekleniyor", type: "idle" },
+  ],
+};
 
 export default function ReferFriends() {
+  const { user } = useAuth();
   const [copyStatus, setCopyStatus] = useState("Kopyala");
-  const [referralData, setReferralData] = useState({
+  const [referralData, setReferralData] = useState<ReferralData>({
     totalEarned: 0,
     friendsInvited: 0,
     pendingApprovals: 0,
@@ -12,29 +41,15 @@ export default function ReferFriends() {
   const referralCode = "EMASTUDIO2024";
 
   useEffect(() => {
-    // Mock local storage init if empty
-    const storageKey = "referralData_user_123";
-    let storedData = localStorage.getItem(storageKey);
-    
-    if (!storedData) {
-      const initialData = {
-        totalEarned: 300,
-        friendsInvited: 5,
-        pendingApprovals: 2,
-        history: [
-          { name: "Ahmet Y.", status: "Üye Oldu (Beklemede)", type: "pending" },
-          { name: "Ayşe K.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-          { name: "Mehmet D.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-          { name: "Zeynep T.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-          { name: "Can S.", status: "Kayıt Bekleniyor", type: "idle" }
-        ]
-      };
-      localStorage.setItem(storageKey, JSON.stringify(initialData));
-      storedData = JSON.stringify(initialData);
+    if (!user) return;
+    const stored = readUserStorage<ReferralData | null>("referralData", user, null);
+    if (stored && Array.isArray(stored.history)) {
+      setReferralData(stored);
+    } else {
+      setReferralData(INITIAL_REFERRAL_DATA);
+      writeUserStorage("referralData", user, INITIAL_REFERRAL_DATA);
     }
-    
-    setReferralData(JSON.parse(storedData));
-  }, []);
+  }, [user]);
 
   const handleCopy = async () => {
     try {
@@ -144,8 +159,8 @@ export default function ReferFriends() {
           <h4>Davet Geçmişi</h4>
           {referralData.history.length > 0 ? (
             <ul className="history-list">
-              {referralData.history.map((item, index) => (
-                <li key={index} className={`history-item ${item.type}`}>
+              {referralData.history.map((item) => (
+                <li key={item.name} className={`history-item ${item.type}`}>
                   <span className="history-name">{item.name}</span>
                   <span className="history-status">{item.status}</span>
                 </li>

@@ -1,6 +1,21 @@
 import { useState } from "react";
 
-const COUPONS_DATA = [
+type CouponType = "discount" | "shipping" | "special";
+type CouponStatus = "active" | "expired" | "used";
+
+interface Coupon {
+  id: number;
+  code: string;
+  title: string;
+  description: string;
+  discount: string;
+  type: CouponType;
+  minOrder: number;
+  expiry: string;
+  status: CouponStatus;
+}
+
+const COUPONS_DATA: Coupon[] = [
   {
     id: 1,
     code: "HOSGELDIN20",
@@ -69,7 +84,7 @@ const COUPONS_DATA = [
   },
 ];
 
-const ICONS = {
+const ICONS: Record<CouponType, string> = {
   discount: "🏷️",
   shipping: "🚚",
   special: "⭐",
@@ -82,14 +97,14 @@ export default function Coupons() {
   const usedCoupons = COUPONS_DATA.filter((c) => c.status === "used");
   const expiredCoupons = COUPONS_DATA.filter((c) => c.status === "expired");
 
-  const copyCode = (code) => {
+  const copyCode = (code: string) => {
     navigator.clipboard.writeText(code).then(() => {
       setToast(`"${code}" kodu panoya kopyalandı!`);
       setTimeout(() => setToast(""), 3000);
     });
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
     return d.toLocaleDateString("tr-TR", {
       day: "numeric",

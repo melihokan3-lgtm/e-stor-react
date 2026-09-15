@@ -46,13 +46,13 @@ const FAQ_ITEMS = [
 ];
 
 export default function HelpCenter() {
-  const [openItemIds, setOpenItemIds] = useState([1]); // First FAQ open by default
+  const [openItemIds, setOpenItemIds] = useState<number[]>([1]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Tümü");
   const [chatModalOpen, setChatModalOpen] = useState(false);
 
   // Toggle FAQ Accordion item
-  const toggleAccordion = (id) => {
+  const toggleAccordion = (id: number) => {
     setOpenItemIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -255,7 +255,7 @@ export default function HelpCenter() {
                   if (e.key === "Enter") {
                     e.preventDefault();
                     alert("Mesajınız canlı destek temsilcimize iletildi.");
-                    e.target.value = "";
+                    e.currentTarget.value = "";
                   }
                 }}
               />
