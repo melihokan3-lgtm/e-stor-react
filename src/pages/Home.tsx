@@ -192,7 +192,7 @@ export default function Home() {
 
 
 
-            <div className="relative z-[2] w-full rounded-[0_32px_24px_24px] bg-white px-5 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:rounded-b-[18px] [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-[14px] [@media(max-width:640px)]:pb-[18px]">
+            <div className="relative z-[2] w-full rounded-[0_32px_24px_24px] bg-white px-5 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:overflow-hidden [@media(max-width:640px)]:rounded-b-[18px] [@media(max-width:640px)]:bg-white [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-[14px] [@media(max-width:640px)]:pb-[18px]">
               <Swiper
                 slidesPerView={2}
                 spaceBetween={20}
