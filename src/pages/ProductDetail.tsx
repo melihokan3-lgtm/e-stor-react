@@ -104,17 +104,18 @@ export default function ProductDetail() {
     images.length > 0 ? cleanImageUrl(images[activeImgIndex]) : FALLBACK_IMG;
 
   return (
-    <main id="main__details" className="mx-auto w-full max-w-7xl px-5 py-8">
-      <section className="mb-6 flex items-center gap-1 text-sm text-[#777]">
+    <main id="main__details" className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
+      <section className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
         <Link to="/"> Home &gt; &nbsp; </Link>
         <Link to="/category"> Settings &gt; &nbsp; </Link>
         <p style={{ color: "#b6349a" }}> Team </p>
       </section>
 
-      <div className="space-y-10">
-        <div className="grid gap-10 lg:grid-cols-2">
-          <div className="space-y-4">
+      <div className="mx-auto w-full max-w-[1544px]">
+        <div className="mt-5 flex flex-col gap-[50px] bg-white lg:flex-row">
+          <div className="flex w-full flex-col items-center gap-5 rounded-[20px] border border-[#f4f0f0] bg-[#fdfdfd] p-[30px] shadow-[var(--shadow-sm)] lg:w-1/2">
             <img
+              className="max-h-[640px] max-w-full object-contain"
               src={mainImg}
               alt={product.title}
               onError={(e) => {
@@ -122,7 +123,7 @@ export default function ProductDetail() {
                 e.currentTarget.src = FALLBACK_IMG;
               }}
             />
-            <div className="flex gap-3 overflow-x-auto">
+            <div className="flex gap-5 overflow-x-auto">
               {images.map((imgUrl, idx) => (
                 <img
                   key={`${imgUrl}-${idx}`}
@@ -133,13 +134,13 @@ export default function ProductDetail() {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = FALLBACK_IMG;
                   }}
-                  className={`h-20 w-20 cursor-pointer rounded-2xl border-2 object-contain p-1 ${activeImgIndex === idx ? "border-[#b6349a]" : "border-transparent"}`}
+                  className={`h-20 w-[100px] max-w-full cursor-pointer rounded-2xl border-2 object-contain p-1 ${activeImgIndex === idx ? "border-[#b6349a]" : "border-transparent"}`}
                 />
               ))}
             </div>
           </div>
 
-          <div className="flex flex-col justify-center">
+          <div className="flex w-full flex-col gap-[30px] px-2.5 py-[30px] lg:w-1/2">
             <div>
               <h2
                 className="text-3xl font-bold text-black"
@@ -222,21 +223,21 @@ export default function ProductDetail() {
             </button>
 
             <div className="mt-8 border-t border-[#eee] pt-6">
-              <h3 className="mb-4 text-lg font-semibold">About Product</h3>
-              <div className="mb-3 flex items-center gap-3">
-                <div className="grid h-8 w-8 place-items-center rounded-full bg-[#fff0fa] text-[#b6349a]">
+              <h3 className="mb-4 text-[22px] font-medium text-[#6b7280]">About Product</h3>
+              <div className="mb-3 flex items-center gap-3 text-[22px]">
+                <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#fff0fa] text-base">
                   🏆
                 </div>
-                <p className="text-sm font-medium">Best Seller Product</p>
-                <a href="#" className="ml-auto text-sm text-[#b6349a]">
+                <p className="flex-1 font-medium text-[#1f2937]">Best Seller Product</p>
+                <a href="#" className="ml-auto whitespace-nowrap text-base font-semibold text-[#b6349a]">
                   View More &gt;
                 </a>
               </div>
-              <div className="flex items-center gap-3">
-                <div className="grid h-8 w-8 place-items-center rounded-full bg-[#effbf4] text-[#2d9f62]">
+              <div className="flex items-center gap-3 text-[22px]">
+                <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#ecfdf5] text-base">
                   ✔
                 </div>
-                <p className="text-sm font-medium">
+                <p className="flex-1 font-medium text-[#1f2937]">
                   100% satisfaction guarantee
                 </p>
               </div>
