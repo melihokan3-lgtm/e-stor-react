@@ -198,7 +198,10 @@ export default function AuthModal() {
 
         {/* Status message */}
         {success && (
-          <div className="auth-success-msg" role="status">
+          <div
+            className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-[13px] font-medium leading-[1.45] text-green-700"
+            role="status"
+          >
             {success}
           </div>
         )}
