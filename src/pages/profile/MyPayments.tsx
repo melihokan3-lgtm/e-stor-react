@@ -1,23 +1,13 @@
-import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
-import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+import { loadSavedCards, saveSavedCards } from "../../features/payments/savedCards";
+import { useCardForm } from "../../features/payments/useCardForm";
+import CardThemeSelector from "../../components/payments/CardThemeSelector";
 import type { PaymentCard } from "../../types/payment";
 import {
   CARD_THEMES,
-  DEFAULT_DEMO_CARDS,
   detectCardType,
-  maskCardNumber,
 } from "../../utils/cardUtils";
-
-interface CardForm {
-  cardHolder: string;
-  cardNumber: string;
-  expiry: string;
-  cvv: string;
-  theme: string;
-}
-
-type CardFormErrors = Partial<Record<"cardHolder" | "cardNumber" | "expiry" | "cvv", string>>;
 
 export default function MyPayments() {
   const { user } = useAuth();
@@ -25,27 +15,14 @@ export default function MyPayments() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [cardToDelete, setCardToDelete] = useState<PaymentCard | null>(null);
 
-  // Form State
-  const [formData, setFormData] = useState<CardForm>({
-    cardHolder: "",
-    cardNumber: "",
-    expiry: "",
-    cvv: "",
-    theme: "purple",
-  });
-  const [errors, setErrors] = useState<CardFormErrors>({});
+  const {
+    formData, errors, handleNameChange, handleCardNumberChange,
+    handleExpiryChange, handleCvvChange, validateForm, createCard, setTheme, resetForm,
+  } = useCardForm();
   const [toastMessage, setToastMessage] = useState("");
 
-  // Load cards from localStorage on mount / user change
   useEffect(() => {
-    const saved = readUserStorage<PaymentCard[] | null>("savedCards", user, null);
-    if (saved !== null && Array.isArray(saved)) {
-      setCards(saved);
-    } else {
-      // Initialize with demo cards for instant visual WOW
-      setCards(DEFAULT_DEMO_CARDS);
-      writeUserStorage("savedCards", user, DEFAULT_DEMO_CARDS);
-    }
+    setCards(loadSavedCards(user));
   }, [user]);
 
   // Show temporary toast notification
@@ -54,111 +31,19 @@ export default function MyPayments() {
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  // Live input handlers with formatting
-  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Only accept letters, spaces and common Turkish characters
-    const val = e.target.value.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ\s]/g, "").toUpperCase();
-    setFormData((prev) => ({ ...prev, cardHolder: val }));
-    if (errors.cardHolder) setErrors((prev) => ({ ...prev, cardHolder: undefined }));
-  };
-
-  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Keep only digits, max 16 digits
-    const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 16);
-    // Split into chunks of 4 separated by spaces
-    const formatted = rawDigits.match(/.{1,4}/g)?.join(" ") || rawDigits;
-    setFormData((prev) => ({ ...prev, cardNumber: formatted }));
-    if (errors.cardNumber) setErrors((prev) => ({ ...prev, cardNumber: undefined }));
-  };
-
-  const handleExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Digits only, max 4 digits (MMYY)
-    const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 4);
-    let formatted = rawDigits;
-    if (rawDigits.length >= 2) {
-      formatted = `${rawDigits.slice(0, 2)}/${rawDigits.slice(2)}`;
-    }
-    setFormData((prev) => ({ ...prev, expiry: formatted }));
-    if (errors.expiry) setErrors((prev) => ({ ...prev, expiry: undefined }));
-  };
-
-  const handleCvvChange = (e: ChangeEvent<HTMLInputElement>) => {
-    // Digits only, max 3 digits
-    const val = e.target.value.replace(/\D/g, "").slice(0, 3);
-    setFormData((prev) => ({ ...prev, cvv: val }));
-    if (errors.cvv) setErrors((prev) => ({ ...prev, cvv: undefined }));
-  };
-
-  // Validation function
-  const validateForm = () => {
-    const errs: CardFormErrors = {};
-    const rawNumber = formData.cardNumber.replace(/\s/g, "");
-
-    if (!formData.cardHolder.trim() || formData.cardHolder.trim().length < 3) {
-      errs.cardHolder = "Lütfen kart üzerindeki adı ve soyadı girin (En az 3 harf).";
-    }
-
-    if (rawNumber.length !== 16) {
-      errs.cardNumber = "Kart numarası 16 haneli olmalıdır.";
-    }
-
-    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiry)) {
-      errs.expiry = "Geçerli bir son kullanma tarihi girin (AA/YY).";
-    } else {
-      const [monthStr, yearStr] = formData.expiry.split("/");
-      const month = parseInt(monthStr, 10);
-      const year = parseInt("20" + yearStr, 10);
-      const now = new Date();
-      const currentYear = now.getFullYear();
-      const currentMonth = now.getMonth() + 1;
-
-      if (year < currentYear || (year === currentYear && month < currentMonth)) {
-        errs.expiry = "Kartın son kullanma tarihi geçmiş olamaz.";
-      }
-    }
-
-    if (formData.cvv.length !== 3) {
-      errs.cvv = "CVV güvenlik kodu 3 haneli olmalıdır.";
-    }
-
-    setErrors(errs);
-    return Object.keys(errs).length === 0;
-  };
-
   // Form Submit
   const handleAddCardSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
-    const rawNumber = formData.cardNumber.replace(/\s/g, "");
-    const cardType = detectCardType(rawNumber);
-    const maskedNumber = maskCardNumber(rawNumber);
-
-    const newCard: PaymentCard = {
-      id: "card_" + Date.now(),
-      cardHolder: formData.cardHolder.trim(),
-      maskedNumber: maskedNumber,
-      last4: rawNumber.slice(-4),
-      expiry: formData.expiry,
-      cardType: cardType,
-      theme: formData.theme,
-      isDefault: cards.length === 0,
-      createdAt: Date.now(),
-    };
+    const newCard = createCard(cards.length === 0);
 
     const updated = [newCard, ...cards];
     setCards(updated);
-    writeUserStorage("savedCards", user, updated);
+    saveSavedCards(user, updated);
 
     // Reset & Close
-    setFormData({
-      cardHolder: "",
-      cardNumber: "",
-      expiry: "",
-      cvv: "",
-      theme: "purple",
-    });
-    setErrors({});
+    resetForm();
     setIsModalOpen(false);
     showToast("Kart görünümü kaydedildi (demo). Gerçek ödeme alınmaz.");
   };
@@ -170,7 +55,7 @@ export default function MyPayments() {
       isDefault: c.id === cardId,
     }));
     setCards(updated);
-    writeUserStorage("savedCards", user, updated);
+    saveSavedCards(user, updated);
     showToast("Varsayılan ödeme kartınız güncellendi.");
   };
 
@@ -191,7 +76,7 @@ export default function MyPayments() {
       filtered = filtered.map((c, i) => (i === 0 ? { ...c, isDefault: true } : c));
     }
     setCards(filtered);
-    writeUserStorage("savedCards", user, filtered);
+    saveSavedCards(user, filtered);
 
     setCardToDelete(null);
     showToast(`Sonu ${last4} ile biten kart başarıyla silindi.`);
@@ -253,14 +138,7 @@ export default function MyPayments() {
           type="button"
           className="add-new-card-main-btn"
           onClick={() => {
-            setFormData({
-              cardHolder: "",
-              cardNumber: "",
-              expiry: "",
-              cvv: "",
-              theme: "purple",
-            });
-            setErrors({});
+            resetForm();
             setIsModalOpen(true);
           }}
         >
@@ -386,14 +264,7 @@ export default function MyPayments() {
           tabIndex={0}
           aria-label="Yeni Kart Ekle"
           onClick={() => {
-            setFormData({
-              cardHolder: "",
-              cardNumber: "",
-              expiry: "",
-              cvv: "",
-              theme: "purple",
-            });
-            setErrors({});
+            resetForm();
             setIsModalOpen(true);
           }}
           onKeyDown={(e) => {
@@ -499,21 +370,7 @@ export default function MyPayments() {
             {/* FORM */}
             <form onSubmit={handleAddCardSubmit} className="card-entry-form" noValidate>
               {/* Theme Selector */}
-              <div className="theme-selection-row">
-                <span className="field-label-text">Kart Teması:</span>
-                <div className="theme-options">
-                  {CARD_THEMES.map((theme) => (
-                    <button
-                      key={theme.id}
-                      type="button"
-                      className={`theme-dot ${formData.theme === theme.id ? "selected" : ""}`}
-                      style={{ background: theme.gradient }}
-                      title={theme.name}
-                      onClick={() => setFormData((prev) => ({ ...prev, theme: theme.id }))}
-                    />
-                  ))}
-                </div>
-              </div>
+              <CardThemeSelector selectedTheme={formData.theme} onSelectTheme={setTheme} />
 
               {/* Cardholder Name */}
               <div className="form-group-field">

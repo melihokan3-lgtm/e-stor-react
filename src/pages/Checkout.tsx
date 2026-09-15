@@ -6,8 +6,7 @@ import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { useAuth } from "../features/auth/AuthContext";
 import { useLocation } from "../features/addresses/LocationContext";
 import PaymentSelectionModal from "../components/checkout/PaymentSelectionModal";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
-import { DEFAULT_DEMO_CARDS } from "../utils/cardUtils";
+import { loadSavedCards } from "../features/payments/savedCards";
 import type { PaymentCard } from "../types/payment";
 import type { CreateOrderInput } from "../types/order";
 
@@ -103,14 +102,8 @@ export default function Checkout() {
 
   // Sync selected card on mount & user change
   useEffect(() => {
-    const saved = readUserStorage<PaymentCard[] | null>("savedCards", user, null);
-    if (saved && saved.length > 0) {
-      const def = saved.find((c) => c.isDefault) || saved[0];
-      setSelectedCard(def);
-    } else {
-      setSelectedCard(DEFAULT_DEMO_CARDS[0]);
-      writeUserStorage("savedCards", user, DEFAULT_DEMO_CARDS);
-    }
+    const saved = loadSavedCards(user);
+    setSelectedCard(saved.find((card) => card.isDefault) ?? saved[0] ?? null);
   }, [user]);
 
   const deliveryFee = 4.78;
@@ -133,7 +126,7 @@ export default function Checkout() {
 
   const cardDisplayName = selectedCard
     ? `${selectedCard.cardType === "visa" ? "Visa" : "Mastercard"} **** ${selectedCard.last4 || selectedCard.maskedNumber?.slice(-4) || "3434"}`
-    : "Mastercard **** 3434";
+    : "Kart seçilmedi";
 
   const handleApplyCoupon = (coupon: Coupon) => {
     if (itemsTotal < coupon.minOrder) {
