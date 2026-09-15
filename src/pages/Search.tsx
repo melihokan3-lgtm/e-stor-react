@@ -19,15 +19,17 @@ export default function Search() {
   );
 
   return (
-    <main>
-      <div className="search-page-container">
-        <h2 className="search-page-title">{filterQuery || "Search"}</h2>
+    <main className="min-h-[60vh] bg-white px-[60px] py-10 max-[992px]:px-6 max-[480px]:px-4">
+      <div className="mx-auto w-full max-w-[1400px]">
+        <h2 className="mb-6 text-xl font-bold capitalize text-[#111]">
+          {filterQuery || "Search"}
+        </h2>
         {loading ? (
           <LoadingState message="Loading products..." />
         ) : error ? (
           <ErrorState message={error} />
         ) : (
-          <div className="search-grid">
+          <div className="grid grid-cols-5 items-stretch gap-5 max-[1200px]:grid-cols-4 max-[992px]:grid-cols-3 max-[768px]:grid-cols-2 max-[480px]:grid-cols-1">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
                 <SearchProductCard key={product.id} product={product} />
