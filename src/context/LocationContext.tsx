@@ -1,7 +1,8 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 import { deleteUserAddress, fetchUserAddresses, isSupabaseDataEnabled, saveUserAddress } from "../services/supabaseData";
+import type { Address, LocationContextValue } from "../types/address";
 
 export const DEFAULT_LOCATION = "Bursa, Türkiye";
 export const LOCATION_OPTIONS = [
@@ -11,11 +12,12 @@ export const LOCATION_OPTIONS = [
   "İzmir, Türkiye",
 ];
 
-export const LocationContext = createContext(null);
+export const LocationContext = createContext<LocationContextValue | null>(null);
 
-export function LocationProvider({ children }) {
-  const { user } = useContext(AuthContext);
-  const [location, setLocation] = useState(() => {
+export function LocationProvider({ children }: { children: ReactNode }) {
+  const auth = useContext(AuthContext);
+  const user = auth?.user ?? null;
+  const [location, setLocation] = useState<string>(() => {
     try {
       return localStorage.getItem("userLocation") || DEFAULT_LOCATION;
     } catch (error) {
@@ -24,9 +26,9 @@ export function LocationProvider({ children }) {
     }
   });
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [addresses, setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
-  const hydratedStorageId = useRef(null);
+  const hydratedStorageId = useRef<string | null>(null);
   const isHydrating = useRef(false);
 
   useEffect(() => {
@@ -58,13 +60,13 @@ export function LocationProvider({ children }) {
     }
   }, [addresses, user, userStorageId]);
 
-  const selectLocation = (nextLocation) => {
+  const selectLocation = (nextLocation: string): void => {
     if (!nextLocation?.trim()) return;
     setLocation(nextLocation.trim());
     setIsLocationModalOpen(false);
   };
 
-  const addAddress = ({ label, address }) => {
+  const addAddress = ({ label, address }: Pick<Address, "label" | "address">): void => {
     const normalizedAddress = address.trim();
     if (!normalizedAddress) return;
 
@@ -80,7 +82,7 @@ export function LocationProvider({ children }) {
     selectLocation(normalizedAddress);
   };
 
-  const removeAddress = (addressId) => {
+  const removeAddress = (addressId: Address["id"]): void => {
     setAddresses((previous) => previous.filter((item) => item.id !== addressId));
     if (isSupabaseDataEnabled(user)) {
       deleteUserAddress(user, addressId).catch((error) => console.error("Failed to delete address", error));
@@ -105,4 +107,4 @@ export function LocationProvider({ children }) {
   );
 }
 
-export const useLocation = () => useContext(LocationContext);
+export const useLocation = (): LocationContextValue | null => useContext(LocationContext);

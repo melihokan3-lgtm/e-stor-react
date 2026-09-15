@@ -1,15 +1,18 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../services/supabaseData";
+import type { CartContextValue, CartItem } from "../types/cart";
+import type { Product } from "../types/product";
 
-export const CartContext = createContext();
+export const CartContext = createContext<CartContextValue | null>(null);
 
-export const CartProvider = ({ children }) => {
-  const { user } = useContext(AuthContext);
+export const CartProvider = ({ children }: { children: ReactNode }) => {
+  const auth = useContext(AuthContext);
+  const user = auth?.user ?? null;
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
-  const [cart, setCart] = useState([]);
-  const hydratedStorageId = useRef(null);
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const hydratedStorageId = useRef<string | null>(null);
   const isHydrating = useRef(false);
 
   useEffect(() => {
@@ -39,7 +42,7 @@ export const CartProvider = ({ children }) => {
     } else writeUserStorage("cart", user, cart);
   }, [cart, user, userStorageId]);
 
-  const addToCart = (product) => {
+  const addToCart = (product: Product): void => {
     setCart((prev) => {
       const existingItem = prev.find((item) => item.data.id === product.id);
       if (existingItem) {
@@ -51,11 +54,11 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  const removeFromCart = (id) => {
+  const removeFromCart = (id: Product["id"]): void => {
     setCart((prev) => prev.filter((item) => item.data.id !== id));
   };
 
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (id: Product["id"], delta: number): void => {
     setCart((prev) => {
       const updatedCart = prev.map((item) => {
         if (item.data.id === id) {
@@ -76,7 +79,7 @@ export const CartProvider = ({ children }) => {
   const tax = totalPrice * 0.1;
   const subtotal = totalPrice + tax;
 
-  const clearCart = () => {
+  const clearCart = (): void => {
     setCart([]);
   };
 

@@ -1,15 +1,17 @@
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 import { fetchUserOrders, isSupabaseDataEnabled, saveUserOrder, updateUserOrderAddress } from "../services/supabaseData";
+import type { CreateOrderInput, Order, OrdersContextValue } from "../types/order";
 
-export const OrdersContext = createContext();
+export const OrdersContext = createContext<OrdersContextValue | null>(null);
 
-export function OrdersProvider({ children }) {
-  const { user } = useContext(AuthContext);
-  const [orders, setOrders] = useState([]);
+export function OrdersProvider({ children }: { children: ReactNode }) {
+  const auth = useContext(AuthContext);
+  const user = auth?.user ?? null;
+  const [orders, setOrders] = useState<Order[]>([]);
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
-  const hydratedStorageId = useRef(null);
+  const hydratedStorageId = useRef<string | null>(null);
   const isHydrating = useRef(false);
 
   useEffect(() => {
@@ -37,15 +39,15 @@ export function OrdersProvider({ children }) {
     }
   }, [orders, user, userStorageId]);
 
-  const addOrder = (order) => {
-    const nextOrder = { ...order, userId: user?.id ?? user?.email ?? user?.username };
+  const addOrder = (order: CreateOrderInput): void => {
+    const nextOrder: Order = { ...order, id: order.id ?? `${Date.now()}`, userId: user?.id ?? user?.email ?? user?.username };
     setOrders((prev) => [nextOrder, ...prev]);
     if (isSupabaseDataEnabled(user)) {
       saveUserOrder(user, nextOrder).catch((error) => console.error("Failed to save order", error));
     }
   };
 
-  const updateOrderAddress = (orderId, newAddress) => {
+  const updateOrderAddress = (orderId: Order["id"], newAddress: string): void => {
     setOrders((prev) => {
       const updated = prev.map((order) => {
         if (String(order.id) === String(orderId)) {

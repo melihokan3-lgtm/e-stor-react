@@ -1,12 +1,14 @@
-import { createContext, useState, useEffect, useCallback } from "react";
+import { createContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
+import type { AuthContextValue, AuthUser, RegisterInput } from "../types/auth";
 
-export const AuthContext = createContext();
+export const AuthContext = createContext<AuthContextValue | null>(null);
 
 const AUTH_API = "https://dummyjson.com";
 const REGISTERED_USER_KEY = "newRegisteredUser";
 
-const hashPassword = async (password) => {
+const hashPassword = async (password: string): Promise<string> => {
   const encodedPassword = new TextEncoder().encode(password);
   const digest = await crypto.subtle.digest("SHA-256", encodedPassword);
   return Array.from(new Uint8Array(digest))
@@ -14,7 +16,7 @@ const hashPassword = async (password) => {
     .join("");
 };
 
-const readRegisteredUser = () => {
+const readRegisteredUser = (): { username: string; email: string; passwordHash: string; user: AuthUser } | null => {
   try {
     const storedUser = localStorage.getItem(REGISTERED_USER_KEY);
     return storedUser ? JSON.parse(storedUser) : null;
@@ -24,13 +26,13 @@ const readRegisteredUser = () => {
   }
 };
 
-const saveRegisteredUser = (user) => {
+const saveRegisteredUser = (user: { username: string; email: string; passwordHash: string; user: AuthUser }): void => {
   localStorage.setItem(REGISTERED_USER_KEY, JSON.stringify(user));
 };
 
-const mapSupabaseUser = (authUser) => {
+const mapSupabaseUser = (authUser: SupabaseUser | null | undefined): AuthUser | null => {
   if (!authUser) return null;
-  const metadata = authUser.user_metadata || {};
+  const metadata = (authUser.user_metadata || {}) as Record<string, string | undefined>;
   return {
     id: authUser.id,
     email: authUser.email || "",
@@ -42,18 +44,19 @@ const mapSupabaseUser = (authUser) => {
   };
 };
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(true); // initial load
 
   // Restore session from localStorage on mount
   useEffect(() => {
-    if (isSupabaseConfigured && supabase) {
+    const client = supabase;
+    if (isSupabaseConfigured && client) {
       let mounted = true;
       const restoreSession = async () => {
-        const { data } = await supabase.auth.getSession();
+        const { data } = await client.auth.getSession();
         if (!mounted) return;
         const restoredUser = mapSupabaseUser(data.session?.user);
         setUser(restoredUser);
@@ -62,7 +65,7 @@ export function AuthProvider({ children }) {
       };
 
       restoreSession();
-      const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
         if (!mounted) return;
         setUser(mapSupabaseUser(session?.user));
         setToken(session?.access_token || null);
@@ -93,7 +96,7 @@ export function AuthProvider({ children }) {
   const isLoggedIn = !!user && !!token;
 
   // --- LOGIN ---
-  const loginUser = async (username, password) => {
+  const loginUser = async (username: string, password: string): Promise<AuthUser> => {
     try {
       const isEmail = username.includes("@");
       let supabaseError = null;
@@ -106,6 +109,7 @@ export function AuthProvider({ children }) {
         
         if (!error && data.user) {
           const userData = mapSupabaseUser(data.user);
+          if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
           setUser(userData);
           setToken(data.session?.access_token || null);
           setIsAuthModalOpen(false);
@@ -143,26 +147,27 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ username, password }),
         });
 
-        const data = await res.json();
+        const data = (await res.json()) as Record<string, string | number | undefined>;
 
         if (!res.ok) {
-          throw new Error(data.message || "Kullanıcı adı veya şifre hatalı");
+          throw new Error(String(data.message || "Kullanıcı adı veya şifre hatalı"));
         }
 
-        const userData = {
-          id: data.id,
-          username: data.username,
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          image: data.image,
-          phone: data.phone || "",
+        const userData: AuthUser = {
+          id: data.id ?? "",
+          username: String(data.username ?? username),
+          email: String(data.email ?? ""),
+          firstName: String(data.firstName ?? ""),
+          lastName: String(data.lastName ?? ""),
+          image: String(data.image ?? ""),
+          phone: String(data.phone ?? ""),
         };
 
         setUser(userData);
-        setToken(data.accessToken);
+        const accessToken = String(data.accessToken ?? "");
+        setToken(accessToken);
         localStorage.setItem("auth_user", JSON.stringify(userData));
-        localStorage.setItem("auth_token", data.accessToken);
+        localStorage.setItem("auth_token", accessToken);
         localStorage.setItem("currentUser", JSON.stringify(userData));
         setIsAuthModalOpen(false);
 
@@ -182,7 +187,7 @@ export function AuthProvider({ children }) {
   };
 
   // --- REGISTER (simulated via /users/add) ---
-  const registerUser = async ({ username, email, password, firstName, lastName }) => {
+  const registerUser = async ({ username, email, password, firstName, lastName }: RegisterInput): Promise<AuthUser> => {
     try {
       let supabaseError = null;
       if (isSupabaseConfigured && supabase) {
@@ -199,6 +204,7 @@ export function AuthProvider({ children }) {
           if (!data.session) {
             throw new Error("Kayıt tamamlandı. E-posta adresinizi doğrulayıp giriş yapın.");
           }
+          if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
           setUser(userData);
           setToken(data.session.access_token);
           setIsAuthModalOpen(false);
@@ -216,21 +222,22 @@ export function AuthProvider({ children }) {
           body: JSON.stringify({ username, email, password, firstName, lastName }),
         });
 
-        const data = await res.json();
+        const data = (await res.json()) as Record<string, string | number | undefined>;
 
         if (!res.ok) {
-          throw new Error(data.message || "Kayıt işlemi başarısız oldu");
+          throw new Error(String(data.message || "Kayıt işlemi başarısız oldu"));
         }
 
-        const userData = {
-          id: data.id,
-          username: data.username || username,
-          email: data.email || email,
-          firstName: data.firstName || firstName,
-          lastName: data.lastName || lastName,
+        const userData: AuthUser = {
+          id: data.id ?? "",
+          username: String(data.username || username),
+          email: String(data.email || email),
+          firstName: String(data.firstName || firstName),
+          lastName: String(data.lastName || lastName),
           image:
-            data.image ||
+            String(data.image ||
             `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=b6349a&color=fff`,
+            ),
           phone: "",
         };
 
@@ -263,7 +270,7 @@ export function AuthProvider({ children }) {
   };
 
   // --- UPDATE USER PROFILE ---
-  const updateUser = useCallback((newFields) => {
+  const updateUser = useCallback((newFields: Partial<AuthUser>): void => {
     setUser((prev) => {
       if (!prev) return prev;
       const updated = { ...prev, ...newFields };
