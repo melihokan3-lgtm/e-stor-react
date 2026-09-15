@@ -1,4 +1,5 @@
 import { useLocation } from "../../features/addresses/LocationContext";
+import AddressCard from "../../components/profile/AddressCard";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();
@@ -26,18 +27,13 @@ export default function MyAddresses() {
       ) : (
         <div className="addresses-list">
           {addresses.map((item) => (
-            <article className={`address-card ${location === item.address ? "active" : ""}`} key={item.id}>
-              <button type="button" className="address-card__main" onClick={() => selectLocation(item.address)}>
-                <span className="address-card__radio" aria-hidden="true">{location === item.address ? "✓" : ""}</span>
-                <span>
-                  <strong>{item.label}</strong>
-                  <small>{item.address}</small>
-                </span>
-              </button>
-              <button type="button" className="address-card__remove" onClick={() => removeAddress(item.id)}>
-                Remove
-              </button>
-            </article>
+            <AddressCard
+              key={item.id}
+              address={item}
+              selected={location === item.address}
+              onSelect={(address) => selectLocation(address.address)}
+              onRemove={removeAddress}
+            />
           ))}
         </div>
       )}

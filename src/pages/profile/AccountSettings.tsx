@@ -1,42 +1,22 @@
 import { useState, useEffect, type ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
-import { readUserStorage, writeUserStorage, removeUserStorage } from "../../utils/userStorage";
-
-const DEFAULT_SETTINGS = {
-  firstName: "",
-  lastName: "",
-  phone: "",
-  email: "",
-  dob: "",
-  language: "tr",
-  currency: "TRY",
-  twoFactorAuth: false,
-  notifOrder: "email",
-  notifCampaigns: true,
-  notifPriceAlerts: false,
-  cookieConsent: true,
-  personalizedAds: true,
-};
-
-type Settings = typeof DEFAULT_SETTINGS;
+import { clearLocalAccountData, DEFAULT_SETTINGS, loadAccountSettings, saveAccountSettings, type AccountSettingsData } from "../../features/profile/settings";
 type SettingsTab = "account" | "security" | "notifications" | "privacy" | "danger";
 
 export default function AccountSettings() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<SettingsTab>("account");
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+  const [settings, setSettings] = useState<AccountSettingsData>(DEFAULT_SETTINGS);
 
-  // Load from local storage
   useEffect(() => {
-    setSettings({ ...DEFAULT_SETTINGS, ...readUserStorage<Partial<Settings>>("settings", user, {}) });
+    setSettings(loadAccountSettings(user));
   }, [user]);
 
-  // Save to local storage when changed
-  const saveSettings = (newSettings: Settings) => {
+  const saveSettings = (newSettings: AccountSettingsData) => {
     setSettings(newSettings);
-    writeUserStorage("settings", user, newSettings);
+    saveAccountSettings(user, newSettings);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -48,11 +28,10 @@ export default function AccountSettings() {
 
   const handleDeleteAccount = () => {
     const confirmed = window.confirm(
-      "Bu işlem geri alınamaz! Hesabınızı silmek istediğinize emin misiniz?\nLütfen onaylamak için tamam butonuna basınız."
+      "Yerel demo verilerinizi temizleyip çıkış yapmak istediğinize emin misiniz? Supabase hesabınız ve sunucudaki veriler silinmez."
     );
     if (confirmed) {
-      alert("Hesabınız silindi (Simülasyon).");
-      ["cart", "orders", "addresses", "settings"].forEach((key) => removeUserStorage(key, user));
+      clearLocalAccountData(user);
       logout();
       navigate("/", { replace: true });
     }
@@ -287,10 +266,10 @@ export default function AccountSettings() {
           <div className="danger-zone-box">
             <h3 className="danger-zone-title">Danger Zone</h3>
             <p style={{ color: "#7f1d1d", margin: 0, fontSize: "14px", lineHeight: 1.5 }}>
-              Once you delete your account, there is no going back. All of your personal data, order history, addresses, and saved cards will be permanently erased from our servers. Please be certain.
+              This demo action clears local browser copies and signs you out. Your Supabase account and server data are not deleted.
             </p>
             <button className="btn-danger-outline" onClick={handleDeleteAccount}>
-              Delete Account
+              Clear Local Data
             </button>
           </div>
         </div>

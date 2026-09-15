@@ -1,79 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
-import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
-
-type NotificationType = "shipping" | "discount" | "security" | "delivered" | "coupon";
-
-interface ProfileNotification {
-  id: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  time: string;
-  isRead: boolean;
-  badgeColor: string;
-  actionText: string;
-  actionUrl: string;
-}
-
-const INITIAL_NOTIFICATIONS: ProfileNotification[] = [
-  {
-    id: "notif_1",
-    type: "shipping",
-    title: "Siparişiniz Kargoya Verildi 🚚",
-    message: "Siparişiniz (No: #12345) kargoya verildi. Takip etmek ve anlık teslimat durumunu görmek için tıklayın.",
-    time: "15 dakika önce",
-    isRead: false,
-    badgeColor: "#3b82f6",
-    actionText: "Kargo Takibi",
-    actionUrl: "/profile/orders",
-  },
-  {
-    id: "notif_2",
-    type: "discount",
-    title: "Favorinizde %20 İndirim Başladı! 🔥",
-    message: "Favorilerinizdeki Nike Ayakkabı'da %20 indirim başladı! Stoklar tükenmeden hemen yakala.",
-    time: "2 saat önce",
-    isRead: false,
-    badgeColor: "#ec4899",
-    actionText: "Fırsatı İncele",
-    actionUrl: "/category",
-  },
-  {
-    id: "notif_3",
-    type: "security",
-    title: "Yeni Cihaz Girişi Bildirimi 🛡️",
-    message: "Hesabınıza Bursa'dan yeni bir cihazdan (Windows / Chrome) giriş yapıldı. Siz değilseniz şifrenizi hemen değiştirin.",
-    time: "5 saat önce",
-    isRead: false,
-    badgeColor: "#f59e0b",
-    actionText: "Güvenlik Ayarları",
-    actionUrl: "/profile/settings",
-  },
-  {
-    id: "notif_4",
-    type: "delivered",
-    title: "Siparişiniz Teslim Edildi ✅",
-    message: "Siparişiniz teslim edildi. Ürünleri değerlendirip puan kazanmak ve yorum bırakmak ister misiniz?",
-    time: "Dün, 16:45",
-    isRead: true,
-    badgeColor: "#10b981",
-    actionText: "Siparişlerim",
-    actionUrl: "/profile/orders",
-  },
-  {
-    id: "notif_5",
-    type: "coupon",
-    title: "150 TL Hoş Geldin Kuponu Hesabınızda! 🎁",
-    message: "Hesabınıza sepetinizde geçerli 150 TL değerinde 'HOSGELDIN' indirim kuponu başarıyla yüklendi.",
-    time: "3 gün önce",
-    isRead: true,
-    badgeColor: "#8b5cf6",
-    actionText: "Kuponları Gör",
-    actionUrl: "/profile/coupons",
-  },
-];
+import { loadProfileNotifications, saveProfileNotifications, type NotificationType, type ProfileNotification } from "../../features/profile/notifications";
 
 export default function NotificationSetting() {
   const { user } = useAuth();
@@ -81,15 +9,8 @@ export default function NotificationSetting() {
   const [activeFilter, setActiveFilter] = useState<"all" | "unread">("all");
   const [toastMessage, setToastMessage] = useState("");
 
-  // Load notifications from localStorage
   useEffect(() => {
-    const saved = readUserStorage<ProfileNotification[] | null>("notifications", user, null);
-    if (saved !== null && Array.isArray(saved)) {
-      setNotifications(saved);
-    } else {
-      setNotifications(INITIAL_NOTIFICATIONS);
-      writeUserStorage("notifications", user, INITIAL_NOTIFICATIONS);
-    }
+    setNotifications(loadProfileNotifications(user));
   }, [user]);
 
   const showToast = (msg: string) => {
@@ -103,14 +24,14 @@ export default function NotificationSetting() {
       n.id === id ? { ...n, isRead: !n.isRead } : n
     );
     setNotifications(updated);
-    writeUserStorage("notifications", user, updated);
+    saveProfileNotifications(user, updated);
   };
 
   // Mark all as read
   const handleMarkAllAsRead = () => {
     const updated = notifications.map((n) => ({ ...n, isRead: true }));
     setNotifications(updated);
-    writeUserStorage("notifications", user, updated);
+    saveProfileNotifications(user, updated);
     showToast("Tüm bildirimler okundu olarak işaretlendi.");
   };
 
@@ -118,7 +39,7 @@ export default function NotificationSetting() {
   const handleDelete = (id: ProfileNotification["id"]) => {
     const updated = notifications.filter((n) => n.id !== id);
     setNotifications(updated);
-    writeUserStorage("notifications", user, updated);
+    saveProfileNotifications(user, updated);
     showToast("Bildirim silindi.");
   };
 
@@ -127,7 +48,7 @@ export default function NotificationSetting() {
     if (notifications.length === 0) return;
     if (window.confirm("Tüm bildirimlerinizi silmek istediğinize emin misiniz?")) {
       setNotifications([]);
-      writeUserStorage("notifications", user, []);
+      saveProfileNotifications(user, []);
       showToast("Tüm bildirimler temizlendi.");
     }
   };

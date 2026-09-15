@@ -1,32 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
-import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
-
-interface ReferralHistoryItem {
-  name: string;
-  status: string;
-  type: "pending" | "success" | "idle";
-}
-
-interface ReferralData {
-  totalEarned: number;
-  friendsInvited: number;
-  pendingApprovals: number;
-  history: ReferralHistoryItem[];
-}
-
-const INITIAL_REFERRAL_DATA: ReferralData = {
-  totalEarned: 300,
-  friendsInvited: 5,
-  pendingApprovals: 2,
-  history: [
-    { name: "Ahmet Y.", status: "Üye Oldu (Beklemede)", type: "pending" },
-    { name: "Ayşe K.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-    { name: "Mehmet D.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-    { name: "Zeynep T.", status: "Sipariş Verdi (Kazanıldı)", type: "success" },
-    { name: "Can S.", status: "Kayıt Bekleniyor", type: "idle" },
-  ],
-};
+import { loadReferralData, type ReferralData } from "../../features/profile/referrals";
 
 export default function ReferFriends() {
   const { user } = useAuth();
@@ -42,13 +16,7 @@ export default function ReferFriends() {
 
   useEffect(() => {
     if (!user) return;
-    const stored = readUserStorage<ReferralData | null>("referralData", user, null);
-    if (stored && Array.isArray(stored.history)) {
-      setReferralData(stored);
-    } else {
-      setReferralData(INITIAL_REFERRAL_DATA);
-      writeUserStorage("referralData", user, INITIAL_REFERRAL_DATA);
-    }
+    setReferralData(loadReferralData(user));
   }, [user]);
 
   const handleCopy = async () => {

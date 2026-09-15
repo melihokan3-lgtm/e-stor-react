@@ -9,6 +9,7 @@
     "server:dev": "node --watch server/index.js",
     "build": "tsc && vite build",
     "test:orders": "node --test tests/orderProgress.test.mjs",
+    "test:profile": "node --test tests/profileArchitecture.test.mjs",
     "preview": "vite preview"
   },
   "devDependencies": {
