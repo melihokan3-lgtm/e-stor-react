@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../../services/supabase/data";
