@@ -9,9 +9,15 @@ const getClient = () => {
   return supabase;
 };
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 const requireUserId = (user: AuthUser | null): string => {
   if (!user?.id) throw new Error("Supabase işlemi için aktif kullanıcı gerekli.");
-  return String(user.id);
+  const userId = String(user.id);
+  if (!UUID_PATTERN.test(userId)) {
+    throw new Error("Bu hesap Supabase kullanıcısı değil. Çıkış yapıp e-posta adresinizle giriş yapın.");
+  }
+  return userId;
 };
 
 export const isSupabaseDataEnabled = (user: AuthUser | null): boolean => Boolean(isSupabaseConfigured && supabase && user?.id);

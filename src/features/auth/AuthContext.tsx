@@ -104,25 +104,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- LOGIN ---
   const loginUser = async (username: string, password: string): Promise<AuthUser> => {
     try {
-      const isEmail = username.includes("@");
-      let supabaseError = null;
-
-      if (isSupabaseConfigured && supabase && isEmail) {
+      if (isSupabaseConfigured && supabase) {
+        if (!username.includes("@")) {
+          throw new Error("Supabase hesabınıza e-posta adresinizle giriş yapın.");
+        }
         const { data, error } = await supabase.auth.signInWithPassword({
           email: username.trim().toLowerCase(),
           password,
         });
-        
-        if (!error && data.user) {
-          const userData = mapSupabaseUser(data.user);
-          if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
-          setUser(userData);
-          setToken(data.session?.access_token || null);
-          setIsAuthModalOpen(false);
-          return userData;
-        }
-        supabaseError = error;
-        console.warn("Supabase login failed, falling back to local auth:", error?.message);
+        if (error) throw error;
+        const userData = mapSupabaseUser(data.user);
+        if (!userData || !data.session) throw new Error("Kullanıcı oturumu alınamadı.");
+        setUser(userData);
+        setToken(data.session.access_token);
+        setIsAuthModalOpen(false);
+        return userData;
       }
 
       // --- LOCAL / DUMMY AUTH FALLBACK ---
@@ -146,43 +142,37 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return locallyRegisteredUser.user;
       }
 
-      try {
-        const res = await fetch(`${AUTH_API}/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
+      const res = await fetch(`${AUTH_API}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-        const data = (await res.json()) as Record<string, string | number | undefined>;
+      const data = (await res.json()) as Record<string, string | number | undefined>;
 
-        if (!res.ok) {
-          throw new Error(String(data.message || "Kullanıcı adı veya şifre hatalı"));
-        }
-
-        const userData: AuthUser = {
-          id: data.id ?? "",
-          username: String(data.username ?? username),
-          email: String(data.email ?? ""),
-          firstName: String(data.firstName ?? ""),
-          lastName: String(data.lastName ?? ""),
-          image: String(data.image ?? ""),
-          phone: String(data.phone ?? ""),
-        };
-
-        setUser(userData);
-        const accessToken = String(data.accessToken ?? "");
-        setToken(accessToken);
-        localStorage.setItem("auth_user", JSON.stringify(userData));
-        localStorage.setItem("auth_token", accessToken);
-        localStorage.setItem("currentUser", JSON.stringify(userData));
-        setIsAuthModalOpen(false);
-
-        return userData;
-      } catch (fallbackError) {
-        // If Supabase was attempted and failed, show Supabase's error if the fallback also fails
-        // (unless it's a generic message, in which case prioritize the more helpful local error)
-        throw supabaseError ? new Error(supabaseError.message || "Giriş başarısız oldu.") : fallbackError;
+      if (!res.ok) {
+        throw new Error(String(data.message || "Kullanıcı adı veya şifre hatalı"));
       }
+
+      const userData: AuthUser = {
+        id: data.id ?? "",
+        username: String(data.username ?? username),
+        email: String(data.email ?? ""),
+        firstName: String(data.firstName ?? ""),
+        lastName: String(data.lastName ?? ""),
+        image: String(data.image ?? ""),
+        phone: String(data.phone ?? ""),
+      };
+
+      setUser(userData);
+      const accessToken = String(data.accessToken ?? "");
+      setToken(accessToken);
+      localStorage.setItem("auth_user", JSON.stringify(userData));
+      localStorage.setItem("auth_token", accessToken);
+      localStorage.setItem("currentUser", JSON.stringify(userData));
+      setIsAuthModalOpen(false);
+
+      return userData;
 
     } catch (error) {
       if (error instanceof TypeError) {
@@ -195,7 +185,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- REGISTER (simulated via /users/add) ---
   const registerUser = async ({ username, email, password, firstName, lastName }: RegisterInput): Promise<AuthUser> => {
     try {
-      let supabaseError = null;
       if (isSupabaseConfigured && supabase) {
         const { data, error } = await supabase.auth.signUp({
           email: email.trim().toLowerCase(),
@@ -204,69 +193,60 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             data: { username, firstName, lastName },
           },
         });
-        
-        if (!error && data.user) {
-          const userData = mapSupabaseUser(data.user);
-          if (!data.session) {
-            throw new Error("Kayıt tamamlandı. E-posta adresinizi doğrulayıp giriş yapın.");
-          }
-          if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
-          setUser(userData);
-          setToken(data.session.access_token);
-          setIsAuthModalOpen(false);
-          return userData;
+        if (error) throw error;
+        const userData = mapSupabaseUser(data.user);
+        if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
+        if (!data.session) {
+          throw new Error("Kayıt tamamlandı. E-posta adresinizi doğrulayıp giriş yapın.");
         }
-        
-        supabaseError = error || new Error("Supabase kayıt yapılamadı");
-        console.warn("Supabase registration failed, falling back to local auth:", supabaseError?.message);
-      }
-
-      try {
-        const res = await fetch(`${AUTH_API}/users/add`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, email, password, firstName, lastName }),
-        });
-
-        const data = (await res.json()) as Record<string, string | number | undefined>;
-
-        if (!res.ok) {
-          throw new Error(String(data.message || "Kayıt işlemi başarısız oldu"));
-        }
-
-        const userData: AuthUser = {
-          id: data.id ?? "",
-          username: String(data.username || username),
-          email: String(data.email || email),
-          firstName: String(data.firstName || firstName),
-          lastName: String(data.lastName || lastName),
-          image:
-            String(data.image ||
-            `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=b6349a&color=fff`,
-            ),
-          phone: "",
-        };
-
-        // Fake API kalıcı olmadığı için demo hesabını yerel fallback olarak sakla.
-        saveRegisteredUser({
-          username: userData.username,
-          email: userData.email,
-          passwordHash: await hashPassword(password),
-          user: userData,
-        });
-
-        const fakeToken = "registered_" + Date.now();
         setUser(userData);
-        setToken(fakeToken);
-        localStorage.setItem("auth_user", JSON.stringify(userData));
-        localStorage.setItem("auth_token", fakeToken);
-        localStorage.setItem("currentUser", JSON.stringify(userData));
+        setToken(data.session.access_token);
         setIsAuthModalOpen(false);
-
         return userData;
-      } catch (fallbackError) {
-        throw supabaseError ? new Error(supabaseError.message || "Kayıt işlemi başarısız oldu.") : fallbackError;
       }
+
+      const res = await fetch(`${AUTH_API}/users/add`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, email, password, firstName, lastName }),
+      });
+
+      const data = (await res.json()) as Record<string, string | number | undefined>;
+
+      if (!res.ok) {
+        throw new Error(String(data.message || "Kayıt işlemi başarısız oldu"));
+      }
+
+      const userData: AuthUser = {
+        id: data.id ?? "",
+        username: String(data.username || username),
+        email: String(data.email || email),
+        firstName: String(data.firstName || firstName),
+        lastName: String(data.lastName || lastName),
+        image:
+          String(data.image ||
+            `https://ui-avatars.com/api/?name=${firstName}+${lastName}&background=b6349a&color=fff`,
+          ),
+        phone: "",
+      };
+
+      // Fake API kalıcı olmadığı için demo hesabını yerel fallback olarak sakla.
+      saveRegisteredUser({
+        username: userData.username,
+        email: userData.email,
+        passwordHash: await hashPassword(password),
+        user: userData,
+      });
+
+      const fakeToken = "registered_" + Date.now();
+      setUser(userData);
+      setToken(fakeToken);
+      localStorage.setItem("auth_user", JSON.stringify(userData));
+      localStorage.setItem("auth_token", fakeToken);
+      localStorage.setItem("currentUser", JSON.stringify(userData));
+      setIsAuthModalOpen(false);
+
+      return userData;
     } catch (error) {
       if (error instanceof TypeError) {
         throw new Error("Kayıt servisine ulaşılamadı. Lütfen tekrar deneyin.");

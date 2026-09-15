@@ -193,7 +193,9 @@ export default function Checkout() {
       navigate(`/order-progress?orderId=${encodeURIComponent(String(savedOrder.id))}`);
     } catch (error) {
       console.error("Failed to place order", error);
-      setSubmitError("Sipariş kaydedilemedi. Sepetiniz korunuyor; lütfen tekrar deneyin.");
+      setSubmitError(error instanceof Error && error.message.startsWith("Bu hesap Supabase kullanıcısı değil")
+        ? error.message
+        : "Sipariş kaydedilemedi. Sepetiniz korunuyor; lütfen tekrar deneyin.");
     } finally {
       submittingRef.current = false;
       setIsSubmitting(false);
