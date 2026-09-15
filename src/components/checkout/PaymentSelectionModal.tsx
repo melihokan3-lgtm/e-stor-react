@@ -66,14 +66,14 @@ export default function PaymentSelectionModal({
   const renderCardLogo = (type: PaymentCard["cardType"]) => {
     if (type === "mastercard") {
       return (
-        <svg className="card-brand-svg" width="38" height="24" viewBox="0 0 46 30" fill="none">
+        <svg className="shrink-0" width="38" height="24" viewBox="0 0 46 30" fill="none">
           <circle cx="15" cy="15" r="14" fill="#EB001B" fillOpacity="0.9" />
           <circle cx="31" cy="15" r="14" fill="#F79E1B" fillOpacity="0.85" />
         </svg>
       );
     }
     return (
-      <svg className="card-brand-svg" width="46" height="16" viewBox="0 0 100 32" fill="#FFFFFF">
+      <svg className="shrink-0" width="46" height="16" viewBox="0 0 100 32" fill="#FFFFFF">
         <path d="M38.5 2.5L25.4 29.5H17.2L10.5 8.9C10.1 7.3 9.8 6.7 8.5 6C6.4 4.8 3 3.8 0 3.2L0.3 2.5H13.6C15.3 2.5 16.9 3.7 17.2 5.7L20.5 22.8L28.8 2.5H38.5ZM72.6 20.8C72.7 13.5 62 13.1 62.1 9.7C62.2 8.7 63.2 7.6 65.5 7.3C66.7 7.2 70.1 7.1 73.8 8.8L75.3 2C73.3 1.3 70.4 0.6 66.8 0.6C58.6 0.6 52.8 4.9 52.7 11C52.6 15.6 56.8 18.2 60 19.7C63.2 21.2 64.3 22.2 64.3 23.6C64.2 25.7 61.7 26.6 59.4 26.7C55.3 26.8 52.8 25.6 51 24.8L49.4 31.8C51.4 32.7 55.1 33.5 59 33.5C67.6 33.5 72.5 29.3 72.6 20.8ZM93.4 29.5H100.5L94.3 2.5H88.3C86.7 2.5 85.4 3.4 84.8 4.8L72.4 29.5H81.3L83.1 24.6H92L93.4 29.5ZM85.5 18.2L89.1 8.5L91.2 18.2H85.5ZM49.8 2.5L42.9 29.5H34.4L41.3 2.5H49.8Z" />
       </svg>
     );
@@ -83,17 +83,17 @@ export default function PaymentSelectionModal({
   const previewType = detectCardType(formData.cardNumber);
 
   return (
-    <div className="card-modal-overlay" onClick={onClose}>
-      <div className="card-modal-box checkout-card-modal-box" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-[1000] grid place-items-center bg-[rgba(22,16,22,0.55)] p-5" onClick={onClose}>
+      <div className="max-h-[90vh] w-full max-w-[680px] overflow-y-auto rounded-2xl bg-white p-6 shadow-[0_24px_80px_rgba(0,0,0,0.22)] max-w-[760px]" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
-        <div className="card-modal-header">
+        <div className="mb-5 flex items-start justify-between gap-4 border-b border-[#eee] pb-4">
           <div>
             <h3>Ödeme Yöntemi Seçin</h3>
-            <p className="checkout-modal-subtitle">
+            <p className="mt-1 text-sm text-[#777]">
               Siparişiniz için kayıtlı bir kart seçin veya yeni bir kredi kartı ekleyin.
             </p>
           </div>
-          <button className="card-modal-close-btn" onClick={onClose} aria-label="Kapat">
+          <button className="grid h-9 w-9 place-items-center rounded-full text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" onClick={onClose} aria-label="Kapat">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -102,10 +102,10 @@ export default function PaymentSelectionModal({
         </div>
 
         {/* Tab Navigation */}
-        <div className="checkout-payment-modal-tabs">
+        <div className="mb-5 flex gap-2 border-b border-[#eee]">
           <button
             type="button"
-            className={`payment-tab-btn ${activeTab === "saved" ? "active" : ""}`}
+            className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "saved" ? "border-[#b6349a] text-[#b6349a]" : ""}`}
             onClick={() => setActiveTab("saved")}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -116,7 +116,7 @@ export default function PaymentSelectionModal({
           </button>
           <button
             type="button"
-            className={`payment-tab-btn ${activeTab === "new" ? "active" : ""}`}
+            className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-semibold transition ${activeTab === "new" ? "border-[#b6349a] text-[#b6349a]" : ""}`}
             onClick={() => setActiveTab("new")}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -129,13 +129,13 @@ export default function PaymentSelectionModal({
 
         {/* TAB 1: SAVED CARDS */}
         {activeTab === "saved" && (
-          <div className="saved-cards-selection-list">
+          <div className="grid gap-4">
             {cards.length === 0 ? (
-              <div className="no-cards-empty-state">
+              <div className="rounded-2xl border border-dashed border-[#e5e7eb] bg-[#f9fafb] p-8 text-center">
                 <p>Henüz kayıtlı bir kredi kartınız bulunmuyor.</p>
                 <button
                   type="button"
-                  className="btn-primary-card"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-semibold text-white hover:bg-[#98277f]"
                   onClick={() => setActiveTab("new")}
                 >
                   + İlk Kartınızı Ekleyin
@@ -143,14 +143,14 @@ export default function PaymentSelectionModal({
               </div>
             ) : (
               <>
-                <div className="card-selection-items">
+                <div className="grid gap-3">
                   {cards.map((card) => {
                     const isSelected = String(card.id) === String(selectedCardId);
                     const themeObj = CARD_THEMES.find((t) => t.id === card.theme) || CARD_THEMES[0];
                     return (
                       <div
                         key={card.id}
-                        className={`card-select-row ${isSelected ? "selected" : ""}`}
+                        className={`flex cursor-pointer items-center gap-3 rounded-xl border border-[#eee] p-3 transition hover:border-[#b6349a] ${isSelected ? "border-[#b6349a] bg-[#fff8fd]" : ""}`}
                         onClick={() => {
                           onSelectCard(card);
                           onClose();
@@ -167,23 +167,23 @@ export default function PaymentSelectionModal({
                       >
                         {/* Mini visual icon with theme gradient */}
                         <div
-                          className="card-mini-visual"
+                          className="grid h-12 w-20 shrink-0 place-items-center overflow-hidden rounded-lg p-2 text-white"
                           style={{ background: themeObj.gradient }}
                         >
                           {renderCardLogo(card.cardType)}
                         </div>
 
                         {/* Card Info */}
-                        <div className="card-select-info">
-                          <div className="card-select-number-row">
-                            <span className="card-select-number">
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="truncate text-sm font-semibold text-[#222]">
                               {card.cardType === "visa" ? "Visa" : "Mastercard"} •••• {card.last4 || card.maskedNumber?.slice(-4)}
                             </span>
                             {card.isDefault && (
-                              <span className="card-default-badge">Varsayılan</span>
+                              <span className="rounded-full bg-[#fff0fa] px-2 py-0.5 text-[10px] font-semibold text-[#b6349a]">Varsayılan</span>
                             )}
                           </div>
-                          <div className="card-select-subtext">
+                          <div className="mt-1 flex gap-2 text-xs text-[#888]">
                             <span>{card.cardHolder}</span>
                             <span>•</span>
                             <span>SKT: {card.expiry}</span>
@@ -191,7 +191,7 @@ export default function PaymentSelectionModal({
                         </div>
 
                         {/* Radio Checkmark */}
-                        <div className={`card-select-radio ${isSelected ? "checked" : ""}`}>
+                        <div className={`grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 border-[#d5d5d5] ${isSelected ? "border-[#b6349a] bg-[#b6349a]" : ""}`}>
                           {isSelected && (
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3">
                               <polyline points="20 6 9 17 4 12"></polyline>
@@ -205,7 +205,7 @@ export default function PaymentSelectionModal({
 
                 <button
                   type="button"
-                  className="checkout-add-card-inline-btn"
+                  className="inline-flex items-center gap-2 rounded-lg border border-dashed border-[#b6349a] px-4 py-2.5 text-sm font-semibold text-[#b6349a] hover:bg-[#fff5fc]"
                   onClick={() => setActiveTab("new")}
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -221,17 +221,17 @@ export default function PaymentSelectionModal({
 
         {/* TAB 2: ADD NEW CARD */}
         {activeTab === "new" && (
-          <div className="new-card-form-wrapper">
+          <div className="grid gap-5">
             {/* Live Card Preview */}
-            <div className="modal-live-preview-container">
+            <div className="flex justify-center">
               <div
-                className="credit-card-ui preview-mode"
+                className="relative w-full max-w-[420px] rounded-2xl p-6 text-white shadow-xl min-h-[220px]"
                 style={{ background: previewTheme.gradient }}
               >
-                <div className="card-top-row">
-                  <div className="card-chip-container">
-                    <div className="card-chip"></div>
-                    <svg className="contactless-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-7 w-10 rounded bg-white/20"></div>
+                    <svg className="text-white" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M5 8.5a9.5 9.5 0 0 1 14 0" />
                       <path d="M7.5 11a6 6 0 0 1 9 0" />
                       <path d="M10 13.5a2.5 2.5 0 0 1 4 0" />
@@ -240,18 +240,18 @@ export default function PaymentSelectionModal({
                   {renderCardLogo(previewType)}
                 </div>
 
-                <div className="card-number-display preview-number">
+                <div className="mt-10 text-xl tracking-[0.18em] font-mono">
                   {formData.cardNumber || "•••• •••• •••• ••••"}
                 </div>
 
-                <div className="card-bottom-row">
-                  <div className="card-holder-col">
-                    <span className="card-meta-label">KART SAHİBİ</span>
-                    <span className="card-meta-val">{formData.cardHolder || "AD SOYAD"}</span>
+                <div className="mt-10 flex justify-between gap-4">
+                  <div className="flex min-w-0 flex-col">
+                    <span className="text-[10px] uppercase text-white/70">KART SAHİBİ</span>
+                    <span className="mt-1 text-sm font-semibold">{formData.cardHolder || "AD SOYAD"}</span>
                   </div>
-                  <div className="card-expiry-col">
-                    <span className="card-meta-label">SON KULLANMA</span>
-                    <span className="card-meta-val">{formData.expiry || "AA/YY"}</span>
+                  <div className="flex shrink-0 flex-col">
+                    <span className="text-[10px] uppercase text-white/70">SON KULLANMA</span>
+                    <span className="mt-1 text-sm font-semibold">{formData.expiry || "AA/YY"}</span>
                   </div>
                 </div>
               </div>
@@ -261,10 +261,10 @@ export default function PaymentSelectionModal({
             <CardThemeSelector selectedTheme={formData.theme} onSelectTheme={setTheme} />
 
             {/* Form Fields */}
-            <form onSubmit={handleAddCardSubmit} className="card-entry-form" noValidate>
-              <div className="form-group-field">
-                <label className="field-label-text">Kart Üzerindeki İsim</label>
-                <div className="input-with-icon">
+            <form onSubmit={handleAddCardSubmit} className="grid gap-4" noValidate>
+              <div className="grid gap-1.5">
+                <label className="text-sm font-semibold text-[#555]">Kart Üzerindeki İsim</label>
+                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                     <circle cx="12" cy="7" r="4" />
@@ -275,15 +275,15 @@ export default function PaymentSelectionModal({
                     value={formData.cardHolder}
                     onChange={handleNameChange}
                     maxLength={30}
-                    className={errors.cardHolder ? "input-error" : ""}
+                    className={errors.cardHolder ? "border-red-400" : ""}
                   />
                 </div>
-                {errors.cardHolder && <span className="field-error-text">{errors.cardHolder}</span>}
+                {errors.cardHolder && <span className="text-xs text-red-600">{errors.cardHolder}</span>}
               </div>
 
-              <div className="form-group-field">
-                <label className="field-label-text">Kart Numarası</label>
-                <div className="input-with-icon">
+              <div className="grid gap-1.5">
+                <label className="text-sm font-semibold text-[#555]">Kart Numarası</label>
+                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                     <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
                     <line x1="2" y1="10" x2="22" y2="10" />
@@ -294,16 +294,16 @@ export default function PaymentSelectionModal({
                     value={formData.cardNumber}
                     onChange={handleCardNumberChange}
                     maxLength={19}
-                    className={errors.cardNumber ? "input-error" : ""}
+                    className={errors.cardNumber ? "border-red-400" : ""}
                   />
                 </div>
-                {errors.cardNumber && <span className="field-error-text">{errors.cardNumber}</span>}
+                {errors.cardNumber && <span className="text-xs text-red-600">{errors.cardNumber}</span>}
               </div>
 
-              <div className="form-row-halves">
-                <div className="form-group-field half">
-                  <label className="field-label-text">Son Kullanma</label>
-                  <div className="input-with-icon">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid gap-1.5 min-w-0">
+                  <label className="text-sm font-semibold text-[#555]">Son Kullanma</label>
+                  <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                       <line x1="16" y1="2" x2="16" y2="6" />
@@ -316,18 +316,18 @@ export default function PaymentSelectionModal({
                       value={formData.expiry}
                       onChange={handleExpiryChange}
                       maxLength={5}
-                      className={errors.expiry ? "input-error" : ""}
+                      className={errors.expiry ? "border-red-400" : ""}
                     />
                   </div>
-                  {errors.expiry && <span className="field-error-text">{errors.expiry}</span>}
+                  {errors.expiry && <span className="text-xs text-red-600">{errors.expiry}</span>}
                 </div>
 
-                <div className="form-group-field half">
-                  <label className="field-label-text">
+                <div className="grid gap-1.5 min-w-0">
+                  <label className="text-sm font-semibold text-[#555]">
                     CVV / CVC
-                    <span className="cvv-tooltip-hint">(3 hane)</span>
+                    <span className="text-xs font-normal text-[#999]">(3 hane)</span>
                   </label>
-                  <div className="input-with-icon">
+                  <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                       <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                       <path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -338,14 +338,14 @@ export default function PaymentSelectionModal({
                       value={formData.cvv}
                       onChange={handleCvvChange}
                       maxLength={3}
-                      className={errors.cvv ? "input-error" : ""}
+                      className={errors.cvv ? "border-red-400" : ""}
                     />
                   </div>
-                  {errors.cvv && <span className="field-error-text">{errors.cvv}</span>}
+                  {errors.cvv && <span className="text-xs text-red-600">{errors.cvv}</span>}
                 </div>
               </div>
 
-              <button type="submit" className="btn-primary-card submit-card-btn">
+              <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-semibold text-white hover:bg-[#98277f] mt-2 w-full rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-semibold text-white hover:bg-[#98277f]">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
