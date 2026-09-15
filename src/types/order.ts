@@ -1,4 +1,11 @@
-import type { CartItem } from "./cart";
+export interface OrderItem {
+  id: number;
+  title: string;
+  img: string;
+  price: number;
+  qty: number;
+  category: string;
+}
 
 export interface Order {
   id: string | number;
@@ -6,8 +13,11 @@ export interface Order {
   status: string;
   total: number;
   deliveryAddress: string;
-  items: CartItem[];
+  items: OrderItem[];
   date?: string;
+  paymentMethod?: string;
+  coupon?: string | null;
+  couponDiscount?: number;
 }
 
 export interface CreateOrderInput extends Omit<Order, "id" | "userId"> {

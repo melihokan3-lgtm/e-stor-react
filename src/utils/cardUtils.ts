@@ -1,3 +1,5 @@
+import type { PaymentCard } from "../types/payment";
+
 // Theme presets for credit cards
 export const CARD_THEMES = [
   { id: "purple", name: "Neon Lüks", gradient: "linear-gradient(135deg, #301860 0%, #7B1FA2 50%, #E91E63 100%)" },
@@ -8,7 +10,7 @@ export const CARD_THEMES = [
 ];
 
 // Seed initial card if none exists for a rich first-glance presentation
-export const DEFAULT_DEMO_CARDS = [
+export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   {
     id: "card_demo_1",
     cardHolder: "MELİH YILMAZ",
@@ -34,7 +36,7 @@ export const DEFAULT_DEMO_CARDS = [
 ];
 
 // Helper: detect card type from number
-export const detectCardType = (number = "") => {
+export const detectCardType = (number = ""): PaymentCard["cardType"] => {
   const clean = number.replace(/\D/g, "");
   if (clean.startsWith("4")) return "visa";
   if (/^(5[1-5]|2[2-7])/.test(clean)) return "mastercard";
@@ -42,7 +44,7 @@ export const detectCardType = (number = "") => {
 };
 
 // Helper: mask 16-digit card number (PCI-DSS simulation)
-export const maskCardNumber = (number = "") => {
+export const maskCardNumber = (number = ""): string => {
   const clean = number.replace(/\D/g, "");
   const last4 = clean.slice(-4) || "0000";
   return `**** **** **** ${last4}`;

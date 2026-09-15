@@ -6,6 +6,12 @@ import type { CreateOrderInput, Order, OrdersContextValue } from "../../types/or
 
 export const OrdersContext = createContext<OrdersContextValue | null>(null);
 
+export const useOrders = (): OrdersContextValue => {
+  const context = useContext(OrdersContext);
+  if (!context) throw new Error("useOrders must be used inside OrdersProvider.");
+  return context;
+};
+
 export function OrdersProvider({ children }: { children: ReactNode }) {
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;

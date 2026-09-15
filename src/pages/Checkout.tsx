@@ -1,15 +1,31 @@
-import { useContext, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { CartContext } from "../features/cart/CartContext";
-import { OrdersContext } from "../features/orders/OrdersContext";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../features/cart/CartContext";
+import { useOrders } from "../features/orders/OrdersContext";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
-import { AuthContext } from "../features/auth/AuthContext";
+import { useAuth } from "../features/auth/AuthContext";
 import { useLocation } from "../features/addresses/LocationContext";
 import PaymentSelectionModal from "../components/PaymentSelectionModal";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 import { DEFAULT_DEMO_CARDS } from "../utils/cardUtils";
+import type { PaymentCard } from "../types/payment";
 
-const AVAILABLE_COUPONS = [
+type CouponIconType = "discount" | "shipping" | "special";
+type CouponDiscountType = "percent" | "fixed" | "shipping";
+
+interface Coupon {
+  id: number;
+  code: string;
+  title: string;
+  description: string;
+  discountType: CouponDiscountType;
+  discountValue: number;
+  type: CouponIconType;
+  minOrder: number;
+  expiry: string;
+}
+
+const AVAILABLE_COUPONS: Coupon[] = [
   {
     id: 1,
     code: "HOSGELDIN20",
@@ -56,35 +72,35 @@ const AVAILABLE_COUPONS = [
   },
 ];
 
-const COUPON_ICONS = {
+const COUPON_ICONS: Record<CouponIconType, string> = {
   discount: "🏷️",
   shipping: "🚚",
   special: "⭐",
 };
 
 export default function Checkout() {
-  const { cart, totalPrice, clearCart } = useContext(CartContext);
-  const { addOrder } = useContext(OrdersContext);
-  const { user, isLoggedIn, openAuthModal } = useContext(AuthContext);
+  const { cart, totalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
+  const { user, isLoggedIn, openAuthModal } = useAuth();
   const { location, openLocationModal } = useLocation();
   const navigate = useNavigate();
 
-  const [activeTip, setActiveTip] = useState(null);
+  const [activeTip, setActiveTip] = useState<number | "Other" | null>(null);
   const [customTip, setCustomTip] = useState('');
 
   // Payment method selection & modal state
-  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedCard, setSelectedCard] = useState<PaymentCard | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   // Coupon state
   const [isCouponPanelOpen, setIsCouponPanelOpen] = useState(false);
-  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [couponToast, setCouponToast] = useState("");
 
   // Sync selected card on mount & user change
   useEffect(() => {
-    const saved = readUserStorage("savedCards", user, null);
-    if (saved && Array.isArray(saved) && saved.length > 0) {
+    const saved = readUserStorage<PaymentCard[] | null>("savedCards", user, null);
+    if (saved && saved.length > 0) {
       const def = saved.find((c) => c.isDefault) || saved[0];
       setSelectedCard(def);
     } else {
@@ -115,7 +131,7 @@ export default function Checkout() {
     ? `${selectedCard.cardType === "visa" ? "Visa" : "Mastercard"} **** ${selectedCard.last4 || selectedCard.maskedNumber?.slice(-4) || "3434"}`
     : "Mastercard **** 3434";
 
-  const handleApplyCoupon = (coupon) => {
+  const handleApplyCoupon = (coupon: Coupon) => {
     if (itemsTotal < coupon.minOrder) {
       setCouponToast(`Minimum sipariş tutarı: ${coupon.minOrder} TL`);
       setTimeout(() => setCouponToast(""), 3000);
@@ -133,7 +149,7 @@ export default function Checkout() {
     setTimeout(() => setCouponToast(""), 3000);
   };
 
-  const formatDate = (dateStr) => {
+  const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
     return d.toLocaleDateString("tr-TR", {
       day: "numeric",
@@ -274,8 +290,8 @@ export default function Checkout() {
                         src={imageSrc}
                         alt={item.data.title}
                         onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = FALLBACK_IMG;
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = FALLBACK_IMG;
                         }}
                       />
                     </div>
@@ -537,7 +553,7 @@ export default function Checkout() {
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         selectedCardId={selectedCard?.id}
-        onSelectCard={(card) => setSelectedCard(card)}
+        onSelectCard={(card: PaymentCard) => setSelectedCard(card)}
         user={user}
       />
 

@@ -2,7 +2,7 @@ import { isSupabaseConfigured, supabase } from "../../lib/supabase";
 import type { AuthUser } from "../../types/auth";
 import type { Address } from "../../types/address";
 import type { CartItem } from "../../types/cart";
-import type { CreateOrderInput, Order } from "../../types/order";
+import type { CreateOrderInput, Order, OrderItem } from "../../types/order";
 
 const getClient = () => {
   if (!supabase) throw new Error("Supabase bağlantısı yapılandırılmamış.");
@@ -42,7 +42,7 @@ export const fetchUserOrders = async (user: AuthUser | null): Promise<Order[]> =
     status: order.status,
     total: Number(order.total),
     deliveryAddress: order.delivery_address,
-    items: order.items || [],
+    items: (order.items || []) as OrderItem[],
     date: new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
   }));
 };
@@ -62,7 +62,7 @@ export const saveUserOrder = async (user: AuthUser | null, order: CreateOrderInp
     status: data.status,
     total: Number(data.total),
     deliveryAddress: data.delivery_address,
-    items: (data.items || []) as CartItem[],
+    items: (data.items || []) as OrderItem[],
     date: new Date(data.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
   };
 };
