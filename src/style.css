@@ -93,42 +93,12 @@ a {
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-main {
-  max-width: 1600px;
-  margin: 0 auto;
-}
-
 .swiper-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-horizontal.swiper-pagination-bullets {
   display: none;
 }
 
-main {
-  display: flex;
-}
-
-aside {
-  width: 100%;
-  max-width: 360px;
-  padding: 22px;
-}
-
 .swiper-wrapper {
   max-width: 1200px;
   padding: 10px 0;
-}
-
-@media (max-width: 768px) {
-  main {
-    display: block;
-  }
-
-  aside {
-    max-width: 100%;
-    padding: 22px 0 0;
-  }
-
-  nav p {
-    display: none;
-  }
 }

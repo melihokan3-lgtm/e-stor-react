@@ -84,7 +84,7 @@ export default function ProductDetail() {
 
   if (loading)
     return (
-      <main>
+      <main className="min-h-screen bg-white">
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Loading product details...</p>
         </div>
@@ -92,7 +92,7 @@ export default function ProductDetail() {
     );
   if (error || !product)
     return (
-      <main>
+      <main className="min-h-screen bg-white">
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Product not found.</p>
         </div>
