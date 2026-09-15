@@ -1,6 +1,4 @@
-/* ==========================================================================
-   1. RESET & BASE STYLES
-   ========================================================================== */
+
 *,
 *::before,
 *::after {
@@ -68,11 +66,9 @@ a {
   text-decoration: none;
 }
 
-/* ==========================================================================
-   2. CSS VARIABLES (:root)
-   ========================================================================== */
+
 :root {
-  /* Colors */
+
   --primary-color: #ff6000;
   --primary-hover: #e65600;
   --secondary-color: #b6349a;
@@ -85,17 +81,17 @@ a {
   --error-color: #d93025;
   --success-color: #0f9d58;
 
-  /* Typography */
+
   --font-family: 'Inter', sans-serif;
 
-  /* Spacing */
+
   --spacing-xs: 4px;
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
   --spacing-xl: 32px;
 
-  /* Borders & Shadows */
+
   --border-radius-sm: 4px;
   --border-radius: 8px;
   --border-radius-lg: 20px;
@@ -103,30 +99,22 @@ a {
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* ==========================================================================
-   3. GLOBAL UTILITIES & LAYOUT
-   ========================================================================== */
+
 main {
   max-width: 1600px;
   margin: 0 auto;
 }
 
-/* ==========================================================================
-   4. LAYOUT COMPONENTS
-   ========================================================================== */
 
-/* ==========================================================================
-   5. UI UTILITIES & FORM ELEMENTS
-   ========================================================================== */
+
+
 
 .swiper-horizontal>.swiper-pagination-bullets,
 .swiper-pagination-horizontal.swiper-pagination-bullets {
   display: none;
 }
 
-/* ==========================================================================
-   6. HOME PAGE LAYOUT & ASIDE FILTERS
-   ========================================================================== */
+
 main {
   display: flex;
 }
@@ -142,7 +130,7 @@ aside {
   padding: 10px 0;
 }
 
-/* Media Queries Temporary Placement (To be grouped in Phase 5) */
+
 @media (max-width: 768px) {
 
   main {
@@ -160,22 +148,15 @@ aside {
 
 }
 
-/* ==========================================================================
-   8.1 PRODUCT CARDS (Continued)
-   ========================================================================== */
 
-/* ==========================================================================
-   11. CART & CHECKOUT PAGES
-   ========================================================================== */
 
-/* ==========================================================================
-   11.2 RECOMMENDED SECTION
-   ========================================================================== */
 
-/* Temporary Profile/Cart Media Queries (To be organized in Phase 5) */
 
-/* Swiper core and navigation styles have been removed.
-   They are correctly imported in main.jsx via 'import "swiper/css/bundle"' */
+
+
+
+
+
 
 .card-title {
   font-size: 13px;
@@ -187,29 +168,25 @@ aside {
   text-overflow: ellipsis;
 }
 
-/* ==========================================================================
-   CART PAGE REDESIGN
-   ========================================================================== */
 
-/* --- Left Column --- */
 
-/* Local Market Header */
 
-/* Recommendations */
 
-/* --- Right Column (Cart Summary) --- */
 
-/* Responsive */
 
-/* ==========================================================================
-   CHECKOUT PAGE
-   ========================================================================== */
 
-/* --- Left Column --- */
 
-/* Review Images Row */
 
-/* --- Right Column --- */
+
+
+
+
+
+
+
+
+
+
 
 .summary-line {
   display: flex;
@@ -228,11 +205,9 @@ aside {
   color: #111;
 }
 
-/* Responsive */
 
-/* ==========================================================================
-   ORDER PROGRESS PAGE
-   ========================================================================== */
+
+
 
 .main-order-progress {
   padding: 40px 24px;
@@ -245,7 +220,7 @@ aside {
   margin: 0 auto;
 }
 
-/* Top Actions */
+
 .progress-top-actions {
   display: flex;
   justify-content: space-between;
@@ -290,7 +265,7 @@ aside {
   background-color: #f0f0f0;
 }
 
-/* Grid Layout */
+
 .progress-content-grid {
   display: grid;
   grid-template-columns: 1.8fr 1fr;
@@ -305,7 +280,7 @@ aside {
   gap: 24px;
 }
 
-/* Card Base */
+
 .progress-card {
   background-color: #fff;
   border-radius: 20px;
@@ -317,7 +292,7 @@ aside {
   padding: 24px 32px;
 }
 
-/* --- Status Card --- */
+
 .status-header {
   display: flex;
   justify-content: space-between;
@@ -372,7 +347,7 @@ aside {
   margin: 0;
 }
 
-/* Timeline */
+
 .status-timeline-wrapper {
   position: relative;
   padding-top: 10px;
@@ -447,7 +422,7 @@ aside {
   line-height: 1.4;
 }
 
-/* --- Items Card --- */
+
 .items-header-row {
   display: flex;
   justify-content: space-between;
@@ -563,7 +538,7 @@ aside {
   color: #b6349a;
 }
 
-/* --- Cancel Card --- */
+
 .cancel-card {
   display: flex;
   justify-content: space-between;
@@ -589,7 +564,7 @@ aside {
   cursor: pointer;
 }
 
-/* --- Summary & Right Column Cards --- */
+
 .card-title {
   font-size: 16px;
   font-weight: 700;
@@ -663,7 +638,7 @@ aside {
   gap: 12px;
 }
 
-/* Responsive */
+
 @media (max-width: 1024px) {
   .progress-content-grid {
     grid-template-columns: 1fr;
@@ -682,16 +657,16 @@ aside {
   }
 }
 
-/* ---------- MY ORDERS PAGE ---------- */
 
-/* Order Address Section */
 
-/* Edit Address Modal */
+
+
+
 
 @media (max-width: 768px) {
 }
 
-/* ========== AUTH MODAL ========== */
+
 .auth-modal-overlay {
   position: fixed;
   inset: 0;
@@ -789,7 +764,7 @@ aside {
   margin: 0;
 }
 
-/* Tabs */
+
 .auth-modal-tabs {
   display: flex;
   background: #f5f5f5;
@@ -817,7 +792,7 @@ aside {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Error */
+
 .auth-error-msg {
   display: flex;
   align-items: center;
@@ -832,7 +807,7 @@ aside {
   margin-bottom: 20px;
 }
 
-/* Form */
+
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -892,7 +867,7 @@ aside {
   color: #ccc;
 }
 
-/* Submit button */
+
 .auth-submit-btn {
   display: flex;
   align-items: center;
@@ -921,7 +896,7 @@ aside {
   cursor: not-allowed;
 }
 
-/* Spinner */
+
 .auth-spinner {
   width: 18px;
   height: 18px;
@@ -937,7 +912,7 @@ aside {
   }
 }
 
-/* Hint text */
+
 .auth-hint-text {
   text-align: center;
   font-size: 12px;
@@ -949,7 +924,7 @@ aside {
   color: #b6349a;
 }
 
-/* Navbar user greeting */
+
 
 @media (max-width: 768px) {
   .auth-modal-container {
@@ -964,11 +939,9 @@ aside {
   }
 }
 
-/* =========================================================
-   PAYMENTS & CREDIT CARD MODULE STYLES (UI/UX)
-========================================================= */
 
-/* Toast Alert */
+
+
 
 @keyframes slideInToast {
   from {
@@ -982,9 +955,9 @@ aside {
   }
 }
 
-/* Cards Grid */
 
-/* 3D Realistic Credit Card */
+
+
 .credit-card-ui {
   position: relative;
   width: 100%;
@@ -1011,11 +984,11 @@ aside {
   border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
-/* Gloss Shimmer Effect */
 
-/* Default Pill */
 
-/* Card Top Row */
+
+
+
 .card-top-row {
   display: flex;
   justify-content: space-between;
@@ -1023,7 +996,7 @@ aside {
   z-index: 1;
 }
 
-/* Metallic EMV Chip */
+
 
 .contactless-icon {
   display: flex;
@@ -1031,7 +1004,7 @@ aside {
   opacity: 0.9;
 }
 
-/* Card Number */
+
 .card-number-display {
   font-family: "Courier New", Courier, monospace, "Outfit", sans-serif;
   font-size: 20px;
@@ -1044,7 +1017,7 @@ aside {
   white-space: nowrap;
 }
 
-/* Card Bottom Row */
+
 .card-bottom-row {
   display: flex;
   justify-content: space-between;
@@ -1080,15 +1053,13 @@ aside {
   white-space: nowrap;
 }
 
-/* Card Action Bar below credit card */
 
-/* Add Card Placeholder */
 
-/* Security Notice Box */
 
-/* =========================================================
-   NEW CARD MODAL STYLES
-========================================================= */
+
+
+
+
 
 .card-modal-overlay {
   position: fixed;
@@ -1172,7 +1143,7 @@ aside {
   transform: rotate(90deg);
 }
 
-/* Modal Live Preview Card */
+
 .modal-live-preview-container {
   margin-bottom: 24px;
 }
@@ -1192,7 +1163,7 @@ aside {
   letter-spacing: 2px;
 }
 
-/* Form Styles */
+
 .card-entry-form {
   display: flex;
   flex-direction: column;
@@ -1235,7 +1206,7 @@ aside {
   align-items: center;
 }
 
-/* Modal Action Buttons */
+
 
 @media (max-width: 640px) {
   .form-row-halves {
@@ -1257,13 +1228,9 @@ aside {
   }
 }
 
-/* =========================================================
-   CARD DELETE CONFIRMATION MODAL
-========================================================= */
 
-/* =========================================================
-   CHECKOUT PAYMENT SELECTION MODAL
-========================================================= */
+
+
 
 .checkout-card-modal-box {
   max-width: 540px !important;
@@ -1480,28 +1447,24 @@ aside {
   opacity: 0.95;
 }
 
-/* =========================================================
-   NOTIFICATIONS PAGE STYLES (Trendyol / Amazon Quality)
-========================================================= */
 
-/* Filter Tabs */
-/* Notifications List */
-/* Unread Distinction (Very subtle soft tint & glowing dot) */
 
-/* Notification Type Icons */
-/* Content Area */
-/* Side Actions */
-/* Empty State */
+
+
+
+
+
+
+
+
 .empty-state-icon {
   margin-bottom: 16px;
 }
 
-/* =========================================================
-   HELP & SUPPORT (FAQ ACCORDION & CONTACT)
-========================================================= */
 
-/* Category Pills */
-/* FAQ Accordion List */
+
+
+
 @keyframes faqPaneFade {
   from {
     opacity: 0;
@@ -1514,7 +1477,7 @@ aside {
   }
 }
 
-/* Contact & Support Section */
+
 
 .online-dot {
   width: 6px;
@@ -1523,7 +1486,7 @@ aside {
   background: #10b981;
 }
 
-/* Live Chat Simulation Modal */
+
 
 .chat-agent-info {
   display: flex;
@@ -1555,33 +1518,25 @@ aside {
 
 @media (max-width: 640px) {}
 
-/* =========================================================
-   SETTINGS PAGE STYLES (UI/UX)
-========================================================= */
-/* Horizontal Tabs */
-/* Section Card */
-/* Floating Labels */
+
+
+
+
 @media (max-width: 640px) {}
 
-/* Avatar Management */
 
-/* ==========================================================================
-   12. PROFILE & SETTINGS PAGES
-   ========================================================================== */
 
-/* iOS Style Toggle Switch */
 
-/* Danger Zone */
 
-/* Standard Secondary Button */
 
-/* ==========================================================================
-   CART EMPTY STATE CENTERING
-   ========================================================================== */
 
-/* ==========================================================================
-   COUPONS PAGE STYLES
-   ========================================================================== */
+
+
+
+
+
+
+
 .coupon-status-badge.active {
   background: #ecfdf5;
   color: #059669;
