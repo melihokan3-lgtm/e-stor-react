@@ -143,7 +143,7 @@ export default function Home() {
               768: { slidesPerView: 4 },
               1024: { slidesPerView: 5 },
             }}
-            className="home-swiper"
+            className="w-full"
           >
             {products.slice(0, 10).map((product) => (
               <SwiperSlide key={product.id}>
@@ -201,7 +201,7 @@ export default function Home() {
                   768: { slidesPerView: 4 },
                   1024: { slidesPerView: 5 },
                 }}
-                className="home-swiper"
+                className="w-full"
               >
                 {weeklyProducts.map((product) => (
                   <SwiperSlide key={product.id}>
@@ -247,7 +247,7 @@ export default function Home() {
               768: { slidesPerView: 4 },
               1024: { slidesPerView: 5 },
             }}
-            className="home-swiper"
+            className="w-full"
           >
             {trendProducts.map((product) => (
               <SwiperSlide key={product.id}>
