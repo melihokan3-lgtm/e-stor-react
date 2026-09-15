@@ -1,29 +1,29 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, useState, useEffect, useRef } from "react";
-import { CartContext } from "../context/CartContext";
-import { AuthContext } from "../context/AuthContext";
-import { useLocation } from "../context/LocationContext";
-import AuthModal from "./AuthModal";
-import LocationModal from "./LocationModal";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
+import { useState, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
+import { useCart } from "../../context/CartContext";
+import { useAuth } from "../../context/AuthContext";
+import { useLocation } from "../../context/LocationContext";
+import AuthModal from "../common/AuthModal";
+import LocationModal from "../common/LocationModal";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 
 export default function Navbar() {
-  const { totalItems } = useContext(CartContext);
-  const { user, isLoggedIn, openAuthModal } = useContext(AuthContext);
+  const { totalItems } = useCart();
+  const { user, isLoggedIn, openAuthModal } = useAuth();
   const { location, openLocationModal } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
-  const [pastSearches, setPastSearches] = useState([]);
+  const [pastSearches, setPastSearches] = useState<string[]>([]);
   const [showPastSearches, setShowPastSearches] = useState(false);
-  const searchContainerRef = useRef(null);
+  const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPastSearches(readUserStorage("pastSearches", user, []));
+    setPastSearches(readUserStorage<string[]>("pastSearches", user, []));
   }, [user]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target)) {
+    const handleClickOutside = (event: globalThis.MouseEvent): void => {
+      if (searchContainerRef.current && !(event.target instanceof Node && searchContainerRef.current.contains(event.target))) {
         setShowPastSearches(false);
       }
     };
@@ -31,7 +31,7 @@ export default function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSearch = (termToSearch = searchTerm) => {
+  const handleSearch = (termToSearch: string = searchTerm): void => {
     if (termToSearch) {
       const updatedSearches = [termToSearch, ...pastSearches.filter(s => s !== termToSearch)].slice(0, 5);
       setPastSearches(updatedSearches);
@@ -41,7 +41,7 @@ export default function Navbar() {
     }
   };
 
-  const handleRemoveSearch = (e, searchToRemove) => {
+  const handleRemoveSearch = (e: ReactMouseEvent<HTMLButtonElement>, searchToRemove: string): void => {
     e.stopPropagation();
     const updatedSearches = pastSearches.filter(s => s !== searchToRemove);
     setPastSearches(updatedSearches);
@@ -49,11 +49,11 @@ export default function Navbar() {
   };
 
 
-  const handlePriceFilter = (range) => {
+  const handlePriceFilter = (range: string): void => {
     navigate(`/category?price=${range}`);
   };
 
-  const handleLoginClick = (e) => {
+  const handleLoginClick = (e: ReactMouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     if (isLoggedIn) {
       navigate("/profile/details");
@@ -161,8 +161,8 @@ export default function Navbar() {
           {showPastSearches && pastSearches.length > 0 && (
             <div className="past-searches-dropdown">
               <ul>
-                {pastSearches.map((search, index) => (
-                  <li key={index} onClick={() => { setSearchTerm(search); handleSearch(search); }}>
+                {pastSearches.map((search) => (
+                  <li key={search} onClick={() => { setSearchTerm(search); handleSearch(search); }}>
                     <div className="search-text">
                       <img src="/img/icon/Frame 28.svg" alt="Search" className="past-search-icon" />
                       <span>{search}</span>
@@ -192,7 +192,7 @@ export default function Navbar() {
             <p>Cart</p>
           </Link>
 
-          {isLoggedIn ? (
+          {isLoggedIn && user ? (
             <Link to="/profile/details" className="nav-user-greeting">
               <img
                 src={user.image}

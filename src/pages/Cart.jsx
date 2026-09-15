@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import SearchProductCard from "../components/SearchProductCard";
+import SearchProductCard from "../components/product/SearchProductCard";
 import { useLocation } from "../context/LocationContext";
 
 export default function Cart() {

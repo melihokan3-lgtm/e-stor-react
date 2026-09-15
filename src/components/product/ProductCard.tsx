@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { cleanImageUrl, FALLBACK_IMG } from "../services/api";
-import { useCart } from "../context/CartContext";
-import type { Product } from "../types/product";
+import { cleanImageUrl, FALLBACK_IMG } from "../../services/api";
+import { useCart } from "../../context/CartContext";
+import type { Product } from "../../types/product";
 
 interface ProductCardProps {
   product: Product;

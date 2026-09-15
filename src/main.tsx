@@ -1,15 +1,12 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
-import App from "./App";
+import App from "./app/App";
+import AppProviders from "./app/providers";
 import "./style.css";
 import "./styles/tailwind.css";
 // Import Swiper styles bundle to match the old CDN swiper-bundle.min.css
 import "swiper/css/bundle";
-import { AuthProvider } from "./context/AuthContext";
-import { CartProvider } from "./context/CartContext";
-import { OrdersProvider } from "./context/OrdersContext";
-import { LocationProvider } from "./context/LocationContext";
 
 const rootElement = document.getElementById("root");
 
@@ -20,15 +17,9 @@ if (!rootElement) {
 createRoot(rootElement).render(
   <StrictMode>
     <BrowserRouter>
-        <AuthProvider>
-          <LocationProvider>
-            <OrdersProvider>
-              <CartProvider>
-                <App />
-              </CartProvider>
-            </OrdersProvider>
-          </LocationProvider>
-        </AuthProvider>
+        <AppProviders>
+          <App />
+        </AppProviders>
     </BrowserRouter>
   </StrictMode>,
 );

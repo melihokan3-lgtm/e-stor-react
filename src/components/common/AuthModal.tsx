@@ -1,11 +1,10 @@
-import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { useState, useEffect, type FormEvent } from "react";
+import { useAuth } from "../../context/AuthContext";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, loginUser, registerUser } =
-    useContext(AuthContext);
+  const { isAuthModalOpen, closeAuthModal, loginUser, registerUser } = useAuth();
 
-  const [mode, setMode] = useState("login"); // "login" | "register"
+  const [mode, setMode] = useState<"login" | "register">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -35,7 +34,7 @@ export default function AuthModal() {
 
   // Close on ESC key
   useEffect(() => {
-    const handleEsc = (e) => {
+    const handleEsc = (e: KeyboardEvent): void => {
       if (e.key === "Escape") closeAuthModal();
     };
     if (isAuthModalOpen) {
@@ -51,7 +50,7 @@ export default function AuthModal() {
   if (!isAuthModalOpen) return null;
 
   // --- LOGIN HANDLER ---
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError("");
 
@@ -64,14 +63,14 @@ export default function AuthModal() {
     try {
       await loginUser(username.trim(), password);
     } catch (err) {
-      setError(err.message || "Kullanıcı adı veya şifre hatalı.");
+      setError(err instanceof Error ? err.message : "Kullanıcı adı veya şifre hatalı.");
     } finally {
       setLoading(false);
     }
   };
 
   // --- REGISTER HANDLER ---
-  const handleRegister = async (e) => {
+  const handleRegister = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError("");
 
@@ -106,7 +105,7 @@ export default function AuthModal() {
         lastName: regLastName.trim(),
       });
     } catch (err) {
-      setError(err.message || "Kayıt işlemi başarısız oldu.");
+      setError(err instanceof Error ? err.message : "Kayıt işlemi başarısız oldu.");
     } finally {
       setLoading(false);
     }

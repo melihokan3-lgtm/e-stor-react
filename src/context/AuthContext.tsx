@@ -1,9 +1,15 @@
-import { createContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { isSupabaseConfigured, supabase } from "../lib/supabase";
 import type { AuthContextValue, AuthUser, RegisterInput } from "../types/auth";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
+
+export const useAuth = (): AuthContextValue => {
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used inside AuthProvider.");
+  return context;
+};
 
 const AUTH_API = "https://dummyjson.com";
 const REGISTERED_USER_KEY = "newRegisteredUser";

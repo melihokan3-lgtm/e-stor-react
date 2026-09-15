@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import useProducts from "../hooks/useProducts";
-import ProductCard from "../components/ProductCard";
-import SearchProductCard from "../components/SearchProductCard";
+import ProductCard from "../components/product/ProductCard";
+import SearchProductCard from "../components/product/SearchProductCard";
 
 export default function Search() {
   const { products, loading, error } = useProducts();

@@ -1,14 +1,46 @@
-import { useEffect, useRef, useState } from "react";
-import { useLocation } from "../context/LocationContext";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useLocation } from "../../context/LocationContext";
 
-const BURSA_CENTER = [40.195, 29.06];
-let leafletPromise;
+type LatLngTuple = [number, number];
+type AddressData = Record<string, string | undefined>;
 
-const loadLeaflet = () => {
+interface LeafletMap {
+  setView(center: LatLngTuple, zoom: number): LeafletMap;
+  on(event: "click", handler: (event: { latlng: { lat: number; lng: number } }) => void): LeafletMap;
+  invalidateSize(): void;
+  remove(): void;
+}
+
+interface LeafletMarker {
+  addTo(map: LeafletMap): LeafletMarker;
+  setLatLng(position: LatLngTuple): LeafletMarker;
+}
+
+interface LeafletApi {
+  map(element: HTMLElement): LeafletMap;
+  tileLayer(url: string, options: { attribution: string; maxZoom: number }): { addTo(map: LeafletMap): void };
+  marker(position: LatLngTuple): LeafletMarker;
+}
+
+interface NominatimResult {
+  address?: AddressData;
+  display_name?: string;
+}
+
+declare global {
+  interface Window {
+    L?: LeafletApi;
+  }
+}
+
+const BURSA_CENTER: LatLngTuple = [40.195, 29.06];
+let leafletPromise: Promise<LeafletApi> | null = null;
+
+const loadLeaflet = (): Promise<LeafletApi> => {
   if (window.L) return Promise.resolve(window.L);
   if (leafletPromise) return leafletPromise;
 
-  leafletPromise = new Promise((resolve, reject) => {
+  leafletPromise = new Promise<LeafletApi>((resolve, reject) => {
     const stylesheet = document.createElement("link");
     stylesheet.rel = "stylesheet";
     stylesheet.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
@@ -17,7 +49,10 @@ const loadLeaflet = () => {
     const script = document.createElement("script");
     script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
     script.async = true;
-    script.onload = () => resolve(window.L);
+    script.onload = () => {
+      if (window.L) resolve(window.L);
+      else reject(new Error("Leaflet API bulunamadı."));
+    };
     script.onerror = () => reject(new Error("Leaflet yüklenemedi."));
     document.body.appendChild(script);
   });
@@ -25,18 +60,19 @@ const loadLeaflet = () => {
   return leafletPromise;
 };
 
-const firstValue = (...values) => values.find(
-  (value) => typeof value === "string" && value.trim(),
-);
+const firstValue = (...values: unknown[]): string => {
+  const value = values.find((item): item is string => typeof item === "string" && Boolean(item.trim()));
+  return value?.trim() || "";
+};
 
-const uniqueParts = (parts) => [...new Set(parts.filter(Boolean).map((part) => part.trim()))];
+const uniqueParts = (parts: string[]): string[] => [...new Set(parts.filter(Boolean).map((part) => part.trim()))];
 
-const normalizeLocationText = (value = "") => value
+const normalizeLocationText = (value = ""): string => value
   .toLocaleLowerCase("tr-TR")
   .replace(/\s+belediyesi$/u, "")
   .trim();
 
-const getDistrict = (address = {}) => {
+const getDistrict = (address: AddressData = {}): string => {
   const city = normalizeLocationText(firstValue(
     address.city,
     address.province,
@@ -60,7 +96,7 @@ const getDistrict = (address = {}) => {
   return candidate ? candidate.replace(/\s+belediyesi$/iu, "").trim() : "";
 };
 
-const formatAddress = (address = {}, displayName = "") => {
+const formatAddress = (address: AddressData = {}, displayName = ""): string => {
   // Nominatim, aynı bilgiyi şehir ve ülkeye göre farklı alanlarda döndürebilir.
   const street = firstValue(
     address.road,
@@ -91,23 +127,23 @@ const formatAddress = (address = {}, displayName = "") => {
   return displayName || "Seçilen konum";
 };
 
-const reverseGeocode = async (lat, lng, zoom) => {
+const reverseGeocode = async (lat: number, lng: number, zoom: number): Promise<NominatimResult> => {
   const response = await fetch(
     `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=${zoom}&addressdetails=1&accept-language=tr`,
     { headers: { Accept: "application/json" } },
   );
   if (!response.ok) throw new Error("Adres servisi yanıt vermedi.");
-  return response.json();
+  return (await response.json()) as NominatimResult;
 };
 
 export default function LocationModal() {
   const { location, addresses, selectLocation, isLocationModalOpen, addAddress, closeLocationModal } = useLocation();
-  const mapElementRef = useRef(null);
-  const mapRef = useRef(null);
-  const markerRef = useRef(null);
+  const mapElementRef = useRef<HTMLDivElement | null>(null);
+  const mapRef = useRef<LeafletMap | null>(null);
+  const markerRef = useRef<LeafletMarker | null>(null);
   const [label, setLabel] = useState("Home");
   const [address, setAddress] = useState(location);
-  const [mapStatus, setMapStatus] = useState("idle");
+  const [mapStatus, setMapStatus] = useState<"idle" | "loading" | "geocoding" | "ready" | "error">("idle");
   const [mapError, setMapError] = useState("");
 
   useEffect(() => {
@@ -159,7 +195,7 @@ export default function LocationModal() {
             setMapStatus("ready");
           } catch (error) {
             setMapStatus("ready");
-            setMapError(error.message || "Adres bulunamadı. Lütfen tekrar deneyin.");
+            setMapError(error instanceof Error ? error.message : "Adres bulunamadı. Lütfen tekrar deneyin.");
           }
         });
 
@@ -168,7 +204,7 @@ export default function LocationModal() {
       .catch((error) => {
         if (!cancelled) {
           setMapStatus("error");
-          setMapError(error.message);
+          setMapError(error instanceof Error ? error.message : "Harita yüklenemedi.");
         }
       });
 
@@ -182,7 +218,9 @@ export default function LocationModal() {
 
   useEffect(() => {
     if (!isLocationModalOpen) return undefined;
-    const handleKeyDown = (event) => event.key === "Escape" && closeLocationModal();
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") closeLocationModal();
+    };
     document.addEventListener("keydown", handleKeyDown);
     document.body.style.overflow = "hidden";
     return () => {
@@ -193,7 +231,7 @@ export default function LocationModal() {
 
   if (!isLocationModalOpen) return null;
 
-  const handleSave = (event) => {
+  const handleSave = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     addAddress({ label, address });
   };

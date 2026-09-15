@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { cleanImageUrl, FALLBACK_IMG } from "../services/api";
-import { useCart } from "../context/CartContext";
-import type { Product } from "../types/product";
+import { cleanImageUrl, FALLBACK_IMG } from "../../services/api";
+import { useCart } from "../../context/CartContext";
+import type { Product } from "../../types/product";
 
 export default function WeeklyProductCard({ product }: { product: Product }) {
   const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";

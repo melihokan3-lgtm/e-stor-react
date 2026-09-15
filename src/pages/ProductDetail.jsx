@@ -10,7 +10,7 @@ import {
 import { CartContext } from "../context/CartContext";
 import { AuthContext } from "../context/AuthContext";
 import { readUserStorage } from "../utils/userStorage";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/product/ProductCard";
 
 const StarIcon = ({ filled = true, width = 14, height = 14 }) => (
   <svg width={width} height={height} viewBox="0 0 24 24" fill={filled ? "#ffc107" : "none"} stroke={filled ? "#ffc107" : "#ddd"} strokeWidth="2" xmlns="http://www.w3.org/0000/svg">

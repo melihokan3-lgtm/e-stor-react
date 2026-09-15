@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { fetchProducts } from "../services/api";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../components/product/ProductCard";
 
 const promoBanners = [
   { img: "/img/Frame 33.png", alt: "Special Deals", link: "/category?deals=true" },
