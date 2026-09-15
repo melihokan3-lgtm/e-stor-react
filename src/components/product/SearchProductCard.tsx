@@ -41,7 +41,7 @@ export default function SearchProductCard({ product }: { product: Product }) {
           <span className="text-xs text-[#999] line-through">${oldPrice || "99.99"}</span>
         </div>
         <button 
-          className="mt-auto w-full cursor-pointer rounded-xl border-0 bg-[#ed70d5] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#de57c4] active:scale-[0.98]"
+          className="mt-auto w-full cursor-pointer rounded-xl border-0 bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9d2d85] active:scale-[0.98]"
           onClick={(e) => {
             e.preventDefault();
             addToCart(product);
