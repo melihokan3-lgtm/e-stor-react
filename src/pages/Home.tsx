@@ -155,10 +155,10 @@ export default function Home() {
 
         {/* ─── 6. WEEKLY SOLD — FULL WIDTH ─── */}
         <section className="relative left-1/2 flex w-screen -translate-x-1/2 justify-center bg-[#faf9fa] px-5 pt-12 pb-[50px] [@media(max-width:640px)]:px-3 [@media(max-width:640px)]:pt-7 [@media(max-width:640px)]:pb-8">
-          <div className="relative isolate flex w-full max-w-[1600px] flex-col overflow-hidden rounded-[24px] bg-[#712463] shadow-[0_8px_24px_rgba(31,22,29,0.025)] [@media(max-width:480px)]:p-0">
+          <div className="relative flex w-full max-w-[1600px] flex-col overflow-hidden rounded-[24px] border border-[#eee7ed] bg-white shadow-[0_10px_30px_rgba(31,22,29,0.06)]">
 
-            <div className="relative flex min-h-[119px] w-full [@media(max-width:1024px)]:flex-col [@media(max-width:1024px)]:items-stretch [@media(max-width:1024px)]:gap-5 [@media(max-width:640px)]:block [@media(max-width:640px)]:min-h-0 [@media(max-width:480px)]:overflow-hidden [@media(max-width:480px)]:rounded-t-[24px]">
-              <div className="w-full max-w-[calc(100%-235px)] rounded-tl-[24px] rounded-tr-[32px] bg-white px-5 pt-5 pb-[14px] [@media(max-width:1024px)]:max-w-[calc(100%-220px)] [@media(max-width:640px)]:max-w-none [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-5 [@media(max-width:640px)]:pb-3 [@media(max-width:480px)]:rounded-tl-none [@media(max-width:480px)]:rounded-tr-none">
+            <div className="grid w-full grid-cols-[minmax(0,1fr)_235px] gap-5 p-5 [@media(max-width:1024px)]:grid-cols-1 [@media(max-width:640px)]:gap-3 [@media(max-width:640px)]:p-4">
+              <div className="min-w-0 rounded-[18px] bg-[#faf9fa] px-5 pt-5 pb-[14px] [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-4 [@media(max-width:640px)]:pb-3">
                 <div className="flex flex-col gap-[14px]">
                   <h2 className="m-0 text-[16px] font-bold text-[#111]">Trending Store Favorites</h2>
                   <div className="flex flex-wrap gap-[10px]">
@@ -174,8 +174,8 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="w-[235px] shrink-0 grow-0 basis-[235px] rounded-none bg-white [@media(max-width:1024px)]:h-[102px] [@media(max-width:1024px)]:w-[220px] [@media(max-width:1024px)]:basis-[220px] [@media(max-width:640px)]:h-[96px] [@media(max-width:640px)]:w-full [@media(max-width:640px)]:basis-auto [@media(max-width:480px)]:overflow-hidden">
-                <div className="absolute top-0 right-0 z-[1] flex h-full w-[235px] flex-col justify-center rounded-tr-[20px] rounded-bl-[20px] bg-[#712463] px-4 py-[14px] text-white [@media(max-width:1024px)]:w-[220px] [@media(max-width:640px)]:relative [@media(max-width:640px)]:top-auto [@media(max-width:640px)]:right-auto [@media(max-width:640px)]:h-[96px] [@media(max-width:640px)]:w-full [@media(max-width:640px)]:rounded-[0_0_18px_18px]">
+              <div className="min-w-0">
+                <div className="flex h-full min-h-[119px] w-full flex-col justify-center rounded-[18px] bg-[#712463] px-5 py-5 text-white [@media(max-width:640px)]:min-h-0 [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:py-4">
                   <div className="flex flex-col gap-[5px]">
                     <p className="m-0 flex items-center gap-[6px] text-[9px] text-[#e0d0df]">
                       <svg className="size-3 text-white" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" /><polyline points="22 4 12 14.01 9 11.01" /></svg>
@@ -192,7 +192,7 @@ export default function Home() {
 
 
 
-            <div className="relative z-[2] w-full rounded-[0_32px_24px_24px] bg-white px-5 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-[14px] [@media(max-width:640px)]:pb-[18px]">
+            <div className="w-full border-t border-[#f0edf0] bg-white px-5 pt-1 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-1 [@media(max-width:640px)]:pb-[18px]">
               <Swiper
                 slidesPerView={2}
                 spaceBetween={20}
