@@ -1,6 +1,6 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CartContext } from "../features/cart/CartContext";
+import { useCart } from "../features/cart/CartContext";
 import { fetchProducts, cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
@@ -8,18 +8,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import SearchProductCard from "../components/product/SearchProductCard";
 import { useLocation } from "../features/addresses/LocationContext";
+import type { Product } from "../types/product";
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQuantity, totalPrice } =
-    useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
   const { location, openLocationModal } = useLocation();
 
-  const [recommendations, setRecommendations] = useState([]);
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetchProducts().then((data) => {
-      setRecommendations(data.slice(0, 10));
-    });
+    let active = true;
+    fetchProducts()
+      .then((data) => { if (active) setRecommendations(data.slice(0, 10)); })
+      .catch(() => { if (active) setRecommendations([]); });
+    return () => { active = false; };
   }, []);
 
   const deliveryFee = 5.78;
@@ -129,9 +131,7 @@ export default function Cart() {
           <div className="cart-items-list">
             {cart.map((item) => {
               const product = item.data;
-              const categorySlug =
-                (typeof product.category === 'string' ? product.category : product.category?.name)?.toLowerCase().replace(/\s+/g, "-") ||
-                "category";
+              const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";
               const productId = product.id;
               const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
               const oldPrice = (product.price * 1.2).toFixed(2);
@@ -145,8 +145,8 @@ export default function Cart() {
                         src={imageSrc}
                         alt={product.title}
                         onError={(e) => {
-                          e.target.onerror = null;
-                          e.target.src = FALLBACK_IMG;
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = FALLBACK_IMG;
                         }}
                       />
                     </div>
