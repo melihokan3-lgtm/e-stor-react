@@ -122,7 +122,7 @@ export default function Home() {
         </section>
 
         {/* ─── 3. BEST SELLER ─── */}
-        <section className="mb-[60px]">
+        <section className="mb-[60px] [@media(max-width:768px)]:px-5 [@media(max-width:640px)]:px-3">
           <div className="mb-6 flex items-center justify-between [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:items-start [@media(max-width:768px)]:gap-3">
             <h2 className="m-0 text-[24px] font-bold text-[#111]">Best Seller</h2>
             <div className="flex items-center gap-[14px]">
