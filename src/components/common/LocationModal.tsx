@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLocation } from "../../context/LocationContext";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import Modal from "./ui/Modal";
 
 type LatLngTuple = [number, number];
 type AddressData = Record<string, string | undefined>;
@@ -237,14 +240,19 @@ export default function LocationModal() {
   };
 
   return (
-    <div className="location-modal-overlay" role="presentation" onClick={closeLocationModal}>
-      <div className="location-modal location-modal--map" role="dialog" aria-modal="true" aria-labelledby="location-modal-title" onClick={(event) => event.stopPropagation()}>
+    <Modal
+      open={isLocationModalOpen}
+      onClose={closeLocationModal}
+      overlayClassName="location-modal-overlay"
+      contentClassName="location-modal location-modal--map"
+      labelledBy="location-modal-title"
+    >
         <div className="location-modal__header">
           <div>
             <p className="location-modal__eyebrow">Delivery location</p>
             <h2 id="location-modal-title">Choose your delivery point</h2>
           </div>
-          <button type="button" className="location-modal__close" aria-label="Close location dialog" onClick={closeLocationModal}>×</button>
+          <Button type="button" tone="ghost" className="location-modal__close" aria-label="Close location dialog" onClick={closeLocationModal}>×</Button>
         </div>
 
         <div ref={mapElementRef} className="location-map" aria-label="OpenStreetMap location picker" />
@@ -258,10 +266,10 @@ export default function LocationModal() {
 
         <form className="location-form" onSubmit={handleSave}>
           <label htmlFor="location-label">Adres adı</label>
-          <input id="location-label" value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Ev, İş..." />
+          <Input id="location-label" value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Ev, İş..." />
           <label htmlFor="location-address">Sokak, mahalle, ilçe ve il</label>
-          <input id="location-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="Haritadan bir nokta seç" required />
-          <button type="submit" className="location-save-btn">Konumu kaydet</button>
+          <Input id="location-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="Haritadan bir nokta seç" required />
+          <Button type="submit" className="location-save-btn">Konumu kaydet</Button>
         </form>
 
         {addresses.length > 0 && (
@@ -276,7 +284,6 @@ export default function LocationModal() {
             ))}
           </div>
         )}
-      </div>
-    </div>
+    </Modal>
   );
 }

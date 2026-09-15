@@ -1,4 +1,45 @@
 import { Link } from "react-router-dom";
+import FooterLinkGroup, { type FooterLink } from "./FooterLinkGroup";
+
+const footerGroups: Array<{ title: string; links: FooterLink[] }> = [
+  {
+    title: "About",
+    links: [
+      { label: "About Us", to: "/profile/help" },
+      { label: "Our Branches", to: "/profile/help" },
+      { label: "Changelog", to: "/profile/help" },
+    ],
+  },
+  {
+    title: "Quick Links",
+    links: [
+      { label: "FAQs", to: "/profile/help" },
+      { label: "Recipes", to: "/category" },
+      { label: "Contact Us", to: "/profile/help" },
+    ],
+  },
+  {
+    title: "Help & Support",
+    links: [
+      { label: "Terms of Privacy", to: "/profile/settings" },
+      { label: "Privacy Policy", to: "/profile/settings" },
+      { label: "Security", to: "/profile/settings" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { label: "Blog", to: "/profile/help" },
+      { label: "Contact", to: "/profile/help" },
+    ],
+  },
+];
+
+const socialLinks = [
+  { label: "Facebook", href: "https://facebook.com" },
+  { label: "Instagram", href: "https://instagram.com" },
+  { label: "X", href: "https://twitter.com" },
+];
 
 export default function Footer() {
   return (
@@ -7,34 +48,14 @@ export default function Footer() {
         <Link to="/">
           <img src="/img/icon/Logo.svg" alt="E-Storee" />
         </Link>
-        <div className="footer__link">
-          <h5>About</h5>
-          <Link to="/profile/help">About Us</Link>
-          <Link to="/profile/help">Our Branches</Link>
-          <Link to="/profile/help">Changelog</Link>
-        </div>
-        <div className="footer__link">
-          <h5>Quick Links</h5>
-          <Link to="/profile/help">FAQs</Link>
-          <Link to="/category">Recipes</Link>
-          <Link to="/profile/help">Contact Us</Link>
-        </div>
-        <div className="footer__link">
-          <h5>Help & Support</h5>
-          <Link to="/profile/settings">Terms of Privacy</Link>
-          <Link to="/profile/settings">Privacy Policy</Link>
-          <Link to="/profile/settings">Security</Link>
-        </div>
-        <div className="footer__link">
-          <h5>Company</h5>
-          <Link to="/profile/help">Blog</Link>
-          <Link to="/profile/help">Contact</Link>
-        </div>
+        {footerGroups.map((group) => <FooterLinkGroup key={group.title} {...group} />)}
         <div className="footer__link">
           <h5>Social</h5>
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">Facebook</a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">Instagram</a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">X</a>
+          {socialLinks.map((link) => (
+            <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer">
+              {link.label}
+            </a>
+          ))}
         </div>
       </div>
       <div className="footer__down">
