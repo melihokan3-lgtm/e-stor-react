@@ -15,6 +15,7 @@ export interface Order {
   deliveryAddress: string;
   items: OrderItem[];
   date?: string;
+  createdAt?: string;
   paymentMethod?: string;
   coupon?: string | null;
   couponDiscount?: number;
@@ -26,6 +27,8 @@ export interface CreateOrderInput extends Omit<Order, "id" | "userId"> {
 
 export interface OrdersContextValue {
   orders: Order[];
-  addOrder: (order: CreateOrderInput) => void;
+  ordersLoading: boolean;
+  ordersError: string;
+  addOrder: (order: CreateOrderInput) => Promise<Order>;
   updateOrderAddress: (orderId: Order["id"], address: string) => void;
 }

@@ -16,44 +16,65 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
   const [orders, setOrders] = useState<Order[]>([]);
+  const [ordersOwnerId, setOrdersOwnerId] = useState<string | null>(null);
+  const [ordersLoading, setOrdersLoading] = useState(true);
+  const [ordersError, setOrdersError] = useState("");
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
-  const hydratedStorageId = useRef<string | null>(null);
-  const isHydrating = useRef(false);
+  const activeStorageId = useRef(String(userStorageId));
+  activeStorageId.current = String(userStorageId);
+  const currentOwnerId = String(userStorageId);
+  const visibleOrders = ordersOwnerId === currentOwnerId ? orders : [];
+  const visibleLoading = ordersLoading || ordersOwnerId !== currentOwnerId;
 
   useEffect(() => {
-    isHydrating.current = true;
+    let active = true;
+    setOrdersLoading(true);
+    setOrdersError("");
     const hydrate = async () => {
       try {
-        setOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage("orders", user, []));
+        const loaded = isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []);
+        if (active) setOrders(loaded);
       } catch (error) {
         console.error("Failed to load orders", error);
-        setOrders([]);
+        if (active) {
+          setOrders([]);
+          setOrdersError("Siparişler yüklenemedi. Lütfen sayfayı yenileyin.");
+        }
       } finally {
-        hydratedStorageId.current = String(userStorageId);
+        if (active) {
+          setOrdersOwnerId(String(userStorageId));
+          setOrdersLoading(false);
+        }
       }
     };
-    hydrate();
+    void hydrate();
+    return () => { active = false; };
   }, [userStorageId]);
 
   useEffect(() => {
-    if (isHydrating.current) {
-      isHydrating.current = false;
-      return;
-    }
-    if (hydratedStorageId.current === String(userStorageId)) {
+    if (ordersOwnerId === currentOwnerId && !ordersLoading && !ordersError) {
       writeUserStorage("orders", user, orders);
     }
-  }, [orders, user, userStorageId]);
+  }, [orders, ordersOwnerId, ordersLoading, ordersError, user, userStorageId]);
 
-  const addOrder = (order: CreateOrderInput): void => {
-    const nextOrder: Order = { ...order, id: order.id ?? `${Date.now()}`, userId: user?.id ?? user?.email ?? user?.username };
-    setOrders((prev) => [nextOrder, ...prev]);
-    if (isSupabaseDataEnabled(user)) {
-      saveUserOrder(user, nextOrder).catch((error) => console.error("Failed to save order", error));
-    }
+  const addOrder = async (order: CreateOrderInput): Promise<Order> => {
+    if (visibleLoading) throw new Error("Siparişler hâlâ yükleniyor.");
+    const nextOrder: Order = {
+      ...order,
+      id: order.id ?? `${Date.now()}`,
+      userId: user?.id ?? user?.email ?? user?.username,
+      createdAt: new Date().toISOString(),
+    };
+    const persisted = isSupabaseDataEnabled(user) ? await saveUserOrder(user, nextOrder) : nextOrder;
+    if (activeStorageId.current !== currentOwnerId) throw new Error("Aktif kullanıcı değişti.");
+    const savedOrder = { ...nextOrder, ...persisted };
+    setOrdersError("");
+    setOrders((prev) => [savedOrder, ...prev]);
+    return savedOrder;
   };
 
   const updateOrderAddress = (orderId: Order["id"], newAddress: string): void => {
+    if (ordersOwnerId !== currentOwnerId) return;
     setOrders((prev) => {
       const updated = prev.map((order) => {
         if (String(order.id) === String(orderId)) {
@@ -69,7 +90,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <OrdersContext.Provider value={{ orders, addOrder, updateOrderAddress }}>
+    <OrdersContext.Provider value={{ orders: visibleOrders, ordersLoading: visibleLoading, ordersError, addOrder, updateOrderAddress }}>
       {children}
     </OrdersContext.Provider>
   );

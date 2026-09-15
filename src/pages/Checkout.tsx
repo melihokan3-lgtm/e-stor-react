@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
 import { useOrders } from "../features/orders/OrdersContext";
@@ -9,6 +9,7 @@ import PaymentSelectionModal from "../components/PaymentSelectionModal";
 import { readUserStorage, writeUserStorage } from "../utils/userStorage";
 import { DEFAULT_DEMO_CARDS } from "../utils/cardUtils";
 import type { PaymentCard } from "../types/payment";
+import type { CreateOrderInput } from "../types/order";
 
 type CouponIconType = "discount" | "shipping" | "special";
 type CouponDiscountType = "percent" | "fixed" | "shipping";
@@ -80,7 +81,7 @@ const COUPON_ICONS: Record<CouponIconType, string> = {
 
 export default function Checkout() {
   const { cart, totalPrice, clearCart } = useCart();
-  const { addOrder } = useOrders();
+  const { addOrder, ordersLoading } = useOrders();
   const { user, isLoggedIn, openAuthModal } = useAuth();
   const { location, openLocationModal } = useLocation();
   const navigate = useNavigate();
@@ -96,6 +97,9 @@ export default function Checkout() {
   const [isCouponPanelOpen, setIsCouponPanelOpen] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [couponToast, setCouponToast] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
+  const [submitError, setSubmitError] = useState("");
 
   // Sync selected card on mount & user change
   useEffect(() => {
@@ -156,6 +160,51 @@ export default function Checkout() {
       month: "short",
       year: "numeric",
     });
+  };
+
+  const handlePlaceOrder = async (): Promise<void> => {
+    if (submittingRef.current || ordersLoading) return;
+    if (cart.length === 0) {
+      setSubmitError("Your cart is empty!");
+      return;
+    }
+    if (!isLoggedIn) {
+      openAuthModal();
+      return;
+    }
+
+    const newOrder: CreateOrderInput = {
+      date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+      deliveryAddress: location,
+      paymentMethod: cardDisplayName,
+      total: finalTotal,
+      coupon: appliedCoupon?.code ?? null,
+      couponDiscount,
+      status: "Processing",
+      items: cart.map((item) => ({
+        id: item.data.id,
+        title: item.data.title,
+        img: cleanImageUrl(item.data.image) || FALLBACK_IMG,
+        price: item.data.price,
+        qty: item.unit,
+        category: item.data.category,
+      })),
+    };
+
+    setSubmitError("");
+    submittingRef.current = true;
+    setIsSubmitting(true);
+    try {
+      const savedOrder = await addOrder(newOrder);
+      clearCart();
+      navigate(`/order-progress?orderId=${encodeURIComponent(String(savedOrder.id))}`);
+    } catch (error) {
+      console.error("Failed to place order", error);
+      setSubmitError("Sipariş kaydedilemedi. Sepetiniz korunuyor; lütfen tekrar deneyin.");
+    } finally {
+      submittingRef.current = false;
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -508,40 +557,12 @@ export default function Checkout() {
 
             <button
               className="place-order-btn"
-              onClick={() => {
-                if (cart.length === 0) {
-                  alert("Your cart is empty!");
-                  return;
-                }
-                if (!isLoggedIn) {
-                  openAuthModal();
-                  return;
-                }
-                const newOrder = {
-                  id: "#" + String(Date.now()).slice(-5),
-                  date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
-                  deliveryAddress: location,
-                  paymentMethod: cardDisplayName,
-                  total: finalTotal,
-                  coupon: appliedCoupon ? appliedCoupon.code : null,
-                  couponDiscount: couponDiscount,
-                  status: "Processing",
-                  items: cart.map((item) => ({
-                    id: item.data.id,
-                    title: item.data.title,
-                    img: cleanImageUrl(item.data.image) || FALLBACK_IMG,
-                    price: item.data.price,
-                    qty: item.unit,
-                    category: item.data.category,
-                  })),
-                };
-                addOrder(newOrder);
-                clearCart();
-                navigate("/order-progress");
-              }}
+              onClick={() => { void handlePlaceOrder(); }}
+              disabled={isSubmitting || ordersLoading}
             >
-              Place Order
+              {isSubmitting ? "Placing Order..." : "Place Order"}
             </button>
+            {submitError && <p role="alert" className="mt-3 text-sm text-red-700">{submitError}</p>}
 
           </div>
         </div>

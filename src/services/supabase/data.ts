@@ -44,6 +44,7 @@ export const fetchUserOrders = async (user: AuthUser | null): Promise<Order[]> =
     deliveryAddress: order.delivery_address,
     items: (order.items || []) as OrderItem[],
     date: new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+    createdAt: order.created_at,
   }));
 };
 
@@ -64,6 +65,7 @@ export const saveUserOrder = async (user: AuthUser | null, order: CreateOrderInp
     deliveryAddress: data.delivery_address,
     items: (data.items || []) as OrderItem[],
     date: new Date(data.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
+    createdAt: data.created_at,
   };
 };
 
