@@ -1,11 +1,31 @@
-import { useState, useEffect } from "react";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
+import { useState, useEffect, type ChangeEvent, type FormEvent } from "react";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import {
   CARD_THEMES,
   DEFAULT_DEMO_CARDS,
   detectCardType,
   maskCardNumber
-} from "../utils/cardUtils";
+} from "../../utils/cardUtils";
+import type { AuthUser } from "../../types/auth";
+import type { PaymentCard } from "../../types/payment";
+
+interface PaymentSelectionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  selectedCardId?: PaymentCard["id"];
+  onSelectCard: (card: PaymentCard) => void;
+  user: AuthUser | null;
+}
+
+type CardForm = {
+  cardHolder: string;
+  cardNumber: string;
+  expiry: string;
+  cvv: string;
+  theme: string;
+};
+
+type CardFormErrors = Partial<Record<"cardHolder" | "cardNumber" | "expiry" | "cvv", string>>;
 
 export default function PaymentSelectionModal({
   isOpen,
@@ -13,24 +33,24 @@ export default function PaymentSelectionModal({
   selectedCardId,
   onSelectCard,
   user
-}) {
-  const [cards, setCards] = useState([]);
-  const [activeTab, setActiveTab] = useState("saved"); // "saved" | "new"
+}: PaymentSelectionModalProps) {
+  const [cards, setCards] = useState<PaymentCard[]>([]);
+  const [activeTab, setActiveTab] = useState<"saved" | "new">("saved");
 
   // Form State
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<CardForm>({
     cardHolder: "",
     cardNumber: "",
     expiry: "",
     cvv: "",
     theme: "purple",
   });
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<CardFormErrors>({});
 
   // Sync cards with user storage on open / user change
   useEffect(() => {
     if (!isOpen) return;
-    const saved = readUserStorage("savedCards", user, null);
+    const saved = readUserStorage<PaymentCard[] | null>("savedCards", user, null);
     if (saved !== null && Array.isArray(saved) && saved.length > 0) {
       setCards(saved);
     } else {
@@ -42,7 +62,7 @@ export default function PaymentSelectionModal({
   // Handle ESC key to close
   useEffect(() => {
     if (!isOpen) return;
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -52,37 +72,37 @@ export default function PaymentSelectionModal({
   if (!isOpen) return null;
 
   // Form handlers
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ\s]/g, "").toUpperCase();
     setFormData((prev) => ({ ...prev, cardHolder: val }));
-    if (errors.cardHolder) setErrors((prev) => ({ ...prev, cardHolder: null }));
+    if (errors.cardHolder) setErrors((prev) => ({ ...prev, cardHolder: undefined }));
   };
 
-  const handleCardNumberChange = (e) => {
+  const handleCardNumberChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 16);
     const formatted = rawDigits.match(/.{1,4}/g)?.join(" ") || rawDigits;
     setFormData((prev) => ({ ...prev, cardNumber: formatted }));
-    if (errors.cardNumber) setErrors((prev) => ({ ...prev, cardNumber: null }));
+    if (errors.cardNumber) setErrors((prev) => ({ ...prev, cardNumber: undefined }));
   };
 
-  const handleExpiryChange = (e) => {
+  const handleExpiryChange = (e: ChangeEvent<HTMLInputElement>) => {
     const rawDigits = e.target.value.replace(/\D/g, "").slice(0, 4);
     let formatted = rawDigits;
     if (rawDigits.length >= 2) {
       formatted = `${rawDigits.slice(0, 2)}/${rawDigits.slice(2)}`;
     }
     setFormData((prev) => ({ ...prev, expiry: formatted }));
-    if (errors.expiry) setErrors((prev) => ({ ...prev, expiry: null }));
+    if (errors.expiry) setErrors((prev) => ({ ...prev, expiry: undefined }));
   };
 
-  const handleCvvChange = (e) => {
+  const handleCvvChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 3);
     setFormData((prev) => ({ ...prev, cvv: val }));
-    if (errors.cvv) setErrors((prev) => ({ ...prev, cvv: null }));
+    if (errors.cvv) setErrors((prev) => ({ ...prev, cvv: undefined }));
   };
 
   const validateForm = () => {
-    const errs = {};
+    const errs: CardFormErrors = {};
     const rawNumber = formData.cardNumber.replace(/\s/g, "");
 
     if (!formData.cardHolder.trim() || formData.cardHolder.trim().length < 3) {
@@ -116,7 +136,7 @@ export default function PaymentSelectionModal({
     return Object.keys(errs).length === 0;
   };
 
-  const handleAddCardSubmit = (e) => {
+  const handleAddCardSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateForm()) return;
 
@@ -124,7 +144,7 @@ export default function PaymentSelectionModal({
     const cardType = detectCardType(rawNumber);
     const masked = maskCardNumber(rawNumber);
 
-    const newCard = {
+    const newCard: PaymentCard = {
       id: "card_" + Date.now(),
       cardHolder: formData.cardHolder.trim(),
       maskedNumber: masked,
@@ -154,7 +174,7 @@ export default function PaymentSelectionModal({
     onClose();
   };
 
-  const renderCardLogo = (type) => {
+  const renderCardLogo = (type: PaymentCard["cardType"]) => {
     if (type === "mastercard") {
       return (
         <svg className="card-brand-svg" width="38" height="24" viewBox="0 0 46 30" fill="none">

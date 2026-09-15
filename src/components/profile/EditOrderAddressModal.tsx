@@ -1,12 +1,20 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "../features/addresses/LocationContext";
+import { useState, useEffect, type FormEvent } from "react";
+import { useLocation } from "../../features/addresses/LocationContext";
+import type { Order } from "../../types/order";
+
+interface EditOrderAddressModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  order: Order | null;
+  onSaveAddress: (orderId: Order["id"], address: string) => void;
+}
 
 export default function EditOrderAddressModal({
   isOpen,
   onClose,
   order,
   onSaveAddress,
-}) {
+}: EditOrderAddressModalProps) {
   const { location, addresses } = useLocation();
   const [addressInput, setAddressInput] = useState("");
   const [error, setError] = useState("");
@@ -20,7 +28,7 @@ export default function EditOrderAddressModal({
 
   useEffect(() => {
     if (!isOpen) return;
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -29,7 +37,7 @@ export default function EditOrderAddressModal({
 
   if (!isOpen || !order) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmed = addressInput.trim();
     if (!trimmed) {

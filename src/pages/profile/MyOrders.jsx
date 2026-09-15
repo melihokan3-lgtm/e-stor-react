@@ -2,7 +2,7 @@ import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { OrdersContext } from "../../features/orders/OrdersContext";
 import { FALLBACK_IMG } from "../../services/api/productApi";
-import EditOrderAddressModal from "../../components/EditOrderAddressModal";
+import EditOrderAddressModal from "../../components/profile/EditOrderAddressModal";
 
 // Returns true if order has NOT yet been shipped or completed
 export const canEditOrderAddress = (status = "") => {
