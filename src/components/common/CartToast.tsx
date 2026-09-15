@@ -13,7 +13,7 @@ export default function CartToast() {
     closeTimerRef.current = window.setTimeout(() => {
       dismissCartToast();
       closeTimerRef.current = null;
-    }, 220);
+    }, 400);
   }, [dismissCartToast]);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function CartToast() {
   if (!lastAddedProduct) return null;
 
   return (
-    <div className={`fixed right-4 top-4 z-[100] flex w-[min(360px,calc(100vw-32px))] items-start gap-3 rounded-2xl border border-[#ecd7e8] bg-white p-4 shadow-[0_12px_32px_rgba(62,28,55,0.16)] transition-[transform,opacity] duration-200 ease-out [@media(max-width:480px)]:right-3 [@media(max-width:480px)]:top-3 ${isExiting ? "-translate-y-3 opacity-0" : "translate-y-0 opacity-100"}`}>
+    <div className={`fixed right-4 top-4 z-[100] flex w-[min(360px,calc(100vw-32px))] items-start gap-3 rounded-2xl border border-[#ecd7e8] bg-white p-4 shadow-[0_12px_32px_rgba(62,28,55,0.16)] transition-[transform,opacity] duration-400 ease-out [@media(max-width:480px)]:right-3 [@media(max-width:480px)]:top-3 ${isExiting ? "-translate-y-3 opacity-0" : "translate-y-0 opacity-100"}`}>
       <span className="grid size-9 shrink-0 place-items-center rounded-full bg-[#f8e8f5] text-[#b6349a]" aria-hidden="true">
         <svg className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M6 7h15l-1.5 9h-12z" />
