@@ -150,13 +150,13 @@ export default function Category() {
   );
 
   return (
-    <main className="category-page-main">
-      <div className="category-page-layout">
+    <main className="min-h-screen bg-[#fafafa] px-6 py-8 max-[640px]:px-3 max-[640px]:py-4">
+      <div className="mx-auto flex max-w-[1600px] gap-6 max-[1024px]:flex-col">
         
         {/* MOBILE FILTER TOGGLE BUTTON */}
-        <div className="mobile-filter-bar">
+        <div className="mb-4 hidden items-center justify-between gap-3 max-[1024px]:flex">
           <button 
-            className="mobile-filter-btn"
+            className="flex items-center gap-2 rounded-lg border border-[#e2e8f0] bg-white px-4 py-2.5 text-sm font-semibold text-[#334155] shadow-sm"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -165,8 +165,8 @@ export default function Category() {
             <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
           </button>
           
-          <div className="mobile-sort-select">
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+          <div>
+            <select className="rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-sm" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <option value="recommended">Recommended</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -176,22 +176,22 @@ export default function Category() {
         </div>
 
         {/* LEFT SIDEBAR: TRENDYOL / HEPSIBURADA / AMAZON STYLE */}
-        <aside className={`category-sidebar ${mobileFilterOpen ? "mobile-open" : ""}`}>
-          <div className="sidebar-card">
+        <aside className={`${mobileFilterOpen ? "block" : "max-[1024px]:hidden"} w-[290px] shrink-0 max-[1024px]:static max-[1024px]:w-full`}>
+          <div className="rounded-2xl border border-[#e2e8f0] bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.04)]">
             
             {/* Sidebar Header */}
-            <div className="sidebar-header">
-              <div className="sidebar-title-wrap">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d73f98" strokeWidth="2.2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                 </svg>
-                <h3>Filters</h3>
+                <h3 className="font-bold text-[#0f172a]">Filters</h3>
                 {activeFiltersCount > 0 && (
-                  <span className="active-badge">{activeFiltersCount}</span>
+                  <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#d73f98] px-1 text-xs font-bold text-white">{activeFiltersCount}</span>
                 )}
               </div>
               {activeFiltersCount > 0 && (
-                <button className="reset-btn" onClick={resetFilters}>
+                <button className="text-xs font-semibold text-[#d73f98] hover:underline" onClick={resetFilters}>
                   Clear All
                 </button>
               )}
@@ -199,34 +199,34 @@ export default function Category() {
 
             {/* Active filter chips */}
             {activeFiltersCount > 0 && (
-              <div className="active-chips-container">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {catFilter !== "all" && (
-                  <span className="filter-chip" onClick={() => updateFilter("cat", "all")}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("cat", "all")}>
                     {catFilter} ✕
                   </span>
                 )}
                 {priceFilter !== "all" && (
-                  <span className="filter-chip" onClick={() => updateFilter("price", "all")}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("price", "all")}>
                     ${priceFilter} ✕
                   </span>
                 )}
                 {dealsFilter && (
-                  <span className="filter-chip" onClick={() => updateFilter("deals", false)}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("deals", false)}>
                     Deals ✕
                   </span>
                 )}
                 {newFilter && (
-                  <span className="filter-chip" onClick={() => updateFilter("new", false)}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("new", false)}>
                     New Arrivals ✕
                   </span>
                 )}
                 {fastShippingFilter && (
-                  <span className="filter-chip" onClick={() => updateFilter("fast_shipping", false)}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("fast_shipping", false)}>
                     Fast Delivery ✕
                   </span>
                 )}
                 {minRatingFilter > 0 && (
-                  <span className="filter-chip" onClick={() => updateFilter("rating", 0)}>
+                  <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("rating", 0)}>
                     {minRatingFilter}★+ ✕
                   </span>
                 )}
@@ -234,13 +234,13 @@ export default function Category() {
             )}
 
             {/* 1. CATEGORIES */}
-            <div className="filter-section">
-              <div className="filter-section-title">
+            <div className="mt-6 border-t border-[#f1f5f9] pt-5">
+              <div className="mb-3 font-semibold text-[#0f172a]">
                 <span>Categories</span>
               </div>
               
               {categoryStats.length > 5 && (
-                <div className="category-search-box">
+                <div className="mb-3">
                   <input
                     type="text"
                     placeholder="Search category..."
@@ -250,23 +250,23 @@ export default function Category() {
                 </div>
               )}
 
-              <div className="category-filter-list">
-                <label className={`category-filter-item ${catFilter === "all" ? "active" : ""}`}>
+              <div className="space-y-1">
+                <label className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm transition hover:bg-[#f8fafc] ${catFilter === "all" ? "bg-[#fff5fc] text-[#d73f98]" : "text-[#475569]"}`}>
                   <input
                     type="radio"
                     name="category"
                     checked={catFilter === "all"}
                     onChange={() => updateFilter("cat", "all")}
                   />
-                  <span className="custom-radio"></span>
-                  <span className="item-name">All Categories</span>
-                  <span className="item-count">({products.length})</span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="flex-1">All Categories</span>
+                  <span className="text-xs text-[#94a3b8]">({products.length})</span>
                 </label>
 
                 {filteredCategoryList.map((cat, i) => (
                   <label 
                     key={i} 
-                    className={`category-filter-item ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "active" : ""}`}
+                    className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm transition hover:bg-[#f8fafc] ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "bg-[#fff5fc] text-[#d73f98]" : "text-[#475569]"}`}
                   >
                     <input
                       type="radio"
@@ -274,91 +274,91 @@ export default function Category() {
                       checked={catFilter.toLowerCase() === cat.name.toLowerCase()}
                       onChange={() => updateFilter("cat", cat.name)}
                     />
-                    <span className="custom-radio"></span>
-                    <span className="item-name">{cat.name}</span>
-                    <span className="item-count">({cat.count})</span>
+                    <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                    <span className="flex-1">{cat.name}</span>
+                    <span className="text-xs text-[#94a3b8]">({cat.count})</span>
                   </label>
                 ))}
               </div>
             </div>
 
             {/* 2. PRICE RANGE */}
-            <div className="filter-section">
-              <div className="filter-section-title">
+            <div className="mt-6 border-t border-[#f1f5f9] pt-5">
+              <div className="mb-3 font-semibold text-[#0f172a]">
                 <span>Price Range</span>
               </div>
 
               {/* Quick price radios */}
-              <div className="price-quick-list">
-                <label className="price-quick-item">
+              <div className="space-y-1">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
                     name="price_quick"
                     checked={priceFilter === "all"}
                     onChange={() => updateFilter("price", "all")}
                   />
-                  <span className="custom-radio"></span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
                   <span>All Prices</span>
                 </label>
-                <label className="price-quick-item">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
                     name="price_quick"
                     checked={priceFilter === "0-25"}
                     onChange={() => updateFilter("price", "0-25")}
                   />
-                  <span className="custom-radio"></span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
                   <span>$0 - $25</span>
                 </label>
-                <label className="price-quick-item">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
                     name="price_quick"
                     checked={priceFilter === "25-50"}
                     onChange={() => updateFilter("price", "25-50")}
                   />
-                  <span className="custom-radio"></span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
                   <span>$25 - $50</span>
                 </label>
-                <label className="price-quick-item">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
                     name="price_quick"
                     checked={priceFilter === "50-100"}
                     onChange={() => updateFilter("price", "50-100")}
                   />
-                  <span className="custom-radio"></span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
                   <span>$50 - $100</span>
                 </label>
-                <label className="price-quick-item">
+                <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
                     name="price_quick"
                     checked={priceFilter === "100-10000"}
                     onChange={() => updateFilter("price", "100-10000")}
                   />
-                  <span className="custom-radio"></span>
+                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
                   <span>$100 & Above</span>
                 </label>
               </div>
 
               {/* Min - Max custom inputs */}
-              <form onSubmit={handleCustomPriceSubmit} className="price-inputs-form">
-                <div className="price-input-group">
+              <form onSubmit={handleCustomPriceSubmit} className="mt-3">
+                <div className="flex items-center gap-2">
                   <input
                     type="number"
                     placeholder="Min"
                     value={minPriceInput}
                     onChange={(e) => setMinPriceInput(e.target.value)}
                   />
-                  <span className="price-dash">-</span>
+                  <span className="text-[#94a3b8]">-</span>
                   <input
                     type="number"
                     placeholder="Max"
                     value={maxPriceInput}
                     onChange={(e) => setMaxPriceInput(e.target.value)}
                   />
-                  <button type="submit" className="price-go-btn" title="Apply Filter">
+                  <button type="submit" className="grid h-9 w-9 place-items-center rounded-lg bg-[#d73f98] text-white hover:opacity-90" title="Apply Filter">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -368,71 +368,74 @@ export default function Category() {
             </div>
 
             {/* 3. DEALS & PERKS */}
-            <div className="filter-section">
-              <div className="filter-section-title">
+            <div className="mt-6 border-t border-[#f1f5f9] pt-5">
+              <div className="mb-3 font-semibold text-[#0f172a]">
                 <span>Deals & Perks</span>
               </div>
-              <div className="toggle-list">
-                <label className="filter-switch-row">
-                  <div className="switch-text">
-                    <span className="switch-title">Discounted Products</span>
-                    <span className="switch-desc">Special promotions</span>
+              <div className="space-y-3">
+                <label className="flex cursor-pointer items-center justify-between gap-2">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-[#0f172a]">Discounted Products</span>
+                    <span className="text-[11px] text-[#64748b]">Special promotions</span>
                   </div>
                   <input
                     type="checkbox"
+                    className="peer sr-only"
                     checked={dealsFilter}
                     onChange={(e) => updateFilter("deals", e.target.checked)}
                   />
-                  <span className="switch-slider"></span>
+                  <span className="relative h-5 w-9 rounded-full bg-[#cbd5e1] transition peer-checked:bg-[#d73f98] before:absolute before:left-0.5 before:top-0.5 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-4"></span>
                 </label>
 
-                <label className="filter-switch-row">
-                  <div className="switch-text">
-                    <span className="switch-title">New Arrivals</span>
-                    <span className="switch-desc">Recently added</span>
+                <label className="flex cursor-pointer items-center justify-between gap-2">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-[#0f172a]">New Arrivals</span>
+                    <span className="text-[11px] text-[#64748b]">Recently added</span>
                   </div>
                   <input
                     type="checkbox"
+                    className="peer sr-only"
                     checked={newFilter}
                     onChange={(e) => updateFilter("new", e.target.checked)}
                   />
-                  <span className="switch-slider"></span>
+                  <span className="relative h-5 w-9 rounded-full bg-[#cbd5e1] transition peer-checked:bg-[#d73f98] before:absolute before:left-0.5 before:top-0.5 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-4"></span>
                 </label>
 
-                <label className="filter-switch-row">
-                  <div className="switch-text">
-                    <span className="switch-title">Fast Delivery</span>
-                    <span className="switch-desc">Ships today</span>
+                <label className="flex cursor-pointer items-center justify-between gap-2">
+                  <div className="flex flex-col">
+                    <span className="text-sm font-semibold text-[#0f172a]">Fast Delivery</span>
+                    <span className="text-[11px] text-[#64748b]">Ships today</span>
                   </div>
                   <input
                     type="checkbox"
+                    className="peer sr-only"
                     checked={fastShippingFilter}
                     onChange={(e) => updateFilter("fast_shipping", e.target.checked)}
                   />
-                  <span className="switch-slider"></span>
+                  <span className="relative h-5 w-9 rounded-full bg-[#cbd5e1] transition peer-checked:bg-[#d73f98] before:absolute before:left-0.5 before:top-0.5 before:h-4 before:w-4 before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-4"></span>
                 </label>
               </div>
             </div>
 
             {/* 4. CUSTOMER RATING */}
-            <div className="filter-section">
-              <div className="filter-section-title">
+            <div className="mt-6 border-t border-[#f1f5f9] pt-5">
+              <div className="mb-3 font-semibold text-[#0f172a]">
                 <span>Customer Rating</span>
               </div>
-              <div className="rating-filter-list">
+              <div className="space-y-1">
                 {[4, 3, 2].map((stars) => (
-                  <label key={stars} className="rating-filter-item">
+                  <label key={stars} className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-[#f8fafc]">
                     <input
                       type="radio"
                       name="rating"
                       checked={minRatingFilter === stars}
                       onChange={() => updateFilter("rating", minRatingFilter === stars ? 0 : stars)}
                     />
-                    <span className="custom-radio"></span>
-                    <div className="rating-stars">
+                    <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                    <div className="text-[15px] tracking-[1px] text-amber-500">
                       {"★".repeat(stars)}{"☆".repeat(5 - stars)}
                     </div>
-                    <span className="rating-text">& up</span>
+                    <span className="text-xs font-medium text-[#64748b]">& up</span>
                   </label>
                 ))}
               </div>
@@ -442,13 +445,13 @@ export default function Category() {
         </aside>
 
         {/* RIGHT MAIN CONTENT */}
-        <section className="category-main-content">
+        <section className="min-w-0 flex-1">
           
           {/* Top category nav pills */}
-          <div className="category-nav-pills-wrap">
+          <div className="mb-5 flex gap-2.5 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             <Link
               to="/category"
-              className={`cat-pill ${!catFilter || catFilter === "all" ? "active" : ""}`}
+              className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${!catFilter || catFilter === "all" ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
             >
               All ({products.length})
             </Link>
@@ -456,7 +459,7 @@ export default function Category() {
               <Link
                 key={i}
                 to={`/category?cat=${encodeURIComponent(cat.name)}`}
-                className={`cat-pill ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "active" : ""}`}
+                className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
               >
                 {cat.name} ({cat.count})
               </Link>
@@ -464,7 +467,7 @@ export default function Category() {
           </div>
 
           {/* Top Promo Banners Swiper */}
-          <div className="category-promo-banners">
+          <div className="relative mb-7 w-full">
             <Swiper
               modules={[Autoplay, Navigation, Pagination]}
               autoplay={{
@@ -479,12 +482,12 @@ export default function Category() {
               grabCursor={true}
               navigation={true}
               pagination={{ clickable: true }}
-              className="category-promo-swiper"
+              className="w-full !pb-[34px]"
             >
               {promoBanners.map((banner, i) => (
-                <SwiperSlide key={i} className="promo-slide">
-                  <Link to={banner.link} className="promo-banner-card">
-                    <img src={banner.img} alt={banner.alt} />
+                <SwiperSlide key={i} className="w-auto!">
+                  <Link to={banner.link} className="inline-flex h-[220px] w-auto shrink-0 overflow-hidden rounded-[18px] bg-[#f1f5f9] shadow-[0_3px_12px_rgba(0,0,0,0.06)] transition hover:-translate-y-[3px] hover:shadow-[0_8px_22px_rgba(215,63,152,0.18)]">
+                    <img className="block h-full w-auto max-w-none rounded-[18px] object-contain" src={banner.img} alt={banner.alt} />
                   </Link>
                 </SwiperSlide>
               ))}
@@ -492,20 +495,20 @@ export default function Category() {
           </div>
 
           {/* Results Toolbar / Sort */}
-          <div className="category-toolbar">
-            <div className="toolbar-info">
-              <h2>{catFilter && catFilter !== "all" ? catFilter : "All Products"}</h2>
-              <span className="results-count">
-                (<strong>{filtered.length}</strong> products found)
+          <div className="mb-6 flex items-center justify-between rounded-[14px] border border-[#e2e8f0] bg-white px-5 py-3.5 shadow-[0_1px_4px_rgba(15,23,42,0.03)]">
+            <div className="flex items-baseline gap-2.5">
+              <h2 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{catFilter && catFilter !== "all" ? catFilter : "All Products"}</h2>
+              <span className="text-[13.5px] text-[#64748b]">
+                (<strong className="text-[#0f172a]">{filtered.length}</strong> products found)
               </span>
             </div>
 
-            <div className="toolbar-sort">
-              <span className="sort-label">Sort by:</span>
+            <div className="flex items-center gap-2.5 max-[1024px]:hidden">
+              <span className="text-[13.5px] font-semibold text-[#475569]">Sort by:</span>
               <select 
                 value={sortBy} 
                 onChange={(e) => setSortBy(e.target.value)}
-                className="sort-dropdown"
+                className="cursor-pointer rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3.5 py-2 text-[13px] font-semibold text-[#0f172a] outline-none focus:border-[#d73f98]"
               >
                 <option value="recommended">Recommended</option>
                 <option value="price-asc">Price: Low to High</option>
@@ -517,22 +520,22 @@ export default function Category() {
 
           {/* Product Grid */}
           {loading ? (
-            <div className="category-loading-state">
-              <div className="spinner"></div>
+            <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-[3.5px] border-[#f3f4f6] border-t-[#d73f98]"></div>
               <p>Loading products...</p>
             </div>
           ) : filtered.length > 0 ? (
-            <div className="category__container" id="category-Conteiner">
+            <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-5 max-[640px]:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] max-[640px]:gap-3" id="category-Conteiner">
               {filtered.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="category-empty-state">
-              <div className="empty-icon">🔍</div>
-              <h3>No products found matching your criteria</h3>
-              <p>Try clearing or modifying your filters.</p>
-              <button className="empty-reset-btn" onClick={resetFilters}>
+            <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <div className="mb-4 text-5xl">🔍</div>
+              <h3 className="mb-2 text-lg font-extrabold text-[#0f172a]">No products found matching your criteria</h3>
+              <p className="mb-5 text-sm text-[#64748b]">Try clearing or modifying your filters.</p>
+              <button className="rounded-[30px] bg-[#d73f98] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90" onClick={resetFilters}>
                 Clear Filters
               </button>
             </div>
