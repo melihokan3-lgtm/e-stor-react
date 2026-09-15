@@ -111,11 +111,6 @@ main {
   margin: 0 auto;
 }
 
-/* Float Clearfix (To be deprecated) */
-.clear {
-  clear: both;
-}
-
 /* ==========================================================================
    4. LAYOUT COMPONENTS
    ========================================================================== */
@@ -155,23 +150,6 @@ aside {
   padding: 10px 0;
 }
 
-.urun p {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  align-items: flex-end;
-  min-height: 40px;
-  font-size: 18px;
-  font-weight: 500;
-  line-height: 20px;
-  color: var(--text-primary, #000);
-}
-
-.urun p span {
-  color: var(--secondary-color, #b6349a);
-  font-weight: 700;
-}
-
 /* Media Queries Temporary Placement (To be grouped in Phase 5) */
 @media (max-width: 768px) {
 
@@ -182,11 +160,6 @@ aside {
   aside {
     max-width: 100%;
     padding: 22px 0 0;
-  }
-
-  .menu {
-    order: 2;
-    margin-left: auto;
   }
 
   nav p {
@@ -201,18 +174,6 @@ aside {
 /* ==========================================================================
    8.1 PRODUCT CARDS (Continued)
    ========================================================================== */
-
-.urun {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 20px;
-  text-align: left;
-  background-color: var(--surface-color, #fdfdfd);
-  border: 1px solid var(--border-color, #f4f0f0);
-  border-radius: var(--border-radius-lg, 20px);
-  box-shadow: var(--shadow-sm);
-}
 
 /* ==========================================================================
    11. CART & CHECKOUT PAGES
@@ -238,17 +199,6 @@ aside {
   to {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@media (width<=488px) {
-  .ls {
-    justify-content: center;
-  }
-
-  .container {
-    box-shadow: initial;
-    display: inline;
   }
 }
 
