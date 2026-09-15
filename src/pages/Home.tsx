@@ -49,7 +49,7 @@ export default function Home() {
 
 
   return (
-    <main className="mx-auto flex max-w-[1600px] overflow-x-hidden bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
+    <main className="mx-auto flex max-w-[1600px] overflow-visible bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
       <div className="mx-auto w-full max-w-[1600px]">
         {error && <p className="text-center text-[15px] text-[#888]">{error}</p>}
 
