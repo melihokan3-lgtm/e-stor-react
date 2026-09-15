@@ -142,44 +142,12 @@ aside {
   padding: 22px;
 }
 
-.filters__area {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg, 24px);
-  background-color: var(--surface-color, #f8f7f8);
-  border-radius: var(--border-radius-lg, 20px);
-  padding: var(--spacing-md, 16px);
-  width: 100%;
-}
-
-.filter__selected {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm, 10px);
-  font-weight: 700;
-}
-
-.category__container__div {
-  width: 100%;
-}
-
 .category__container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: var(--spacing-lg, 20px);
   margin: 40px 0;
   width: 100%;
-}
-
-.icon-circle {
-  background-color: #f0eef0;
-  border-radius: 50%;
-  padding: 5px;
-}
-
-.icon-circle img {
-  display: flex;
-  border-radius: 50%;
 }
 
 .swiper-wrapper {
@@ -230,12 +198,6 @@ aside {
   }
 }
 
-.product__area {
-  width: 100%;
-  margin: 0 auto;
-  padding: 10px 0px;
-}
-
 /* ==========================================================================
    8.1 PRODUCT CARDS (Continued)
    ========================================================================== */
@@ -262,22 +224,8 @@ aside {
 
 /* Temporary Profile/Cart Media Queries (To be organized in Phase 5) */
 
-
-.reveal {
-  opacity: 1;
-  transform: none;
-}
-
 @media (width<=900px) {
   @supports (animation-timeline: view()) {
-    .reveal {
-      animation-name: reveal-on-scroll;
-      animation-duration: 1s;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
-      animation-timeline: view();
-      animation-range: entry entry 35%;
-    }
   }
 }
 
@@ -298,11 +246,6 @@ aside {
     justify-content: center;
   }
 
-  #rightWrapper {
-    flex-direction: row;
-    place-content: flex-end space-evenly;
-  }
-
   .container {
     box-shadow: initial;
     display: inline;
@@ -315,220 +258,16 @@ aside {
   }
 }
 
-.home__section {
-  border: 1px solid #f4f0f0;
-  border-radius: 20px;
-  padding: 20px;
-}
-
-.home__section__header {
-  justify-content: space-between;
-  align-items: center;
-  display: flex;
-}
-
-.view__all__btn {
-  border: 2px solid rgb(182, 52, 154);
-  border-radius: 32px;
-}
-
-.home__section__header button {
-  border: 1px solid #b6349a;
-  border-radius: 50px;
-  padding: 16px;
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.home__section__header h2 {
-  min-width: 278px;
-  font-size: 24px;
-  font-weight: 600;
-}
-
 /* Swiper core and navigation styles have been removed.
    They are correctly imported in main.jsx via 'import "swiper/css/bundle"' */
 
 /* CUSTOMER REVIEWS SECTION */
-.customer-reviews-section {
-  margin-top: 40px;
-}
-
-.customer-reviews-grid {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  gap: 40px;
-  padding: 40px;
-  background-color: #fafafa;
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.reviews-summary h3 {
-  font-size: 24px;
-  margin-bottom: 10px;
-}
-
-.average-rating {
-  color: #888;
-  margin-bottom: 20px;
-}
-
-.rating-bar-row {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 10px;
-}
-
-.star-label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  width: 40px;
-  font-weight: 500;
-}
-
-.progress-bar-bg {
-  flex: 1;
-  height: 8px;
-  background-color: #eee;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progress-bar-fill {
-  height: 100%;
-  background-color: #b6349a;
-  border-radius: 4px;
-}
-
-.rating-count {
-  font-size: 14px;
-  color: #555;
-  width: 40px;
-  text-align: right;
-}
-
-.reviews-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.reviews-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 15px;
-  margin-bottom: 10px;
-  cursor: pointer;
-  list-style: none;
-}
-
-.reviews-header::-webkit-details-marker {
-  display: none;
-}
-
-.reviews-header h3 {
-  font-size: 24px;
-}
-
-.recent-filter {
-  color: #b6349a;
-  cursor: pointer;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.recent-filter::after {
-  content: "⋁";
-  font-size: 16px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.reviews-list-details[open] .recent-filter::after {
-  transform: rotate(180deg);
-}
-
-.review-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding-bottom: 20px;
-}
-
-.review-item h4 {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-.review-stars {
-  display: flex;
-  gap: 2px;
-}
-
-.review-item p {
-  color: #555;
-  font-size: 14px;
-  line-height: 1.6;
-}
 
 /* ACCORDION SECTION */
-.product-accordions {
-  margin-top: 40px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.product-accordions details {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 20px;
-}
 
 /* Specific styling to reset border for the reviews details */
 
-.product-accordions summary {
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  list-style: none;
-  /* Remove default marker */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.product-accordions summary::-webkit-details-marker {
-  display: none;
-}
-
-.product-accordions summary::after {
-  content: "⋁";
-  font-size: 20px;
-  color: #888;
-  transition: transform 0.3s ease-in-out;
-}
-
-.product-accordions details[open] summary::after {
-  transform: rotate(180deg);
-}
-
-.accordion-content {
-  margin-top: 15px;
-  color: #555;
-  line-height: 1.6;
-}
-
 @media (max-width: 768px) {
-  .customer-reviews-grid {
-    grid-template-columns: 1fr;
-    padding: 20px;
-  }
 }
 
 .card-title {
@@ -549,18 +288,7 @@ aside {
 
 /* Local Market Header */
 
-.addresses-list {
-  display: grid;
-  gap: 16px;
-}
-
 @media (max-width: 640px) {}
-
-.qty-btn.plus {
-  background-color: #b6349a;
-  border-color: #b6349a;
-  color: white;
-}
 
 /* Recommendations */
 
@@ -1050,134 +778,12 @@ aside {
 }
 
 /* ---------- MY ORDERS PAGE ---------- */
-.status-delivered {
-  background: rgba(46, 204, 113, 0.1);
-  color: #27ae60;
-}
-
-.order-item:hover .order-item-title {
-  color: #b6349a;
-}
-
-.order-item-meta {
-  font-size: 13px;
-  color: #999;
-  font-weight: 500;
-}
-
-.order-total {
-  font-size: 16px;
-  font-weight: 700;
-  color: #b6349a;
-}
 
 /* Order Address Section */
-.order-address-info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-  min-width: 220px;
-}
-
-.order-address-label {
-  font-size: 11.5px;
-  color: #666;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.order-address-action-area {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-.order-address-edit-btn:hover {
-  background: #b6349a;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(182, 52, 154, 0.25);
-}
 
 /* Edit Address Modal */
-.order-modal-badge {
-  display: inline-block;
-  margin-top: 4px;
-  font-size: 12px;
-  color: #6b7280;
-  background: #f3f4f6;
-  padding: 2px 8px;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.address-modal-info-alert .alert-text strong {
-  display: block;
-  font-size: 13px;
-  color: #0369a1;
-  font-weight: 700;
-  margin-bottom: 2px;
-}
-
-.address-quick-options {
-  margin-bottom: 14px;
-}
-
-.quick-pills-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.quick-pill-btn:hover {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.address-textarea-input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: 1.5px solid #d1d5db;
-  font-size: 14px;
-  font-family: inherit;
-  color: #111827;
-  outline: none;
-  resize: vertical;
-  min-height: 70px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.address-textarea-input.has-error {
-  border-color: #ef4444;
-}
-
-.modal-save-address-btn {
-  flex: 1;
-  height: 44px;
-  background: linear-gradient(135deg, #b6349a 0%, #831843 100%);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-size: 13.5px;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(182, 52, 154, 0.25);
-  transition: all 0.2s ease;
-}
 
 @media (max-width: 768px) {
-  .order-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
 }
 
 /* ========== AUTH MODAL ========== */
@@ -1439,28 +1045,6 @@ aside {
 }
 
 /* Navbar user greeting */
-.nav-user-greeting {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.nav-user-avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #b6349a;
-}
-
-.nav-user-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: #333;
-  white-space: nowrap;
-}
 
 @media (max-width: 768px) {
   .auth-modal-container {
@@ -1478,49 +1062,8 @@ aside {
 /* =========================================================
    PAYMENTS & CREDIT CARD MODULE STYLES (UI/UX)
 ========================================================= */
-.payments-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-
-.add-new-card-main-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease;
-}
 
 /* Toast Alert */
-.payment-toast-alert {
-  position: fixed;
-  top: 24px;
-  right: 24px;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #111;
-  color: #fff;
-  padding: 14px 22px;
-  border-radius: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  border-left: 4px solid #10b981;
-  font-size: 14px;
-  font-weight: 500;
-  animation: slideInToast 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
 
 @keyframes slideInToast {
   from {
@@ -1535,11 +1078,6 @@ aside {
 }
 
 /* Cards Grid */
-.payment-card-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
 
 /* 3D Realistic Credit Card */
 .credit-card-ui {
@@ -1569,36 +1107,8 @@ aside {
 }
 
 /* Gloss Shimmer Effect */
-.card-shimmer-gloss {
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25) 0%, transparent 55%);
-  pointer-events: none;
-  border-radius: inherit;
-}
 
 /* Default Pill */
-.card-default-pill {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  background: rgba(16, 185, 129, 0.9);
-  backdrop-filter: blur(8px);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 4px 10px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
 
 /* Card Top Row */
 .card-top-row {
@@ -1608,64 +1118,12 @@ aside {
   z-index: 1;
 }
 
-.card-chip-contactless {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
 /* Metallic EMV Chip */
-.emv-chip {
-  width: 44px;
-  height: 32px;
-  background: linear-gradient(135deg, #ffd700 0%, #e6be00 35%, #fff176 50%, #cca000 70%, #d4af37 100%);
-  border-radius: 6px;
-  position: relative;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.6), 0 2px 5px rgba(0, 0, 0, 0.25);
-  overflow: hidden;
-  border: 1px solid #c59b27;
-}
-
-.chip-line-1 {
-  position: absolute;
-  top: 33%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(120, 90, 10, 0.45);
-}
-
-.chip-line-2 {
-  position: absolute;
-  top: 66%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(120, 90, 10, 0.45);
-}
-
-.chip-core {
-  position: absolute;
-  top: 20%;
-  bottom: 20%;
-  left: 32%;
-  right: 32%;
-  border: 1px solid rgba(120, 90, 10, 0.45);
-  border-radius: 3px;
-}
 
 .contactless-icon {
   display: flex;
   align-items: center;
   opacity: 0.9;
-}
-
-.card-brand-box {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 32px;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
 }
 
 /* Card Number */
@@ -1718,43 +1176,10 @@ aside {
 }
 
 /* Card Action Bar below credit card */
-.set-default-btn {
-  color: #555;
-}
-
-.delete-card-btn {
-  color: #dc2626;
-}
-
-.card-active-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: #059669;
-  font-weight: 600;
-}
 
 /* Add Card Placeholder */
-.add-card-icon-circle {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-  transition: transform 0.25s ease;
-}
 
 /* Security Notice Box */
-.notice-text strong {
-  display: block;
-  font-size: 14px;
-  color: #065f46;
-  margin-bottom: 4px;
-}
 
 /* =========================================================
    NEW CARD MODAL STYLES
@@ -1905,106 +1330,7 @@ aside {
   align-items: center;
 }
 
-.payment-input {
-  width: 100%;
-  height: 48px;
-  padding: 0 44px 0 16px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 14px;
-  color: #111;
-  background: #fcfcfc;
-  outline: none;
-  font-weight: 500;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.payment-input:focus {
-  border-color: #b6349a;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(182, 52, 154, 0.12);
-}
-
-.payment-input.has-error {
-  border-color: #ef4444;
-  background: #fffafa;
-}
-
-.payment-input.has-error:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
-}
-
-.field-icon {
-  position: absolute;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  pointer-events: none;
-}
-
-.field-icon-brand {
-  position: absolute;
-  right: 14px;
-  display: flex;
-  align-items: center;
-  height: 20px;
-}
-
-.field-error-msg {
-  font-size: 12px;
-  color: #ef4444;
-  font-weight: 500;
-  margin-top: 2px;
-}
-
 /* Modal Action Buttons */
-.modal-actions-row {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.modal-cancel-btn {
-  flex: 1;
-  height: 48px;
-  background: #f3f4f6;
-  color: #4b5563;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.modal-cancel-btn:hover {
-  background: #e5e7eb;
-  color: #111;
-}
-
-.modal-save-card-btn {
-  flex: 2;
-  height: 48px;
-  background: #000;
-  color: #fff;
-  border: none;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  cursor: pointer;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-  transition: all 0.25s ease;
-}
-
-.modal-save-card-btn:hover {
-  background: #b6349a;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(182, 52, 154, 0.3);
-}
 
 @media (max-width: 640px) {
   .form-row-halves {
@@ -2029,16 +1355,6 @@ aside {
 /* =========================================================
    CARD DELETE CONFIRMATION MODAL
 ========================================================= */
-.no-cards-placeholder-box {
-  grid-column: 1 / -1;
-  background: #f9fafb;
-  border: 1px dashed #d1d5db;
-  border-radius: 16px;
-  padding: 30px 20px;
-  text-align: center;
-  color: #6b7280;
-  font-size: 14px;
-}
 
 /* =========================================================
    CHECKOUT PAYMENT SELECTION MODAL
@@ -2262,25 +1578,10 @@ aside {
 /* =========================================================
    NOTIFICATIONS PAGE STYLES (Trendyol / Amazon Quality)
 ========================================================= */
-.title-with-badge {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
 /* Filter Tabs */
 /* Notifications List */
 /* Unread Distinction (Very subtle soft tint & glowing dot) */
-.unread-pulse-dot {
-  position: absolute;
-  top: 22px;
-  right: 20px;
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: #b6349a;
-  box-shadow: 0 0 10px rgba(182, 52, 154, 0.8);
-}
 
 /* Notification Type Icons */
 /* Content Area */
@@ -2293,36 +1594,6 @@ aside {
 /* =========================================================
    HELP & SUPPORT (FAQ ACCORDION & CONTACT)
 ========================================================= */
-.help-search-box {
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-top: 8px;
-}
-
-.help-search-input {
-  width: 100%;
-  height: 52px;
-  padding: 0 44px 0 48px;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 14px;
-  font-size: 15px;
-  background: #fdfdfd;
-  color: #111;
-  outline: none;
-  transition: all 0.2s ease;
-}
-
-.clear-search-btn {
-  position: absolute;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 4px;
-}
 
 /* Category Pills */
 /* FAQ Accordion List */
@@ -2339,39 +1610,6 @@ aside {
 }
 
 /* Contact & Support Section */
-.help-contact-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: #ffffff;
-  border: 1.5px solid #f0f0f0;
-  border-radius: 20px;
-  padding: 24px;
-  gap: 16px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
-}
-
-.contact-icon-wrapper.chat-icon {
-  background: #ecfdf5;
-}
-
-.contact-info {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.online-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  font-weight: 700;
-  color: #059669;
-  background: #d1fae5;
-  padding: 2px 8px;
-  border-radius: 20px;
-}
 
 .online-dot {
   width: 6px;
@@ -2380,65 +1618,12 @@ aside {
   background: #10b981;
 }
 
-.response-time {
-  font-size: 12px;
-  color: #059669;
-  font-weight: 600;
-}
-
-.contact-details-line {
-  font-size: 13px;
-  color: #374151;
-}
-
-.chat-btn {
-  background: #059669;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
-}
-
-.chat-btn:hover {
-  background: #047857;
-  transform: translateY(-1px);
-}
-
-.email-btn {
-  background: #000;
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.email-btn:hover {
-  background: #b6349a;
-  transform: translateY(-1px);
-}
-
 /* Live Chat Simulation Modal */
-.live-chat-header {
-  padding: 18px 20px;
-  background: #111;
-  color: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
 
 .chat-agent-info {
   display: flex;
   align-items: center;
   gap: 12px;
-}
-
-.agent-avatar {
-  position: relative;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #262626;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
 }
 
 .agent-online-dot {
@@ -2463,35 +1648,6 @@ aside {
   color: #9ca3af;
 }
 
-.chat-bubble {
-  max-width: 80%;
-  padding: 12px 16px;
-  border-radius: 16px;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.chat-bubble p {
-  margin: 0;
-}
-
-.live-chat-footer {
-  padding: 14px 18px;
-  background: #fff;
-  border-top: 1px solid #e5e7eb;
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.chat-input:focus {
-  border-color: #059669;
-}
-
-.chat-send-btn:hover {
-  background: #047857;
-}
-
 @media (max-width: 640px) {}
 
 /* =========================================================
@@ -2503,115 +1659,16 @@ aside {
 @media (max-width: 640px) {}
 
 /* Avatar Management */
-.avatar-manage-row {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid #f3f4f6;
-  margin-bottom: 8px;
-}
 
 /* ==========================================================================
    12. PROFILE & SETTINGS PAGES
    ========================================================================== */
-.avatar-preview {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--border-color, #e5e7eb);
-}
-
-.avatar-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.btn-change-avatar {
-  padding: 8px 16px;
-  background: var(--surface-color, #f3f4f6);
-  color: var(--text-primary, #111);
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 13px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-change-avatar:hover {
-  background: var(--border-color, #e5e7eb);
-}
-
-.btn-remove-avatar {
-  background: transparent;
-  color: #dc2626;
-  border: none;
-  font-size: 13px;
-  font-weight: 600;
-  text-align: left;
-  cursor: pointer;
-}
-
-.btn-remove-avatar:hover {
-  text-decoration: underline;
-}
 
 /* iOS Style Toggle Switch */
-.toggle-row:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-.toggle-title {
-  color: var(--text-primary, #111);
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.ios-toggle {
-  position: relative;
-  display: inline-block;
-  width: 50px;
-  height: 28px;
-}
-
-.ios-slider {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: var(--border-color, #e5e7eb);
-  border-radius: 34px;
-  cursor: pointer;
-  transition: .4s;
-}
-
-.ios-toggle input:checked+.ios-slider:before {
-  transform: translateX(22px);
-}
 
 /* Danger Zone */
-.danger-zone-title {
-  margin: 0;
-  color: #dc2626;
-  font-size: 18px;
-  font-weight: 700;
-}
-
-.btn-danger-outline:hover {
-  background: #dc2626;
-  color: #fff;
-}
 
 /* Standard Secondary Button */
-.btn-secondary:hover {
-  background: var(--surface-color, #f9fafb);
-  border-color: #d1d5db;
-}
 
 /* ==========================================================================
    CART EMPTY STATE CENTERING
