@@ -104,11 +104,11 @@ export default function ProductDetail() {
     images.length > 0 ? cleanImageUrl(images[activeImgIndex]) : FALLBACK_IMG;
 
   return (
-    <main id="main__details" className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
+    <main className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
       <section className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
         <Link to="/"> Home &gt; &nbsp; </Link>
         <Link to="/category"> Settings &gt; &nbsp; </Link>
-        <p style={{ color: "#b6349a" }}> Team </p>
+        <p className="text-[#b6349a]"> Team </p>
       </section>
 
       <div className="mx-auto w-full max-w-[1544px]">
