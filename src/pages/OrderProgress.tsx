@@ -22,26 +22,26 @@ export default function OrderProgress() {
 
   if (!isLoggedIn) {
     return (
-      <main className="main-order-progress">
-        <div className="progress-max-container progress-card">
+      <main className="min-h-screen bg-[#fafafa] px-5 py-10">
+        <div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
           <p>Siparişinizi görmek için giriş yapın.</p>
-          <button type="button" className="progress-help-btn" onClick={openAuthModal}>Login</button>
+          <button type="button" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]" onClick={openAuthModal}>Login</button>
         </div>
       </main>
     );
   }
   if (ordersLoading) {
-    return <main className="main-order-progress"><div className="progress-max-container progress-card">Loading order...</div></main>;
+    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">Loading order...</div></main>;
   }
   if (ordersError) {
-    return <main className="main-order-progress"><div className="progress-max-container progress-card" role="alert">{ordersError}</div></main>;
+    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]" role="alert">{ordersError}</div></main>;
   }
   if (!order) {
     return (
-      <main className="main-order-progress">
-        <div className="progress-max-container progress-card">
+      <main className="min-h-screen bg-[#fafafa] px-5 py-10">
+        <div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
           <p>Order not found.</p>
-          <Link to="/profile/orders" className="progress-help-btn">My Orders</Link>
+          <Link to="/profile/orders" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]">My Orders</Link>
         </div>
       </main>
     );
@@ -59,18 +59,18 @@ export default function OrderProgress() {
   const status = order.status || "Processing";
 
   return (
-    <main className="main-order-progress">
-      <div className="progress-max-container">
-        
+    <main className="min-h-screen bg-[#fafafa] px-5 py-10">
+      <div className="mx-auto w-full max-w-[1200px]">
+
         {/* Top Actions */}
-        <div className="progress-top-actions">
-          <button className="progress-back-btn" onClick={() => navigate(-1)}>
+        <div className="mb-6 flex items-center justify-between">
+          <button className="grid h-10 w-10 place-items-center rounded-full border border-[#eee] bg-white text-[#555] hover:border-[#b6349a]" onClick={() => navigate(-1)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          <Link to="/profile/help" className="progress-help-btn no-underline">
+          <Link to="/profile/help" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f] no-underline">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
@@ -78,22 +78,22 @@ export default function OrderProgress() {
           </Link>
         </div>
 
-        <div className="progress-content-grid">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.7fr)_minmax(320px,1fr)]">
           {/* LEFT COLUMN */}
-          <div className="progress-left-col">
-            
+          <div className="grid gap-5">
+
             {/* Order Status Card */}
-            <div className="progress-card status-card">
-              <div className="status-header">
-                <div className="status-titles">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
                   <h2>Order {status === "Processing" ? "In Progress" : status}</h2>
                   <p>Order placed on {placedAt}</p>
                 </div>
-                <div className="status-badge">{status}</div>
+                <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{status}</div>
               </div>
 
-              <div className="status-center-indicator">
-                <div className="circle-check-large">
+              <div className="my-8 flex flex-col items-center justify-center gap-3">
+                <div className="grid h-14 w-14 place-items-center rounded-full bg-[#b6349a]">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
@@ -101,65 +101,65 @@ export default function OrderProgress() {
                 <h3>Order is Placed</h3>
               </div>
 
-              <div className="status-timeline-wrapper">
-                <div className="timeline-line-bg"></div>
-                <div className="timeline-line-active"></div>
-                
-                <div className="timeline-nodes">
-                  <div className="t-node active">
-                    <div className="t-circle checked">
+              <div className="relative mt-8">
+                <div className="absolute left-0 right-0 top-4 h-1 bg-[#eee]"></div>
+                <div className="absolute left-0 top-4 h-1 w-1/2 bg-[#b6349a]"></div>
+
+                <div className="relative flex justify-between">
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <div className="grid h-8 w-8 place-items-center rounded-full border-2 border-[#b6349a] bg-[#b6349a]">
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="20 6 9 17 4 12"></polyline>
                       </svg>
                     </div>
-                    <span className="t-date">{placedAt}</span>
+                    <span className="text-xs text-[#777]">{placedAt}</span>
                   </div>
-                  
-                  <div className="t-node current">
-                    <div className="t-circle current-circle"></div>
-                    <span className="t-date">{status}</span>
+
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <div className="grid h-8 w-8 place-items-center rounded-full border-2 border-[#b6349a] bg-white"></div>
+                    <span className="text-xs text-[#777]">{status}</span>
                   </div>
-                  
-                  <div className="t-node pending">
-                    <div className="t-circle pending-circle"></div>
-                    <span className="t-date">Pending</span>
+
+                  <div className="flex flex-col items-center gap-2 text-center">
+                    <div className="grid h-8 w-8 place-items-center rounded-full border-2 border-[#ddd] bg-white"></div>
+                    <span className="text-xs text-[#777]">Pending</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Items List Card */}
-            <div className="progress-card items-card">
-              <div className="items-header-row">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+              <div className="mb-4 flex justify-between border-b border-[#eee] pb-3 text-sm font-semibold text-[#555]">
                 <span className="h-left">Items Name</span>
                 <span className="h-right">N.of items</span>
               </div>
 
-              <div className="items-list-container">
+              <div className="space-y-3">
                 {displayedItems.map((item) => {
                   const imageSrc = item.img || FALLBACK_IMG;
                   return (
-                    <div className="item-row" key={item.id}>
-                      <div className="item-info-left">
-                        <div className="item-thumb">
-                          <img 
-                            src={imageSrc} 
+                    <div className="flex items-center justify-between gap-4 border-b border-[#f1f1f1] pb-3" key={item.id}>
+                      <div className="flex min-w-0 items-center gap-3">
+                        <div className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-lg bg-[#f8f8f8]">
+                          <img
+                            src={imageSrc}
                             alt={item.title}
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = FALLBACK_IMG;
-                            }} 
+                            }}
                           />
                         </div>
-                        <div className="item-details">
-                          <h4 className="i-title">{item.title}</h4>
-                          <div className="i-prices">
-                            <span className="i-price">{formatAmount(item.price)}</span>
-                            <span className="i-old-price">{formatAmount(item.price * 1.2)}</span>
+                        <div className="min-w-0">
+                          <h4 className="truncate text-sm font-semibold text-[#222]">{item.title}</h4>
+                          <div className="mt-1 flex items-center gap-2">
+                            <span className="text-sm font-semibold text-[#222]">{formatAmount(item.price)}</span>
+                            <span className="text-xs text-[#999] line-through">{formatAmount(item.price * 1.2)}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="item-qty-right">
+                      <div className="text-sm font-semibold text-[#555]">
                         {item.qty}x
                       </div>
                     </div>
@@ -174,9 +174,9 @@ export default function OrderProgress() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="pagination-row">
-                  <button 
-                    className="p-nav" 
+                <div className="mt-5 flex items-center justify-center gap-2">
+                  <button
+                    className="grid h-8 w-8 place-items-center rounded border border-[#eee] bg-white text-[#555] disabled:opacity-40"
                     onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                     disabled={page === 1}
                   >
@@ -186,16 +186,16 @@ export default function OrderProgress() {
                     </svg>
                   </button>
                   {[...Array(totalPages)].map((_, i) => (
-                    <button 
-                      key={i} 
-                      className={`p-num ${page === i + 1 ? 'active' : ''}`}
+                    <button
+                      key={i}
+                      className={`grid h-8 w-8 place-items-center rounded text-sm text-[#555] ${page === i + 1 ? 'bg-[#b6349a] text-white' : ''}`}
                       onClick={() => setCurrentPage(i + 1)}
                     >
                       {i + 1}
                     </button>
                   ))}
-                  <button 
-                    className="p-nav"
+                  <button
+                    className="grid h-8 w-8 place-items-center rounded border border-[#eee] bg-white text-[#555] disabled:opacity-40"
                     onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                     disabled={page === totalPages}
                   >
@@ -209,21 +209,21 @@ export default function OrderProgress() {
             </div>
 
             {/* Help Card */}
-            <div className="progress-card cancel-card">
+            <div className="flex items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
               <p>Need help with this order?</p>
-              <Link className="btn-cancel no-underline" to="/profile/help">Help Center</Link>
+              <Link className="rounded-lg border border-[#b6349a] px-4 py-2 text-sm font-semibold text-[#b6349a] no-underline no-underline" to="/profile/help">Help Center</Link>
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div className="progress-right-col">
-            
+          <div className="grid content-start gap-5">
+
             {/* Order Summary */}
-            <div className="progress-card summary-card">
-              <h3 className="card-title">Order Summary</h3>
-              <div className="summary-line border-bottom">
-                <span className="s-label">Order Number</span>
-                <span className="s-value pink-val flex-val min-w-0 break-all">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+              <h3 className="mb-4 text-base font-semibold text-[#222]">Order Summary</h3>
+              <div className="flex items-center justify-between gap-4 border-b border-[#eee] pb-3">
+                <span className="text-sm text-[#888]">Order Number</span>
+                <span className="text-sm font-bold text-[#111] text-[#b6349a] flex min-w-0 items-center gap-2 break-all min-w-0 break-all">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -231,42 +231,42 @@ export default function OrderProgress() {
                   {order.id}
                 </span>
               </div>
-              <div className="summary-line mt-16">
-                <span className="s-label">Items total</span>
-                <span className="s-value">{formatAmount(itemsTotal)}</span>
+              <div className="flex items-center justify-between gap-4 mt-4">
+                <span className="text-sm text-[#888]">Items total</span>
+                <span className="text-sm font-bold text-[#111]">{formatAmount(itemsTotal)}</span>
               </div>
-              <div className="summary-line">
-                <span className="s-label">Delivery & adjustments</span>
-                <span className="s-value">{formatAmount(adjustments)}</span>
+              <div className="flex items-center justify-between gap-4">
+                <span className="text-sm text-[#888]">Delivery & adjustments</span>
+                <span className="text-sm font-bold text-[#111]">{formatAmount(adjustments)}</span>
               </div>
-              <div className="summary-line total-line mt-24">
-                <span className="s-total-label">Total</span>
-                <span className="s-total-val">{formatAmount(order.total)}</span>
+              <div className="flex items-center justify-between gap-4 border-t border-[#eee] pt-5 mt-6">
+                <span className="text-base font-semibold text-[#222]">Total</span>
+                <span className="text-lg font-bold text-[#b6349a]">{formatAmount(order.total)}</span>
               </div>
             </div>
 
             {/* Pay With */}
-            <div className="progress-card small-card">
-              <h3 className="card-title">Pay With</h3>
-              <div className="icon-text-row">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+              <h3 className="mb-4 text-base font-semibold text-[#222]">Pay With</h3>
+              <div className="flex items-center gap-3 text-sm">
                 <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="32" height="20" rx="4" fill="#111"/>
                   <circle cx="12" cy="10" r="6" fill="#EB001B"/>
                   <circle cx="20" cy="10" r="6" fill="#F79E1B" fillOpacity="0.8"/>
                 </svg>
-                <span className="pink-val">{order.paymentMethod || "Payment method unavailable"}</span>
+                <span className="text-[#b6349a]">{order.paymentMethod || "Payment method unavailable"}</span>
               </div>
             </div>
 
             {/* Delivery Address */}
-            <div className="progress-card small-card">
-              <h3 className="card-title">Delivery Address</h3>
-              <div className="icon-text-row">
+            <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+              <h3 className="mb-4 text-base font-semibold text-[#222]">Delivery Address</h3>
+              <div className="flex items-center gap-3 text-sm">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span className="pink-val min-w-0 break-words">{order.deliveryAddress}</span>
+                <span className="text-[#b6349a] min-w-0 break-words">{order.deliveryAddress}</span>
               </div>
             </div>
 

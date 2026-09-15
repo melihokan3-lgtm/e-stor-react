@@ -127,13 +127,13 @@ export default function AuthModal() {
   };
 
   return (
-    <div className="auth-modal-overlay" onClick={closeAuthModal}>
+    <div className="fixed inset-0 z-[1000] grid place-items-center bg-[rgba(22,16,22,0.55)] p-5" onClick={closeAuthModal}>
       <div
-        className="auth-modal-container"
+        className="relative max-h-[90vh] w-full max-w-[500px] overflow-y-auto rounded-[20px] bg-white p-8 shadow-[0_25px_80px_rgba(0,0,0,0.25)] max-[480px]:p-6"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
-        <Button type="button" tone="ghost" className="auth-modal-close" onClick={closeAuthModal}>
+        <Button type="button" tone="ghost" className="absolute right-4 top-4 z-10 h-8 w-8 rounded-full text-[#888] hover:bg-[#fff5fc] hover:text-[#b6349a]" onClick={closeAuthModal}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -151,8 +151,8 @@ export default function AuthModal() {
         </Button>
 
         {/* Header */}
-        <div className="auth-modal-header">
-          <div className="auth-modal-logo">
+        <div className="mb-6 text-center">
+          <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-[#fff0fa]">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="40"
@@ -168,10 +168,10 @@ export default function AuthModal() {
               <circle cx="12" cy="7" r="4" />
             </svg>
           </div>
-          <h2 className="auth-modal-title">
+          <h2 className="m-0 text-2xl font-bold text-[#222]">
             {mode === "login" ? "Hoş Geldiniz!" : "Hesap Oluştur"}
           </h2>
-          <p className="auth-modal-subtitle">
+          <p className="mt-1 text-sm text-[#888]">
             {mode === "login"
               ? "Hesabınıza giriş yapın"
               : "Yeni bir hesap oluşturun"}
@@ -179,17 +179,17 @@ export default function AuthModal() {
         </div>
 
         {/* Tabs */}
-        <div className="auth-modal-tabs">
+        <div className="mb-5 flex border-b border-[#eee]">
           <button
             type="button"
-            className={`auth-tab ${mode === "login" ? "active" : ""}`}
+            className={`flex-1 border-b-2 py-3 text-sm font-semibold transition ${mode === "login" ? "border-[#b6349a] text-[#b6349a]" : "border-transparent text-[#999]"}`}
             onClick={() => { setSuccess(""); setMode("login"); }}
           >
             Giriş Yap
           </button>
           <button
             type="button"
-            className={`auth-tab ${mode === "register" ? "active" : ""}`}
+            className={`flex-1 border-b-2 py-3 text-sm font-semibold transition ${mode === "register" ? "border-[#b6349a] text-[#b6349a]" : "border-transparent text-[#999]"}`}
             onClick={() => { setSuccess(""); setMode("register"); }}
           >
             Kayıt Ol
@@ -206,7 +206,7 @@ export default function AuthModal() {
           </div>
         )}
         {error && (
-          <div className="auth-error-msg" role="alert">
+          <div className="mb-5 flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-600" role="alert">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -228,10 +228,10 @@ export default function AuthModal() {
 
         {/* LOGIN FORM */}
         {mode === "login" && (
-          <form className="auth-form" onSubmit={handleLogin}>
-            <div className="auth-input-group">
-              <label>E-posta</label>
-              <div className="auth-input-wrapper">
+          <form className="grid gap-4" onSubmit={handleLogin}>
+            <div className="grid gap-1.5">
+              <label className="text-sm font-semibold text-[#555]">E-posta</label>
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -246,7 +246,7 @@ export default function AuthModal() {
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                <input
+                <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
                   type="email"
                   placeholder="ornek@email.com"
                   value={username}
@@ -256,9 +256,9 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <div className="auth-input-group">
-              <label>Şifre</label>
-              <div className="auth-input-wrapper">
+            <div className="grid gap-1.5">
+              <label className="text-sm font-semibold text-[#555]">Şifre</label>
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -273,7 +273,7 @@ export default function AuthModal() {
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                <input
+                <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
                   type="password"
                   placeholder="••••••••"
                   value={password}
@@ -285,12 +285,12 @@ export default function AuthModal() {
 
             <Button
               type="submit"
-              className="auth-submit-btn"
+              className="mt-1 w-full rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-bold text-white hover:bg-[#98277f]"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <span className="auth-spinner" />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                   Yükleniyor...
                 </>
               ) : (
@@ -298,7 +298,7 @@ export default function AuthModal() {
               )}
             </Button>
 
-            <p className="auth-hint-text">
+            <p className="text-center text-xs text-[#999]">
               Test: <strong>emilys</strong> / <strong>emilyspass</strong>
             </p>
           </form>
@@ -306,12 +306,12 @@ export default function AuthModal() {
 
         {/* REGISTER FORM */}
         {mode === "register" && (
-          <form className="auth-form" onSubmit={handleRegister}>
-            <div className="auth-input-row">
-              <div className="auth-input-group">
-                <label>Ad</label>
-                <div className="auth-input-wrapper">
-                  <input
+          <form className="grid gap-4" onSubmit={handleRegister}>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-1.5">
+                <label className="text-sm font-semibold text-[#555]">Ad</label>
+                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
+                  <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
                     type="text"
                     placeholder="John"
                     value={regFirstName}
@@ -319,10 +319,10 @@ export default function AuthModal() {
                   />
                 </div>
               </div>
-              <div className="auth-input-group">
-                <label>Soyad</label>
-                <div className="auth-input-wrapper">
-                  <input
+              <div className="grid gap-1.5">
+                <label className="text-sm font-semibold text-[#555]">Soyad</label>
+                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
+                  <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
                     type="text"
                     placeholder="Doe"
                     value={regLastName}
@@ -332,9 +332,9 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <div className="auth-input-group">
+            <div className="grid gap-1.5">
               <label>Kullanıcı Adı</label>
-              <div className="auth-input-wrapper">
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -358,9 +358,9 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <div className="auth-input-group">
+            <div className="grid gap-1.5">
               <label>E-posta</label>
-              <div className="auth-input-wrapper">
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -384,9 +384,9 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <div className="auth-input-group">
+            <div className="grid gap-1.5">
               <label>Şifre</label>
-              <div className="auth-input-wrapper">
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -410,9 +410,9 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <div className="auth-input-group">
+            <div className="grid gap-1.5">
               <label>Şifre Tekrar</label>
-              <div className="auth-input-wrapper">
+              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -438,12 +438,12 @@ export default function AuthModal() {
 
             <Button
               type="submit"
-              className="auth-submit-btn"
+              className="mt-1 w-full rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-bold text-white hover:bg-[#98277f]"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <span className="auth-spinner" />
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                   Yükleniyor...
                 </>
               ) : (
