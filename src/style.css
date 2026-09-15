@@ -3843,7 +3843,19 @@ aside {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-/* Error */
+/* Auth feedback */
+.auth-success-msg {
+  padding: 12px 16px;
+  background: rgba(46, 160, 67, 0.08);
+  border: 1px solid rgba(46, 160, 67, 0.2);
+  border-radius: 12px;
+  color: #237a35;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.45;
+  margin-bottom: 20px;
+}
+
 .auth-error-msg {
   display: flex;
   align-items: center;

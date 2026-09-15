@@ -8,6 +8,7 @@ export default function AuthModal() {
   const [mode, setMode] = useState<"login" | "register">("login");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   // Login fields
   const [username, setUsername] = useState("");
@@ -25,6 +26,7 @@ export default function AuthModal() {
   useEffect(() => {
     if (!isAuthModalOpen) {
       setError("");
+      setSuccess("");
       setLoading(false);
     }
   }, [isAuthModalOpen]);
@@ -54,6 +56,7 @@ export default function AuthModal() {
   const handleLogin = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     if (!username.trim() || !password.trim()) {
       setError("Lütfen tüm alanları doldurun.");
@@ -74,6 +77,7 @@ export default function AuthModal() {
   const handleRegister = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setError("");
+    setSuccess("");
 
     if (
       !regFirstName.trim() ||
@@ -91,8 +95,8 @@ export default function AuthModal() {
       return;
     }
 
-    if (regPassword.length < 4) {
-      setError("Şifre en az 4 karakter olmalıdır.");
+    if (regPassword.length < 6) {
+      setError("Şifre en az 6 karakter olmalıdır.");
       return;
     }
 
@@ -106,7 +110,17 @@ export default function AuthModal() {
         lastName: regLastName.trim(),
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Kayıt işlemi başarısız oldu.");
+      const message = err instanceof Error ? err.message : "Kayıt işlemi başarısız oldu.";
+      if (message.startsWith("Kayıt tamamlandı.")) {
+        setSuccess(message);
+        setMode("login");
+        setUsername(regEmail.trim().toLowerCase());
+        setPassword("");
+        setRegPassword("");
+        setRegPasswordConfirm("");
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -167,22 +181,29 @@ export default function AuthModal() {
         {/* Tabs */}
         <div className="auth-modal-tabs">
           <button
+            type="button"
             className={`auth-tab ${mode === "login" ? "active" : ""}`}
-            onClick={() => setMode("login")}
+            onClick={() => { setSuccess(""); setMode("login"); }}
           >
             Giriş Yap
           </button>
           <button
+            type="button"
             className={`auth-tab ${mode === "register" ? "active" : ""}`}
-            onClick={() => setMode("register")}
+            onClick={() => { setSuccess(""); setMode("register"); }}
           >
             Kayıt Ol
           </button>
         </div>
 
-        {/* Error message */}
+        {/* Status message */}
+        {success && (
+          <div className="auth-success-msg" role="status">
+            {success}
+          </div>
+        )}
         {error && (
-          <div className="auth-error-msg">
+          <div className="auth-error-msg" role="alert">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -206,7 +227,7 @@ export default function AuthModal() {
         {mode === "login" && (
           <form className="auth-form" onSubmit={handleLogin}>
             <div className="auth-input-group">
-              <label>Kullanıcı Adı</label>
+              <label>E-posta</label>
               <div className="auth-input-wrapper">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -223,8 +244,8 @@ export default function AuthModal() {
                   <circle cx="12" cy="7" r="4" />
                 </svg>
                 <input
-                  type="text"
-                  placeholder="emilys"
+                  type="email"
+                  placeholder="ornek@email.com"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"

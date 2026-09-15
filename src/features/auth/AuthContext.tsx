@@ -50,6 +50,17 @@ const mapSupabaseUser = (authUser: SupabaseUser | null | undefined): AuthUser | 
   };
 };
 
+const getAuthErrorMessage = (error: { message?: string } | null | undefined, fallback: string): string => {
+  const message = error?.message?.toLowerCase() || "";
+  if (message.includes("invalid login credentials")) return "E-posta veya şifre hatalı.";
+  if (message.includes("email not confirmed")) return "E-posta adresinizi doğruladıktan sonra giriş yapabilirsiniz.";
+  if (message.includes("user already registered")) return "Bu e-posta adresi zaten kayıtlı. Giriş yapmayı deneyin.";
+  if (message.includes("password should be at least")) return "Şifre en az 6 karakter olmalıdır.";
+  if (message.includes("rate limit")) return "Çok fazla deneme yapıldı. Lütfen kısa süre sonra tekrar deneyin.";
+  if (message.includes("invalid email")) return "Geçerli bir e-posta adresi girin.";
+  return error?.message || fallback;
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -112,7 +123,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: username.trim().toLowerCase(),
           password,
         });
-        if (error) throw error;
+        if (error) throw new Error(getAuthErrorMessage(error, "Giriş yapılamadı."));
         const userData = mapSupabaseUser(data.user);
         if (!userData || !data.session) throw new Error("Kullanıcı oturumu alınamadı.");
         setUser(userData);
@@ -193,7 +204,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             data: { username, firstName, lastName },
           },
         });
-        if (error) throw error;
+        if (error) throw new Error(getAuthErrorMessage(error, "Kayıt işlemi başarısız oldu."));
         const userData = mapSupabaseUser(data.user);
         if (!userData) throw new Error("Kullanıcı bilgisi alınamadı.");
         if (!data.session) {
