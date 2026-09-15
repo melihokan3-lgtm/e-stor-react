@@ -9103,29 +9103,41 @@ aside {
   display: block;
 }
 
-/* Swiper Arrows */
+/* Swiper Arrows - Subtle Glassmorphism */
 .category-promo-swiper .swiper-button-next,
 .category-promo-swiper .swiper-button-prev {
-  width: 38px;
-  height: 38px;
-  background: rgba(255, 255, 255, 0.95);
+  width: 34px;
+  height: 34px;
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 50%;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
-  color: #0f172a;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  color: #334155;
   top: calc(50% - 17px);
-  transition: all 0.2s ease;
+  opacity: 0.6;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-promo-banners:hover .category-promo-swiper .swiper-button-next,
+.category-promo-banners:hover .category-promo-swiper .swiper-button-prev {
+  opacity: 0.85;
 }
 
 .category-promo-swiper .swiper-button-next:after,
 .category-promo-swiper .swiper-button-prev:after {
-  font-size: 15px;
-  font-weight: 800;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .category-promo-swiper .swiper-button-next:hover,
 .category-promo-swiper .swiper-button-prev:hover {
-  background: #d73f98;
-  color: #ffffff;
+  background: rgba(255, 255, 255, 0.95);
+  color: #d73f98;
+  border-color: rgba(215, 63, 152, 0.35);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  opacity: 1 !important;
   transform: scale(1.08);
 }
 
