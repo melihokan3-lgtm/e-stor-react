@@ -154,7 +154,7 @@ export default function Home() {
         </section>
 
         {/* ─── 6. WEEKLY SOLD — FULL WIDTH ─── */}
-        <section className="relative left-1/2 flex w-screen -translate-x-1/2 justify-center bg-[#faf9fa] px-5 pt-12 pb-[50px] [@media(max-width:640px)]:px-3 [@media(max-width:640px)]:pt-7 [@media(max-width:640px)]:pb-8">
+        <section className="relative left-1/2 box-border flex w-[100vw] max-w-[100vw] -translate-x-1/2 justify-center bg-[#faf9fa] px-5 pt-12 pb-[50px] [@media(max-width:640px)]:px-3 [@media(max-width:640px)]:pt-7 [@media(max-width:640px)]:pb-8">
           <div className="relative isolate flex w-full max-w-[1600px] flex-col overflow-hidden rounded-[24px] bg-[#712463] shadow-[0_8px_24px_rgba(31,22,29,0.025)] [@media(max-width:640px)]:rounded-[18px] [@media(max-width:480px)]:p-0">
 
             <div className="relative flex min-h-[119px] w-full [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:items-stretch [@media(max-width:768px)]:gap-0 [@media(max-width:640px)]:block [@media(max-width:640px)]:min-h-0 [@media(max-width:480px)]:overflow-hidden [@media(max-width:480px)]:rounded-t-[18px]">
