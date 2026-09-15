@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { cleanImageUrl, FALLBACK_IMG } from "../../services/api";
-import { useCart } from "../../context/CartContext";
+import { cleanImageUrl, FALLBACK_IMG } from "../../services/api/productApi";
+import { useCart } from "../../features/cart/CartContext";
 import type { Product } from "../../types/product";
 
 export default function SearchProductCard({ product }: { product: Product }) {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchProducts } from "../services/api";
+import { fetchProducts } from "../../services/api/productApi";
+import type { Product } from "../../types/product";
 
-let productsPromise;
-let productsCache;
+let productsPromise: Promise<Product[]> | undefined;
+let productsCache: Product[] | undefined;
 
-const loadProducts = () => {
+const loadProducts = (): Promise<Product[]> => {
   if (productsCache) return Promise.resolve(productsCache);
   if (!productsPromise) {
     productsPromise = fetchProducts().then((products) => {
@@ -15,8 +16,8 @@ const loadProducts = () => {
   return productsPromise;
 };
 
-export default function useProducts() {
-  const [products, setProducts] = useState(productsCache || []);
+export default function useProducts(): { products: Product[]; loading: boolean; error: string } {
+  const [products, setProducts] = useState<Product[]>(productsCache || []);
   const [loading, setLoading] = useState(!productsCache);
   const [error, setError] = useState("");
 

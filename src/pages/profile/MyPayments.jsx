@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../features/auth/AuthContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import {
   CARD_THEMES,

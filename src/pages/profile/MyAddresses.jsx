@@ -1,4 +1,4 @@
-import { useLocation } from "../../context/LocationContext";
+import { useLocation } from "../../features/addresses/LocationContext";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();

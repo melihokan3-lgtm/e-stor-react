@@ -1,5 +1,5 @@
 import { useState, useEffect, type FormEvent } from "react";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../../features/auth/AuthContext";
 import Button from "./ui/Button";
 
 export default function AuthModal() {

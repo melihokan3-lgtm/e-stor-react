@@ -1,5 +1,5 @@
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import type { Product } from "../types/product";
+import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import type { Product } from "../../types/product";
 
 const BASE_URL = "https://fakestoreapi.com";
 const PRODUCT_FIELDS = "id,title,price,description,category,image";

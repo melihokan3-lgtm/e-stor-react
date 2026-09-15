@@ -6,9 +6,9 @@ import {
   fetchProducts,
   cleanImageUrl,
   FALLBACK_IMG,
-} from "../services/api";
-import { CartContext } from "../context/CartContext";
-import { AuthContext } from "../context/AuthContext";
+} from "../services/api/productApi";
+import { CartContext } from "../features/cart/CartContext";
+import { AuthContext } from "../features/auth/AuthContext";
 import { readUserStorage } from "../utils/userStorage";
 import ProductCard from "../components/product/ProductCard";
 

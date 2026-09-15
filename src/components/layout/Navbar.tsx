@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
-import { useCart } from "../../context/CartContext";
-import { useAuth } from "../../context/AuthContext";
-import { useLocation } from "../../context/LocationContext";
+import { useCart } from "../../features/cart/CartContext";
+import { useAuth } from "../../features/auth/AuthContext";
+import { useLocation } from "../../features/addresses/LocationContext";
 import AuthModal from "../common/AuthModal";
 import LocationModal from "../common/LocationModal";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";

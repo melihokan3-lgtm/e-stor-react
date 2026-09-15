@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { AuthContext } from "./AuthContext";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
-import { deleteUserAddress, fetchUserAddresses, isSupabaseDataEnabled, saveUserAddress } from "../services/supabaseData";
-import type { Address, LocationContextValue } from "../types/address";
+import { AuthContext } from "../auth/AuthContext";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+import { deleteUserAddress, fetchUserAddresses, isSupabaseDataEnabled, saveUserAddress } from "../../services/supabase/data";
+import type { Address, LocationContextValue } from "../../types/address";
 
 export const DEFAULT_LOCATION = "Bursa, Türkiye";
 export const LOCATION_OPTIONS = [

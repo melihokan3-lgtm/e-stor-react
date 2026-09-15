@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../features/auth/AuthContext";
 
 export default function AccountDetails() {
   const { user, updateUser } = useContext(AuthContext);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
-import useProducts from "../hooks/useProducts";
+import useProducts from "../features/products/useProducts";
 import ProductCard from "../components/product/ProductCard";
 import WeeklyProductCard from "../components/product/WeeklyProductCard";
 

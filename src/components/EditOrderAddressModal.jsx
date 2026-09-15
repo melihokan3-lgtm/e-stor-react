@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "../context/LocationContext";
+import { useLocation } from "../features/addresses/LocationContext";
 
 export default function EditOrderAddressModal({
   isOpen,

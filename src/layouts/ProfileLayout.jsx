@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
-import { AuthContext } from "../context/AuthContext";
+import { AuthContext } from "../features/auth/AuthContext";
 
 export default function ProfileLayout() {
   const { user, isLoggedIn, authLoading, logout, openAuthModal } = useContext(AuthContext);

@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { AuthProvider } from "../context/AuthContext";
-import { CartProvider } from "../context/CartContext";
-import { LocationProvider } from "../context/LocationContext";
-import { OrdersProvider } from "../context/OrdersContext";
+import { AuthProvider } from "../features/auth/AuthContext";
+import { CartProvider } from "../features/cart/CartContext";
+import { LocationProvider } from "../features/addresses/LocationContext";
+import { OrdersProvider } from "../features/orders/OrdersContext";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (

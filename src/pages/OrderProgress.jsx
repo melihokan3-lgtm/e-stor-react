@@ -1,8 +1,8 @@
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CartContext } from "../context/CartContext";
-import { useLocation } from "../context/LocationContext";
-import { cleanImageUrl, FALLBACK_IMG } from "../services/api";
+import { CartContext } from "../features/cart/CartContext";
+import { useLocation } from "../features/addresses/LocationContext";
+import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 
 export default function OrderProgress() {
   const { cart } = useContext(CartContext);

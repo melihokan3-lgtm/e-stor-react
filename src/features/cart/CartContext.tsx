@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { AuthContext } from "./AuthContext";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
-import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../services/supabaseData";
-import type { CartContextValue, CartItem } from "../types/cart";
-import type { Product } from "../types/product";
+import { AuthContext } from "../auth/AuthContext";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../../services/supabase/data";
+import type { CartContextValue, CartItem } from "../../types/cart";
+import type { Product } from "../../types/product";
 
 export const CartContext = createContext<CartContextValue | null>(null);
 

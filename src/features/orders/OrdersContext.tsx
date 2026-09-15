@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
-import { AuthContext } from "./AuthContext";
-import { readUserStorage, writeUserStorage } from "../utils/userStorage";
-import { fetchUserOrders, isSupabaseDataEnabled, saveUserOrder, updateUserOrderAddress } from "../services/supabaseData";
-import type { CreateOrderInput, Order, OrdersContextValue } from "../types/order";
+import { AuthContext } from "../auth/AuthContext";
+import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
+import { fetchUserOrders, isSupabaseDataEnabled, saveUserOrder, updateUserOrderAddress } from "../../services/supabase/data";
+import type { CreateOrderInput, Order, OrdersContextValue } from "../../types/order";
 
 export const OrdersContext = createContext<OrdersContextValue | null>(null);
 

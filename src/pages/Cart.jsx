@@ -1,13 +1,13 @@
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CartContext } from "../context/CartContext";
-import { fetchProducts, cleanImageUrl, FALLBACK_IMG } from "../services/api";
+import { CartContext } from "../features/cart/CartContext";
+import { fetchProducts, cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import SearchProductCard from "../components/product/SearchProductCard";
-import { useLocation } from "../context/LocationContext";
+import { useLocation } from "../features/addresses/LocationContext";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, totalPrice } =

@@ -1,8 +1,8 @@
-import { isSupabaseConfigured, supabase } from "../lib/supabase";
-import type { AuthUser } from "../types/auth";
-import type { Address } from "../types/address";
-import type { CartItem } from "../types/cart";
-import type { CreateOrderInput, Order } from "../types/order";
+import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import type { AuthUser } from "../../types/auth";
+import type { Address } from "../../types/address";
+import type { CartItem } from "../../types/cart";
+import type { CreateOrderInput, Order } from "../../types/order";
 
 const getClient = () => {
   if (!supabase) throw new Error("Supabase bağlantısı yapılandırılmamış.");

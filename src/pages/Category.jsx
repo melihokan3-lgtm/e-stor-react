@@ -5,7 +5,7 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { fetchProducts } from "../services/api";
+import { fetchProducts } from "../services/api/productApi";
 import ProductCard from "../components/product/ProductCard";
 
 const promoBanners = [
