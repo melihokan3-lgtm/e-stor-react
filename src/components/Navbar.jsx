@@ -147,7 +147,7 @@ export default function Navbar() {
           <img src="/img/icon/Frame 28.svg" alt="Search" />
           <input
             type="text"
-            placeholder="Search by"
+            placeholder="Search products..."
             id="category__input"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -155,7 +155,7 @@ export default function Navbar() {
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
           />
           <button id="search__Btn" onClick={() => handleSearch()}>
-            Ara
+            Search
           </button>
           
           {showPastSearches && pastSearches.length > 0 && (
