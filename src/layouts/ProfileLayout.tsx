@@ -68,43 +68,43 @@ export default function ProfileLayout() {
   };
 
   return (
-    <div className="profile-layout container">
-      <div className="profile-sidebar-wrapper">
-        <div className="profile-sidebar">
-          <div className="profile-user-info">
+    <div className="mx-auto my-10 flex w-full max-w-[1200px] items-start gap-[30px] max-[992px]:flex-col">
+      <div className="flex w-[280px] shrink-0 flex-col gap-4 max-[992px]:w-full">
+        <div className="rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="mb-6 flex items-center gap-4 px-1">
             <img
               src={user.image || "https://i.pravatar.cc/150?img=11"}
               alt={user.firstName}
-              className="profile-avatar"
+              className="h-14 w-14 rounded-full border-2 border-[#f0f0f0] object-cover"
             />
-            <span className="profile-name">
+            <span className="text-lg font-bold text-[#111]">
               {user.firstName} {user.lastName}
             </span>
           </div>
 
-          <nav className="profile-nav">
+          <nav className="flex flex-col gap-1.5">
             {sidebarLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
-                className={({ isActive }) => (isActive ? "profile-nav-item active" : "profile-nav-item")}
+                className={({ isActive }) => `flex w-full items-center gap-[14px] rounded-[10px] bg-transparent px-[14px] py-3 text-left text-[15px] font-medium transition-all duration-300 hover:translate-x-1 hover:bg-[#f8f9fa] hover:text-[#b6349a] ${isActive ? "bg-[#b6349a]/[.08] font-semibold text-[#b6349a]" : "text-[#757575]"}`}
               >
-                <span className="profile-nav-icon">{renderIcon(link.icon)}</span>
-                <span className="profile-nav-text">{link.name}</span>
+                <span className="flex items-center justify-center">{renderIcon(link.icon)}</span>
+                <span>{link.name}</span>
               </NavLink>
             ))}
           </nav>
         </div>
 
-        <div className="profile-logout-box">
-          <button className="profile-logout-btn" onClick={handleLogout}>
-            <span className="profile-nav-icon">{renderIcon("log-out")}</span>
-            <span className="profile-nav-text">Logout</span>
+        <div className="mt-auto rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <button className="flex w-full items-center gap-[14px] rounded-[10px] bg-transparent px-[14px] py-3 text-left text-[15px] font-medium text-[#757575] transition-all duration-300 hover:translate-x-1 hover:bg-[#f8f9fa] hover:text-[#b6349a]" onClick={handleLogout}>
+            <span className="flex items-center justify-center">{renderIcon("log-out")}</span>
+            <span>Logout</span>
           </button>
         </div>
       </div>
 
-      <div className="profile-content-area">
+      <div className="min-w-0 flex-1 bg-transparent max-[992px]:py-2.5">
         <Outlet />
       </div>
     </div>
