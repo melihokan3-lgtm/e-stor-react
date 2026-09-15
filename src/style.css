@@ -528,11 +528,6 @@ footer {
   color: var(--text-primary, #282828);
 }
 
-.footer__down {
-  text-align: center;
-  padding-top: var(--spacing-xl, 32px);
-}
-
 /* ==========================================================================
    5. UI UTILITIES & FORM ELEMENTS
    ========================================================================== */

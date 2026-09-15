@@ -58,7 +58,7 @@ export default function Footer() {
           ))}
         </div>
       </div>
-      <div className="footer__down">
+      <div className="pt-8 text-center">
         <p>All rights reserved. © 2024 EmaStudio</p>
       </div>
     </footer>
