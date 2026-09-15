@@ -211,10 +211,10 @@ export default function HelpCenter() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4" onClick={() => setChatModalOpen(false)}>
           <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between border-b border-[#eee] p-4">
-              <div className="chat-agent-info">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
+              <div className="flex items-center gap-3">
+                <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
                   <span>🎧</span>
-                  <span className="agent-online-dot"></span>
+                  <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#111] bg-emerald-500"></span>
                 </div>
                 <div><h4 className="font-bold text-[#111]">Müşteri Temsilcisi (Selin Y.)</h4><span className="text-xs text-[#777]">Canlı Destek Ekibi &bull; Çevrimiçi</span>
                 </div>
