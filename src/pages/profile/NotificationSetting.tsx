@@ -107,10 +107,10 @@ export default function NotificationSetting() {
   };
 
   return (
-    <div className="notifications-page">
+    <div className="w-full">
       {/* Toast Alert */}
       {toastMessage && (
-        <div className="payment-toast-alert">
+        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12"></polyline>
           </svg>
@@ -119,25 +119,24 @@ export default function NotificationSetting() {
       )}
 
       {/* Header */}
-      <div className="notifications-header-row">
+      <div className="mb-6 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <div className="title-with-badge">
-            <h2 className="profile-page-title">Bildirimlerim (Notifications)</h2>
+          <div className="flex items-center gap-3"><h2 className="text-[28px] font-extrabold text-[#111]">Bildirimlerim (Notifications)</h2>
             {unreadCount > 0 && (
-              <span className="notif-count-badge">{unreadCount} Yeni</span>
+              <span className="rounded-full bg-[#b6349a] px-2.5 py-1 text-xs font-semibold text-white">{unreadCount} Yeni</span>
             )}
           </div>
-          <p className="notifications-subtitle">
+          <p className="mt-2 text-sm text-[#777]">
             Sipariş takibi, kampanyalar ve hesap güvenliğinizle ilgili tüm anlık güncellemeler.
           </p>
         </div>
 
         {/* Global Actions */}
-        <div className="notif-header-actions">
+        <div className="flex flex-wrap gap-2">
           {unreadCount > 0 && (
             <button
               type="button"
-              className="notif-action-text-btn"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-[#b6349a] hover:bg-[#b6349a]/[.06]"
               onClick={handleMarkAllAsRead}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -149,7 +148,7 @@ export default function NotificationSetting() {
           {notifications.length > 0 && (
             <button
               type="button"
-              className="notif-action-text-btn text-danger"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-red-600 hover:bg-red-50"
               onClick={handleClearAll}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -163,17 +162,17 @@ export default function NotificationSetting() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="notif-filter-tabs">
+      <div className="mb-4 flex gap-2">
         <button
           type="button"
-          className={`notif-tab-btn ${activeFilter === "all" ? "active" : ""}`}
+          className={`rounded-lg border px-3 py-2 text-xs font-semibold ${activeFilter === "all" ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] text-[#777]"}`}
           onClick={() => setActiveFilter("all")}
         >
           Tüm Bildirimler ({notifications.length})
         </button>
         <button
           type="button"
-          className={`notif-tab-btn ${activeFilter === "unread" ? "active" : ""}`}
+          className={`rounded-lg border px-3 py-2 text-xs font-semibold ${activeFilter === "unread" ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] text-[#777]"}`}
           onClick={() => setActiveFilter("unread")}
         >
           Okunmamışlar ({unreadCount})
@@ -181,17 +180,17 @@ export default function NotificationSetting() {
       </div>
 
       {/* Notifications List */}
-      <div className="notifications-list">
+      <div className="space-y-3">
         {filteredNotifications.length === 0 ? (
-          <div className="notifications-empty-state">
+          <div className="rounded-2xl border border-dashed border-[#ddd] p-10 text-center text-sm text-[#777]">
             <div className="empty-state-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
             </div>
-            <h4>Henüz Bildiriminiz Yok</h4>
-            <p>
+            <h4 className="font-bold text-[#333]">Henüz Bildiriminiz Yok</h4>
+            <p className="mt-2">
               {activeFilter === "unread"
                 ? "Okunmamış bildiriminiz bulunmuyor. Tüm güncel haberleri takip ettiniz!"
                 : "Yeni bir bildirim aldığınızda burada görüntülenecektir."}
@@ -201,28 +200,25 @@ export default function NotificationSetting() {
           filteredNotifications.map((item) => (
             <div
               key={item.id}
-              className={`notif-item-card ${item.isRead ? "is-read" : "is-unread"}`}
+              className={`relative flex items-start gap-4 rounded-2xl border p-4 ${item.isRead ? "border-[#eee] bg-white" : "border-[#b6349a]/[.3] bg-[#fff8fd]"}`}
             >
               {/* Unread Glowing Dot */}
-              {!item.isRead && <span className="unread-pulse-dot" title="Okunmadı"></span>}
+              {!item.isRead && <span className="absolute left-2 top-2 h-2 w-2 rounded-full bg-[#b6349a]" title="Okunmadı"></span>}
 
               {/* Icon Container */}
-              <div className={`notif-type-icon type-${item.type}`}>
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f7f4f7]">
                 {renderIcon(item.type)}
               </div>
 
               {/* Notification Content */}
-              <div className="notif-content-area">
-                <div className="notif-title-row">
-                  <h4 className="notif-title">{item.title}</h4>
-                  <span className="notif-time">{item.time}</span>
+              <div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><h4 className="font-bold text-[#222]">{item.title}</h4><span className="shrink-0 text-xs text-[#999]">{item.time}</span>
                 </div>
-                <p className="notif-message">{item.message}</p>
+                <p className="my-2 text-sm leading-5 text-[#777]">{item.message}</p>
                 {item.actionText && item.actionUrl && (
-                  <div className="notif-action-link-wrapper">
+                  <div>
                     <Link
                       to={item.actionUrl}
-                      className="notif-action-link"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-[#b6349a]"
                       onClick={() => {
                         if (!item.isRead) handleToggleRead(item.id);
                       }}
@@ -237,10 +233,10 @@ export default function NotificationSetting() {
               </div>
 
               {/* Side Action Buttons */}
-              <div className="notif-side-actions">
+              <div className="flex shrink-0 gap-1">
                 <button
                   type="button"
-                  className={`notif-icon-btn ${item.isRead ? "btn-read" : "btn-unread"}`}
+                  className="rounded-lg p-2 text-[#777] hover:bg-[#f5f5f5]"
                   title={item.isRead ? "Okunmadı olarak işaretle" : "Okundu olarak işaretle"}
                   onClick={() => handleToggleRead(item.id)}
                 >
@@ -258,7 +254,7 @@ export default function NotificationSetting() {
 
                 <button
                   type="button"
-                  className="notif-icon-btn btn-delete"
+                  className="rounded-lg p-2 text-red-500 hover:bg-red-50"
                   title="Bildirimi Sil"
                   onClick={() => handleDelete(item.id)}
                 >

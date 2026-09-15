@@ -13,34 +13,34 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
   const orderDate = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString("tr-TR") : "");
 
   return (
-    <div className="order-card">
-      <div className="order-header">
-        <div className="order-header-left">
-          <span className="order-id">Order {order.id}</span>
-          <span className={`order-status status-${order.status.toLowerCase().replace(/\s+/g, "-")}`}>
+    <div className="rounded-2xl border border-[#eee] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
+      <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#f2f2f2] pb-4">
+        <div className="flex items-center gap-3">
+          <span className="text-sm font-bold text-[#111]">Order {order.id}</span>
+          <span className="rounded-full bg-[#b6349a]/[.1] px-2.5 py-1 text-xs font-semibold text-[#b6349a]">
             {order.status}
           </span>
         </div>
-        <span className="order-date">{orderDate}</span>
+        <span className="text-xs text-[#999]">{orderDate}</span>
       </div>
 
-      <div className="order-address-section">
-        <div className="order-address-info">
-          <div className="order-address-label-row">
+      <div className="mb-4 flex items-start justify-between gap-4 rounded-xl bg-[#faf9fa] p-4 max-sm:flex-col">
+        <div className="min-w-0">
+          <div className="mb-1 flex items-center gap-2">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
-            <span className="order-address-label">Teslimat Adresi</span>
+            <span className="text-xs font-bold text-[#555]">Teslimat Adresi</span>
           </div>
-          <span className="order-address-value">{order.deliveryAddress || "Adres belirtilmemiş"}</span>
+          <span className="block break-words text-sm text-[#777]">{order.deliveryAddress || "Adres belirtilmemiş"}</span>
         </div>
 
-        <div className="order-address-action-area">
+        <div className="shrink-0">
           {isEditable ? (
             <button
               type="button"
-              className="order-address-edit-btn"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.08]"
               onClick={() => onEditAddress(order)}
               title="Kargoya verilmediği için adresi değiştirebilirsiniz"
             >
@@ -51,7 +51,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
               Adresi Değiştir
             </button>
           ) : (
-            <span className="order-address-locked-badge" title="Sipariş kargoya verildiği veya teslim edildiği için adres değiştirilemez">
+            <span className="inline-flex items-center gap-1.5 text-xs text-[#6b7280]" title="Sipariş kargoya verildiği veya teslim edildiği için adres değiştirilemez">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="1" y="3" width="15" height="13" />
                 <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
@@ -64,7 +64,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
         </div>
       </div>
 
-      <div className="order-items">
+      <div className="mb-4 flex flex-wrap gap-3">
         {order.items.map((item) => {
           const categorySlug = item.category?.toLowerCase().replace(/\s+/g, "-") || "product";
           const itemUrl = item.id ? `/${categorySlug}/${item.id}` : "#";
@@ -73,30 +73,30 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
             <Link
               key={`${item.id || item.title}-${item.qty || 0}`}
               to={itemUrl}
-              className="order-item"
+              className="flex min-w-[180px] flex-1 items-center gap-3 rounded-xl border border-[#f2f2f2] p-3 transition hover:border-[#b6349a]/[.3]"
               onClick={(event) => { if (!item.id) event.preventDefault(); }}
             >
               <img
                 src={item.img || FALLBACK_IMG}
                 alt={item.title}
-                className="order-item-img"
+                className="h-14 w-14 rounded-lg bg-[#faf9fa] object-contain p-1"
                 onError={(event) => {
                   event.currentTarget.onerror = null;
                   event.currentTarget.src = FALLBACK_IMG;
                 }}
               />
-              <div className="order-item-info">
-                <span className="order-item-title">{item.title}</span>
-                <span className="order-item-meta">Qty: {item.qty} &middot; ${Number(item.price || 0).toFixed(2)}</span>
+              <div className="min-w-0">
+                <span className="block truncate text-sm font-semibold text-[#222]">{item.title}</span>
+                <span className="text-xs text-[#999]">Qty: {item.qty} &middot; ${Number(item.price || 0).toFixed(2)}</span>
               </div>
             </Link>
           );
         })}
       </div>
 
-      <div className="order-footer">
-        <span className="order-total">Total: ${order.total.toFixed(2)}</span>
-        <span className="order-items-count">{order.items.length} item{order.items.length > 1 ? "s" : ""}</span>
+      <div className="flex items-center justify-between border-t border-[#f2f2f2] pt-4">
+        <span className="font-bold text-[#111]">Total: ${order.total.toFixed(2)}</span>
+        <span className="text-xs text-[#999]">{order.items.length} item{order.items.length > 1 ? "s" : ""}</span>
       </div>
     </div>
   );

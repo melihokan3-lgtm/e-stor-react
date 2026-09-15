@@ -1416,10 +1416,6 @@ aside {
   white-space: nowrap;
 }
 
-.my-addresses-page {
-  width: 100%;
-}
-
 .addresses-page-header {
   display: flex;
   align-items: flex-start;

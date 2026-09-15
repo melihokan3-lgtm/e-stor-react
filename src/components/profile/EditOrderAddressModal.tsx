@@ -63,25 +63,25 @@ export default function EditOrderAddressModal({
   const uniqueQuickOptions = Array.from(new Set(quickOptions)).slice(0, 4);
 
   return (
-    <div className="card-modal-overlay" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4" onClick={onClose}>
       <div
-        className="card-modal-box edit-address-modal-box"
+        className="max-h-[90vh] w-full max-w-[620px] overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-address-modal-title"
       >
         {/* Header */}
-        <div className="card-modal-header">
+        <div className="mb-5 flex items-start justify-between gap-4 border-b border-[#eee] pb-4">
           <div>
-            <h3 id="edit-address-modal-title">Teslimat Adresini Değiştir</h3>
-            <span className="order-modal-badge">
+            <h3 id="edit-address-modal-title" className="text-lg font-bold text-[#111]">Teslimat Adresini Değiştir</h3>
+            <span className="text-xs text-[#999]">
               Sipariş: {order.id} • Durum: {order.status}
             </span>
           </div>
           <button
             type="button"
-            className="card-modal-close-btn"
+            className="rounded-lg p-2 text-[#777] hover:bg-[#f5f5f5]"
             onClick={onClose}
             aria-label="Kapat"
           >
@@ -93,28 +93,28 @@ export default function EditOrderAddressModal({
         </div>
 
         {/* Notice Info */}
-        <div className="address-modal-info-alert">
+        <div className="mb-5 flex gap-3 rounded-xl bg-sky-50 p-3 text-sm text-sky-800">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" strokeWidth="2">
             <circle cx="12" cy="12" r="10"></circle>
             <line x1="12" y1="16" x2="12" y2="12"></line>
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
-          <div className="alert-text">
-            <strong>Kargoya Verilmedi</strong>
-            <p>Siparişiniz henüz kargoya teslim edilmediği için teslimat adresinizi güncelleyebilirsiniz.</p>
+          <div>
+            <strong className="block">Kargoya Verilmedi</strong>
+            <p className="m-0 mt-1 text-xs">Siparişiniz henüz kargoya teslim edilmediği için teslimat adresinizi güncelleyebilirsiniz.</p>
           </div>
         </div>
 
         {/* Quick select pills */}
         {uniqueQuickOptions.length > 0 && (
-          <div className="address-quick-options">
-            <span className="quick-options-label">Kayıtlı & Önerilen Adresler:</span>
-            <div className="quick-pills-row">
+          <div className="mb-5">
+            <span className="mb-2 block text-xs font-semibold text-[#777]">Kayıtlı & Önerilen Adresler:</span>
+            <div className="flex flex-wrap gap-2">
               {uniqueQuickOptions.map((opt) => (
                 <button
                   key={opt}
                   type="button"
-                  className={`quick-pill-btn ${addressInput === opt ? "active" : ""}`}
+                  className={`inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-xs transition ${addressInput === opt ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] text-[#777] hover:border-[#b6349a]"}`}
                   onClick={() => {
                     setAddressInput(opt);
                     setError("");
@@ -132,11 +132,11 @@ export default function EditOrderAddressModal({
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="edit-address-form" noValidate>
-          <div className="form-group-field">
-            <label className="field-label-text">Yeni Teslimat Adresi</label>
+        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-[#333]">Yeni Teslimat Adresi</label>
             <textarea
-              className={`address-textarea-input ${error ? "has-error" : ""}`}
+              className={`w-full resize-y rounded-xl border bg-white p-3 text-sm outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-[#ddd]"}`}
               rows={3}
               placeholder="Mahalle, sokak, bina no, ilçe ve şehir giriniz..."
               value={addressInput}
@@ -146,20 +146,20 @@ export default function EditOrderAddressModal({
               }}
               autoFocus
             />
-            {error && <span className="field-error-text">{error}</span>}
+            {error && <span className="mt-1 block text-xs text-red-600">{error}</span>}
           </div>
 
-          <div className="address-modal-actions">
+          <div className="flex justify-end gap-2">
             <button
               type="button"
-              className="modal-cancel-btn"
+              className="rounded-lg bg-[#f3f3f3] px-4 py-2.5 text-sm font-semibold text-[#555]"
               onClick={onClose}
             >
               Vazgeç
             </button>
             <button
               type="submit"
-              className="modal-save-address-btn"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#92277a]"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 6L9 17l-5-5"></path>

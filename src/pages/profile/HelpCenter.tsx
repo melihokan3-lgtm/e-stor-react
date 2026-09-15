@@ -71,16 +71,16 @@ export default function HelpCenter() {
   });
 
   return (
-    <div className="help-center-page">
+    <div className="w-full space-y-5">
       {/* Header Banner */}
-      <div className="help-center-header">
-        <h2 className="profile-page-title">Yardım ve Destek Merkezi</h2>
-        <p className="help-subtitle">
+      <div className="rounded-2xl bg-[#fff8fd] p-6">
+        <h2 className="mb-2 text-[28px] font-extrabold text-[#111]">Yardım ve Destek Merkezi</h2>
+        <p className="mb-5 text-sm text-[#777]">
           Siparişleriniz, iade süreçleriniz ve ödeme güvenliği hakkında merak ettiğiniz tüm soruların yanıtları.
         </p>
 
         {/* Real-time Search Box */}
-        <div className="help-search-box">
+        <div className="flex items-center gap-3 rounded-xl border border-[#eee] bg-white px-4 py-3">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -90,12 +90,12 @@ export default function HelpCenter() {
             placeholder="Bir konu, soru veya anahtar kelime arayın (Örn: iade, kargo, kart...)"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="help-search-input"
+            className="min-w-0 flex-1 border-0 text-sm outline-none"
           />
           {searchQuery && (
             <button
               type="button"
-              className="clear-search-btn"
+              className="text-xl text-[#777]"
               onClick={() => setSearchQuery("")}
             >
               &times;
@@ -105,12 +105,12 @@ export default function HelpCenter() {
       </div>
 
       {/* Category Pills */}
-      <div className="faq-category-pills">
+      <div className="flex flex-wrap gap-2">
         {categories.map((cat) => (
           <button
             key={cat}
             type="button"
-            className={`faq-pill-btn ${selectedCategory === cat ? "active" : ""}`}
+            className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${selectedCategory === cat ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] bg-white text-[#777]"}`}
             onClick={() => setSelectedCategory(cat)}
           >
             {cat}
@@ -119,9 +119,9 @@ export default function HelpCenter() {
       </div>
 
       {/* Accordion FAQ List */}
-      <div className="faq-accordion-list">
+      <div className="space-y-3">
         {filteredFaqs.length === 0 ? (
-          <div className="faq-not-found">
+          <div className="rounded-2xl border border-dashed border-[#ddd] p-8 text-center text-sm text-[#777]">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="8" y1="12" x2="16" y2="12"></line>
@@ -135,19 +135,19 @@ export default function HelpCenter() {
             return (
               <div
                 key={item.id}
-                className={`faq-accordion-item ${isOpen ? "is-open" : ""}`}
+                className="overflow-hidden rounded-2xl border border-[#eee] bg-white"
               >
                 <button
                   type="button"
-                  className="faq-question-btn"
+                  className="flex w-full items-center justify-between gap-4 p-4 text-left text-sm font-semibold text-[#222]"
                   onClick={() => toggleAccordion(item.id)}
                   aria-expanded={isOpen}
                 >
-                  <span className="faq-q-text">
-                    <span className="faq-q-badge">{item.category}</span>
+                  <span className="flex min-w-0 flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-[#b6349a]/[.1] px-2 py-1 text-[11px] text-[#b6349a]">{item.category}</span>
                     {item.question}
                   </span>
-                  <span className="faq-arrow-icon">
+                  <span className={`transition ${isOpen ? "rotate-180" : ""}`}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
@@ -155,8 +155,8 @@ export default function HelpCenter() {
                 </button>
 
                 {isOpen && (
-                  <div className="faq-answer-pane">
-                    <p>{item.answer}</p>
+                  <div className="border-t border-[#eee] bg-[#fafafa] p-4 text-sm leading-6 text-[#666]">
+                    <p className="m-0">{item.answer}</p>
                   </div>
                 )}
               </div>
@@ -166,49 +166,40 @@ export default function HelpCenter() {
       </div>
 
       {/* Contact & Support Cards */}
-      <div className="help-contact-section">
-        <div className="help-contact-card chat-card">
-          <div className="contact-icon-wrapper chat-icon">
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="flex flex-col gap-4 rounded-2xl border border-emerald-100 bg-emerald-50 p-5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
             </svg>
           </div>
-          <div className="contact-info">
-            <div className="contact-title-row">
-              <h4>Canlı Destek</h4>
-              <span className="online-badge">
-                <span className="online-dot"></span> 7/24 Aktif
-              </span>
-            </div>
-            <p>Müşteri temsilcilerimizle anında yazışarak sipariş ve iade desteği alın.</p>
-            <span className="response-time">Ortalama yanıt süresi: &lt; 2 dakika</span>
+          <div>
+            <div className="flex items-center gap-2"><h4 className="font-bold text-[#111]">Canlı Destek</h4><span className="text-xs text-emerald-700">7/24 Aktif</span></div>
+            <p className="my-2 text-sm text-[#666]">Müşteri temsilcilerimizle anında yazışarak sipariş ve iade desteği alın.</p><span className="text-xs text-[#777]">Ortalama yanıt süresi: &lt; 2 dakika</span>
           </div>
           <button
             type="button"
-            className="contact-btn chat-btn"
+            className="self-start rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
             onClick={() => setChatModalOpen(true)}
           >
             Sohbeti Başlat
           </button>
         </div>
 
-        <div className="help-contact-card email-card">
-          <div className="contact-icon-wrapper email-icon">
+        <div className="flex flex-col gap-4 rounded-2xl border border-pink-100 bg-pink-50 p-5">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
           </div>
-          <div className="contact-info">
-            <h4>Bize Ulaşın</h4>
-            <p>Sorularınızı ve kurumsal taleplerinizi destek ekibimize e-posta veya telefonla iletin.</p>
-            <span className="contact-details-line">
+          <div><h4 className="font-bold text-[#111]">Bize Ulaşın</h4><p className="my-2 text-sm text-[#666]">Sorularınızı ve kurumsal taleplerinizi destek ekibimize e-posta veya telefonla iletin.</p><span className="text-xs text-[#777]">
               <strong>destek@estore.com</strong> &bull; <strong>0850 123 45 67</strong>
             </span>
           </div>
           <a
             href="mailto:destek@estore.com"
-            className="contact-btn email-btn"
+            className="self-start rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white"
           >
             E-Posta Gönder
           </a>
@@ -217,40 +208,35 @@ export default function HelpCenter() {
 
       {/* Live Chat Simulation Modal */}
       {chatModalOpen && (
-        <div className="card-modal-overlay" onClick={() => setChatModalOpen(false)}>
-          <div className="live-chat-modal-box" onClick={(e) => e.stopPropagation()}>
-            <div className="live-chat-header">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/45 p-4" onClick={() => setChatModalOpen(false)}>
+          <div className="w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between border-b border-[#eee] p-4">
               <div className="chat-agent-info">
-                <div className="agent-avatar">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-50">
                   <span>🎧</span>
                   <span className="agent-online-dot"></span>
                 </div>
-                <div>
-                  <h4>Müşteri Temsilcisi (Selin Y.)</h4>
-                  <span>Canlı Destek Ekibi &bull; Çevrimiçi</span>
+                <div><h4 className="font-bold text-[#111]">Müşteri Temsilcisi (Selin Y.)</h4><span className="text-xs text-[#777]">Canlı Destek Ekibi &bull; Çevrimiçi</span>
                 </div>
               </div>
               <button
                 type="button"
-                className="card-modal-close-btn"
+                className="rounded-lg p-2 text-xl text-[#777] hover:bg-[#f5f5f5]"
                 onClick={() => setChatModalOpen(false)}
               >
                 &times;
               </button>
             </div>
 
-            <div className="live-chat-messages">
-              <div className="chat-bubble agent">
-                <p>Merhaba! E-Store Canlı Destek hattına hoş geldiniz. Size siparişleriniz veya ürünlerinizle ilgili nasıl yardımcı olabilirim?</p>
-                <span className="chat-time">Şimdi</span>
+            <div className="min-h-48 bg-[#fafafa] p-4"><div className="max-w-[85%] rounded-xl bg-white p-3 text-sm text-[#555] shadow-sm"><p className="m-0">Merhaba! E-Store Canlı Destek hattına hoş geldiniz. Size siparişleriniz veya ürünlerinizle ilgili nasıl yardımcı olabilirim?</p><span className="mt-2 block text-xs text-[#999]">Şimdi</span>
               </div>
             </div>
 
-            <div className="live-chat-footer">
+            <div className="flex gap-2 border-t border-[#eee] p-4">
               <input
                 type="text"
                 placeholder="Mesajınızı buraya yazın..."
-                className="chat-input"
+                className="min-w-0 flex-1 rounded-lg border border-[#ddd] px-3 py-2 text-sm outline-none focus:border-[#b6349a]"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
@@ -261,7 +247,7 @@ export default function HelpCenter() {
               />
               <button
                 type="button"
-                className="chat-send-btn"
+                className="rounded-lg bg-[#b6349a] px-3 text-white"
                 onClick={() => alert("Mesajınız canlı destek temsilcimize iletildi.")}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

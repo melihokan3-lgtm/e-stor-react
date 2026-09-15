@@ -28,9 +28,9 @@ export default function MyOrders() {
 
   const renderOrderList = (orderList: Order[]) => (
     orderList.length === 0 ? (
-      <div className="orders-empty-state">Bu kategoride siparişiniz bulunmuyor.</div>
+      <div className="rounded-2xl border border-dashed border-[#ddd] p-8 text-center text-sm text-[#777]">Bu kategoride siparişiniz bulunmuyor.</div>
     ) : (
-      <div className="order-list">
+      <div className="flex flex-col gap-4">
         {orderList.map((order) => (
           <OrderCard key={order.id} order={order} onEditAddress={setEditingOrder} />
         ))}
@@ -39,27 +39,27 @@ export default function MyOrders() {
   );
 
   return (
-    <div className="my-orders-page">
-      <div className="orders-page-header">
-        <h2 className="profile-page-title">Siparişlerim (My Orders)</h2>
+    <div className="w-full">
+      <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
+        <h2 className="text-[28px] font-extrabold text-[#111]">Siparişlerim (My Orders)</h2>
         
         {/* Filters Tabs */}
         {!ordersLoading && !ordersError && orders.length > 0 && (
-          <div className="orders-filter-tabs">
+          <div className="flex flex-wrap gap-2">
             <button 
-              className={`order-tab-btn ${filterTab === 'all' ? 'active' : ''}`}
+              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'all' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
               onClick={() => setFilterTab('all')}
             >
               Tüm Siparişlerim ({orders.length})
             </button>
             <button 
-              className={`order-tab-btn ${filterTab === 'pending' ? 'active' : ''}`}
+              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'pending' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
               onClick={() => setFilterTab('pending')}
             >
               Devam Eden / Teslim Edilmeyenler ({pendingOrders.length})
             </button>
             <button 
-              className={`order-tab-btn ${filterTab === 'delivered' ? 'active' : ''}`}
+              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'delivered' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
               onClick={() => setFilterTab('delivered')}
             >
               Teslim Edilenler ({deliveredOrders.length})
@@ -69,25 +69,25 @@ export default function MyOrders() {
       </div>
 
       {ordersLoading ? (
-        <div className="orders-empty">Siparişler yükleniyor...</div>
+        <div className="rounded-2xl border border-[#eee] p-8 text-center text-sm text-[#777]">Siparişler yükleniyor...</div>
       ) : ordersError ? (
-        <div className="orders-empty" role="alert">{ordersError}</div>
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{ordersError}</div>
       ) : orders.length === 0 ? (
-        <div className="orders-empty">
+        <div className="rounded-2xl border border-dashed border-[#ddd] p-10 text-center">
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <p>You have no orders yet.</p>
-          <span>Your past orders will appear here after you complete a purchase.</span>
+          <p className="font-semibold text-[#555]">You have no orders yet.</p>
+          <span className="text-sm text-[#999]">Your past orders will appear here after you complete a purchase.</span>
         </div>
       ) : (
-        <div className="orders-container" style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
+        <div className="flex flex-col gap-8">
           
           {(filterTab === 'all' || filterTab === 'pending') && (
             <div className="orders-section">
-              <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "16px", color: "#111", borderBottom: "2px solid #eaeaea", paddingBottom: "8px" }}>
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
                 Devam Eden Siparişler (Pending)
               </h3>
               {renderOrderList(pendingOrders)}
@@ -96,7 +96,7 @@ export default function MyOrders() {
 
           {(filterTab === 'all' || filterTab === 'delivered') && (
             <div className="orders-section">
-              <h3 style={{ fontSize: "18px", fontWeight: "700", marginBottom: "16px", color: "#111", borderBottom: "2px solid #eaeaea", paddingBottom: "8px" }}>
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
                 Teslim Edilenler / Kargodakiler
               </h3>
               {renderOrderList(deliveredOrders)}
@@ -116,7 +116,7 @@ export default function MyOrders() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="payments-toast-notification">
+        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">
           {toastMessage}
         </div>
       )}
