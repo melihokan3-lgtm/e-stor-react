@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from "react";
 import { useAuth } from "../../context/AuthContext";
+import Button from "./ui/Button";
 
 export default function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, loginUser, registerUser } = useAuth();
@@ -118,7 +119,7 @@ export default function AuthModal() {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
-        <button className="auth-modal-close" onClick={closeAuthModal}>
+        <Button type="button" tone="ghost" className="auth-modal-close" onClick={closeAuthModal}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="22"
@@ -133,7 +134,7 @@ export default function AuthModal() {
             <line x1="18" y1="6" x2="6" y2="18" />
             <line x1="6" y1="6" x2="18" y2="18" />
           </svg>
-        </button>
+        </Button>
 
         {/* Header */}
         <div className="auth-modal-header">
@@ -258,7 +259,7 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
               className="auth-submit-btn"
               disabled={loading}
@@ -271,7 +272,7 @@ export default function AuthModal() {
               ) : (
                 "Giriş Yap"
               )}
-            </button>
+            </Button>
 
             <p className="auth-hint-text">
               Test: <strong>emilys</strong> / <strong>emilyspass</strong>
@@ -411,7 +412,7 @@ export default function AuthModal() {
               </div>
             </div>
 
-            <button
+            <Button
               type="submit"
               className="auth-submit-btn"
               disabled={loading}
@@ -424,7 +425,7 @@ export default function AuthModal() {
               ) : (
                 "Kayıt Ol"
               )}
-            </button>
+            </Button>
           </form>
         )}
       </div>
