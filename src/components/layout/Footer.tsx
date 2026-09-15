@@ -49,7 +49,7 @@ export default function Footer() {
           <img src="/img/icon/Logo.svg" alt="E-Storee" />
         </Link>
         {footerGroups.map((group) => <FooterLinkGroup key={group.title} {...group} />)}
-        <div className="footer__link">
+        <div className="flex flex-col gap-4">
           <h5>Social</h5>
           {socialLinks.map((link) => (
             <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer">

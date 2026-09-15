@@ -528,12 +528,6 @@ footer {
   color: var(--text-primary, #282828);
 }
 
-.footer__link {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md, 16px);
-}
-
 .footer__down {
   text-align: center;
   padding-top: var(--spacing-xl, 32px);
