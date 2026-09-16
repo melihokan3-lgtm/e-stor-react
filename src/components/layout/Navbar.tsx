@@ -101,20 +101,10 @@ export default function Navbar() {
   return (
     <>
       <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-evenly md:px-0">
-        <div className="order-1 flex w-auto items-center gap-4 md:w-[290px]">
+        <div className="order-1 flex w-auto items-center gap-4 md:w-auto">
           <Link to="/">
             <img src="/img/icon/logo2.svg" alt="E-Storee" />
           </Link>
-          <button
-            type="button"
-            className="hidden cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a] md:flex"
-            onClick={openLocationModal}
-            aria-label={`Change delivery location. Current location: ${location}`}
-            title={location}
-          >
-            <img src="/img/icon/Location.svg" alt="Location" />
-            <p>{displayLocation}</p>
-          </button>
         </div>
 
         <div className="relative order-2 hidden md:block" ref={categoriesRef}>
@@ -283,7 +273,18 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="order-3 ml-2 hidden gap-5 md:flex md:ml-0">
+        <div className="order-3 ml-2 hidden items-center gap-4 md:flex md:ml-0">
+
+          <button
+            type="button"
+            className="flex cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a]"
+            onClick={openLocationModal}
+            aria-label={`Change delivery location. Current location: ${location}`}
+            title={location}
+          >
+            <img src="/img/icon/Location.svg" alt="Location" />
+            <p>{displayLocation}</p>
+          </button>
 
 
           <Link to="/cart" className="flex items-center justify-center gap-2 rounded-[30px] bg-[#fef5fd] px-5 py-2.5 text-center font-medium">
