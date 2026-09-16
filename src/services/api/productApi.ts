@@ -2,6 +2,19 @@ import { isSupabaseConfigured, supabase } from "../../lib/supabase";
 import type { Product } from "../../types/product";
 
 const PRODUCT_FIELDS = "id,title,price,description,category,image";
+const FAKE_API_URL = "https://fakestoreapi.com/products";
+const FAKE_PRODUCT_ID_OFFSET = 100000;
+
+const requestFakeProducts = async (): Promise<Product[]> => {
+  const response = await fetch(FAKE_API_URL);
+  if (!response.ok) throw new Error(`Supplemental product API failed with status ${response.status}`);
+  const products = (await response.json()) as Product[];
+  return products.map((product) => ({
+    ...product,
+    id: FAKE_PRODUCT_ID_OFFSET + product.id,
+    category: `Featured · ${product.category}`,
+  }));
+};
 
 const requireSupabase = () => {
   if (!isSupabaseConfigured || !supabase) {
@@ -14,11 +27,31 @@ export const fetchProducts = async (): Promise<Product[]> => {
   const client = requireSupabase();
   const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
   if (error) throw error;
-  return (data || []) as Product[];
+
+  const supabaseProducts = (data || []) as Product[];
+  try {
+    const supplementalProducts = await requestFakeProducts();
+    return [...supabaseProducts, ...supplementalProducts];
+  } catch (supplementalError) {
+    console.warn("Supplemental products could not be loaded; using Supabase products only.", supplementalError);
+    return supabaseProducts;
+  }
 };
 
 export const fetchProductById = async (id: string | number): Promise<Product | null> => {
   if (!String(id).trim()) return null;
+
+  const numericId = Number(id);
+  if (Number.isInteger(numericId) && numericId >= FAKE_PRODUCT_ID_OFFSET) {
+    try {
+      const response = await fetch(`${FAKE_API_URL}/${numericId - FAKE_PRODUCT_ID_OFFSET}`);
+      if (!response.ok) return null;
+      const product = (await response.json()) as Product;
+      return { ...product, id: numericId, category: `Featured · ${product.category}` };
+    } catch {
+      return null;
+    }
+  }
 
   const client = requireSupabase();
   const { data, error } = await client.from("products").select(PRODUCT_FIELDS).eq("id", id).maybeSingle();
