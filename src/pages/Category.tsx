@@ -6,7 +6,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { fetchProducts } from "../services/api/productApi";
-import ProductCard from "../components/product/ProductCard";
+import { ProductCard } from "../components/product";
 import type { FormEvent } from "react";
 import type { Product } from "../types/product";
 

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
-import SearchProductCard from "../components/product/SearchProductCard";
+import { SearchProductCard } from "../components/search";
 import { useLocation } from "../features/addresses/LocationContext";
 import type { Product } from "../types/product";
 

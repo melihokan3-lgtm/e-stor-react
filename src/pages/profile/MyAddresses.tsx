@@ -1,5 +1,5 @@
 import { useLocation } from "../../features/addresses/LocationContext";
-import AddressCard from "../../components/profile/AddressCard";
+import { AddressCard } from "../../components/profile";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();

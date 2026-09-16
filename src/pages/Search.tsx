@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
-import SearchProductCard from "../components/product/SearchProductCard";
+import { SearchProductCard } from "../components/search";
 import LoadingState from "../components/common/LoadingState";
 import { EmptyState, ErrorState } from "../components/common/ui/FeedbackState";
 

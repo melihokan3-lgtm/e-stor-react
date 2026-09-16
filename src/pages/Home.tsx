@@ -3,8 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
-import ProductCard from "../components/product/ProductCard";
-import WeeklyProductCard from "../components/product/WeeklyProductCard";
+import { ProductCard, WeeklyProductCard } from "../components/product";
 import type { Product } from "../types/product";
 
 export default function Home() {

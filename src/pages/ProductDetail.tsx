@@ -10,7 +10,7 @@ import {
 import { useCart } from "../features/cart/CartContext";
 import { useAuth } from "../features/auth/AuthContext";
 import { readUserStorage } from "../utils/userStorage";
-import ProductCard from "../components/product/ProductCard";
+import { ProductCard } from "../components/product";
 import type { CartItem } from "../types/cart";
 import type { Product } from "../types/product";
 

@@ -1,7 +1,6 @@
 import { Suspense } from "react";
-import Navbar from "../components/layout/Navbar";
-import Footer from "../components/layout/Footer";
-import LoadingState from "../components/common/LoadingState";
+import { Footer, Navbar } from "../components/layout";
+import { LoadingState } from "../components/common";
 import AppRouter from "./router";
 
 export default function App() {

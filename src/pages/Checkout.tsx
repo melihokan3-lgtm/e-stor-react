@@ -5,7 +5,7 @@ import { useOrders } from "../features/orders/OrdersContext";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { useAuth } from "../features/auth/AuthContext";
 import { useLocation } from "../features/addresses/LocationContext";
-import PaymentSelectionModal from "../components/checkout/PaymentSelectionModal";
+import { PaymentSelectionModal } from "../components/checkout";
 import { loadSavedCards } from "../features/payments/savedCards";
 import type { PaymentCard } from "../types/payment";
 import type { CreateOrderInput } from "../types/order";

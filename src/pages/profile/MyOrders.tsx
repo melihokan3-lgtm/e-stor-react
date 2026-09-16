@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useOrders } from "../../features/orders/OrdersContext";
 import { isPendingOrder } from "../../features/orders/orderStatus";
-import EditOrderAddressModal from "../../components/profile/EditOrderAddressModal";
-import OrderCard from "../../components/profile/OrderCard";
+import { EditOrderAddressModal, OrderCard } from "../../components/profile";
 import type { Order } from "../../types/order";
 
 export default function MyOrders() {

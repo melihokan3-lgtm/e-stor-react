@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { loadSavedCards, saveSavedCards } from "../../features/payments/savedCards";
 import { useCardForm } from "../../features/payments/useCardForm";
-import CardThemeSelector from "../../components/payments/CardThemeSelector";
+import { CardThemeSelector } from "../../components/payments";
 import type { PaymentCard } from "../../types/payment";
 
 const inputClass = "w-full rounded-xl border border-[#ddd] px-3 py-3 text-sm outline-none focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/[.12]";
