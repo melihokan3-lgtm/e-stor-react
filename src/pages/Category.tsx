@@ -351,22 +351,39 @@ export default function Category() {
               </div>
 
               {/* Min - Max custom inputs */}
-              <form onSubmit={handleCustomPriceSubmit} className="mt-3">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="number"
-                    placeholder="Min"
-                    value={minPriceInput}
-                    onChange={(e) => setMinPriceInput(e.target.value)}
-                  />
-                  <span className="text-[#94a3b8]">-</span>
-                  <input
-                    type="number"
-                    placeholder="Max"
-                    value={maxPriceInput}
-                    onChange={(e) => setMaxPriceInput(e.target.value)}
-                  />
-                  <button type="submit" className="grid h-9 w-9 place-items-center rounded-lg bg-[#d73f98] text-white hover:opacity-90" title="Apply Filter">
+              <form onSubmit={handleCustomPriceSubmit} className="mt-4 rounded-xl border border-[#edf0f4] bg-[#fafbfc] p-3">
+                <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-[#94a3b8]">Custom price</div>
+                <div className="flex items-end gap-2">
+                  <label className="min-w-0 flex-1">
+                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">Minimum</span>
+                    <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
+                      <span className="text-xs text-[#94a3b8]">$</span>
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="0"
+                        value={minPriceInput}
+                        onChange={(e) => setMinPriceInput(e.target.value)}
+                        className="min-w-0 w-full border-0 bg-transparent px-1.5 py-2 text-sm text-[#0f172a] outline-none"
+                      />
+                    </span>
+                  </label>
+                  <span className="mb-2 text-xs font-semibold text-[#94a3b8]">to</span>
+                  <label className="min-w-0 flex-1">
+                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">Maximum</span>
+                    <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
+                      <span className="text-xs text-[#94a3b8]">$</span>
+                      <input
+                        type="number"
+                        min="0"
+                        placeholder="Any"
+                        value={maxPriceInput}
+                        onChange={(e) => setMaxPriceInput(e.target.value)}
+                        className="min-w-0 w-full border-0 bg-transparent px-1.5 py-2 text-sm text-[#0f172a] outline-none"
+                      />
+                    </span>
+                  </label>
+                  <button type="submit" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#d73f98] text-white shadow-[0_4px_10px_rgba(215,63,152,0.2)] transition hover:bg-[#b6349a] focus:outline-none focus:ring-2 focus:ring-[#d73f98]/30" title="Apply Filter" aria-label="Apply price filter">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
