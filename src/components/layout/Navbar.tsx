@@ -107,7 +107,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="relative order-2 hidden md:ml-6 md:block" ref={categoriesRef}>
+        <div className="relative order-2 hidden md:ml-2 md:block" ref={categoriesRef}>
           <button
             type="button"
             onClick={() => setCategoriesOpen((open) => !open)}
