@@ -26,7 +26,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
   if (isSupabaseConfigured && supabase) {
     const { data, error } = await supabase.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
     if (error) throw error;
-    if (data?.length) return data as Product[];
+    return (data || []) as Product[];
   }
 
   const data = await requestJson<Product[]>(`${BASE_URL}/products`);
@@ -40,7 +40,7 @@ export const fetchProductById = async (id: string | number): Promise<Product | n
   if (isSupabaseConfigured && supabase) {
     const { data, error } = await supabase.from("products").select(PRODUCT_FIELDS).eq("id", id).maybeSingle();
     if (error) throw error;
-    if (data) return data as Product;
+    return data ? (data as Product) : null;
   }
 
   try {
