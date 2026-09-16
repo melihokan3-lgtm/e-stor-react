@@ -50,7 +50,7 @@ export default function Footer() {
         </Link>
         <div className="grid w-full grid-cols-5 items-start justify-items-center gap-8 text-center [@media(max-width:768px)]:grid-cols-2 [@media(max-width:768px)]:gap-x-5 [@media(max-width:768px)]:gap-y-8 [@media(max-width:768px)]:text-left">
           {footerGroups.map((group) => <FooterLinkGroup key={group.title} {...group} />)}
-          <div className="flex flex-col gap-4 [@media(max-width:768px)]:w-full">
+          <div className="flex flex-col items-center gap-4 text-center [@media(max-width:768px)]:w-full">
             <h5 className="text-[var(--text-primary)]">Social</h5>
             {socialLinks.map((link) => (
               <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)]">
