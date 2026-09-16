@@ -289,7 +289,9 @@ export default function Navbar() {
           <Link to="/cart" className="flex items-center justify-center gap-2 rounded-[30px] border border-[#eee] bg-white px-5 py-2.5 text-center font-medium transition hover:border-[#d73f98] hover:bg-[#fffafe]">
             <div className="relative flex items-center">
               <img src="/img/icon/Buy.svg" alt="Cart" className="h-5 w-5" />
-              <p className="absolute -right-2 -top-2 text-[11px] text-[#d73f98]">{totalItems}</p>
+              {totalItems > 0 && (
+                <p className="absolute -right-2 -top-2 min-w-3 text-center text-[11px] font-semibold text-[#d73f98]">{totalItems}</p>
+              )}
             </div>
             <p>Cart</p>
           </Link>
