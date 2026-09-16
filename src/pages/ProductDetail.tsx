@@ -316,7 +316,7 @@ export default function ProductDetail() {
 
       </div>
 
-      <section className="mt-12">
+      <section className="mt-12 min-w-0 overflow-hidden">
         <section>
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-2xl font-semibold">Recomended For You</h2>
@@ -335,7 +335,7 @@ export default function ProductDetail() {
               700: { slidesPerView: 4, spaceBetween: 30 },
               1024: { slidesPerView: 5, spaceBetween: 30 },
             }}
-            className="!overflow-visible"
+            className="min-w-0 !overflow-hidden"
           >
             {recommended.map((rec) => (
               <SwiperSlide key={rec.id}>
