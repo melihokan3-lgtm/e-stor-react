@@ -273,7 +273,7 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="order-3 ml-2 hidden items-center gap-4 md:ml-4 md:mr-0 md:flex">
+        <div className="order-3 ml-2 hidden items-center gap-4 md:ml-auto md:mr-0 md:flex">
 
           <button
             type="button"
