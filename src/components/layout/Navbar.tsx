@@ -6,19 +6,10 @@ import { useLocation } from "../../features/addresses/LocationContext";
 import AuthModal from "../common/AuthModal";
 import LocationModal from "../common/LocationModal";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
-
-const navbarCategories = [
-  { label: "Fresh Produce", query: "Fresh Produce" },
-  { label: "Dairy & Eggs", query: "Dairy" },
-  { label: "Meat & Seafood", query: "Meat" },
-  { label: "Bakery", query: "Bakery" },
-  { label: "Snacks", query: "Snacks" },
-  { label: "Beverages", query: "Beverages" },
-  { label: "Pantry", query: "Pantry" },
-  { label: "Household", query: "Household" },
-];
+import useProducts from "../../features/products/useProducts";
 
 export default function Navbar() {
+  const { products } = useProducts();
   const { totalItems } = useCart();
   const { user, isLoggedIn, openAuthModal } = useAuth();
   const { location, openLocationModal } = useLocation();
@@ -32,6 +23,9 @@ export default function Navbar() {
   const categoriesRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const avatarSrc = user?.image?.trim() || "https://ui-avatars.com/api/?name=User&background=b6349a&color=fff";
+  const navbarCategories = Array.from(
+    new Set(products.map((product) => product.category?.trim()).filter((category): category is string => Boolean(category))),
+  ).map((category) => ({ label: category, query: category }));
 
   useEffect(() => {
     setPastSearches(readUserStorage<string[]>("pastSearches", user, []));
