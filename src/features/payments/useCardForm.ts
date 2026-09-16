@@ -36,18 +36,21 @@ export function useCardForm() {
 
   const handleCardNumberChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const digits = event.currentTarget.value.replace(/\D/g, "").slice(0, 16);
-    setFormData((previous) => ({ ...previous, cardNumber: digits.match(/.{1,4}/g)?.join(" ") || digits }));
+    const formattedNumber = digits.match(/.{1,4}/g)?.join(" ") || digits;
+    setFormData((previous) => ({ ...previous, cardNumber: formattedNumber }));
     clearError("cardNumber");
   };
 
   const handleExpiryChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const digits = event.currentTarget.value.replace(/\D/g, "").slice(0, 4);
-    setFormData((previous) => ({ ...previous, expiry: digits.length >= 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits }));
+    const expiry = digits.length >= 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    setFormData((previous) => ({ ...previous, expiry }));
     clearError("expiry");
   };
 
   const handleCvvChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setFormData((previous) => ({ ...previous, cvv: event.currentTarget.value.replace(/\D/g, "").slice(0, 3) }));
+    const cvv = event.currentTarget.value.replace(/\D/g, "").slice(0, 3);
+    setFormData((previous) => ({ ...previous, cvv }));
     clearError("cvv");
   };
 
