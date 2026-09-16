@@ -114,13 +114,12 @@ export default function Navbar() {
             className="flex items-center gap-2 rounded-[22px] px-3 py-2 text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
             aria-expanded={categoriesOpen}
             aria-haspopup="menu"
-          >
-            <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <path d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-            <span>Categories</span>
-            <span className={`text-xs transition-transform ${categoriesOpen ? "rotate-180" : ""}`}>⌄</span>
-          </button>
+            >
+              <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+              <span>Categories</span>
+            </button>
           {categoriesOpen && (
             <div className="absolute left-0 top-[calc(100%+12px)] z-40 grid w-[420px] grid-cols-2 gap-1 rounded-2xl border border-[#eee] bg-white p-3 shadow-[0_16px_35px_rgba(0,0,0,0.14)]" role="menu">
               {navbarCategories.map((category) => (
