@@ -9,6 +9,9 @@ export const CARD_THEMES = [
   { id: "dark", name: "Platin Titanyum", gradient: "linear-gradient(135deg, #141414 0%, #282828 50%, #434343 100%)" },
 ];
 
+export const getCardThemeGradient = (themeId: string): string =>
+  CARD_THEMES.find((theme) => theme.id === themeId)?.gradient || CARD_THEMES[0].gradient;
+
 // Seed initial card if none exists for a rich first-glance presentation
 export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   {
