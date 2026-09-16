@@ -359,8 +359,9 @@ export default function Category() {
                     <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
                       <span className="text-xs text-[#94a3b8]">$</span>
                       <input
-                        type="number"
-                        min="0"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         placeholder="0"
                         value={minPriceInput}
                         onChange={(e) => setMinPriceInput(e.target.value)}
@@ -374,8 +375,9 @@ export default function Category() {
                     <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
                       <span className="text-xs text-[#94a3b8]">$</span>
                       <input
-                        type="number"
-                        min="0"
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
                         placeholder="Any"
                         value={maxPriceInput}
                         onChange={(e) => setMaxPriceInput(e.target.value)}
