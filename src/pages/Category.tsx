@@ -1,10 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation, Pagination } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
 import { fetchProducts } from "../services/api/productApi";
 import { ProductCard } from "../components/product";
 import type { FormEvent } from "react";
@@ -497,7 +495,7 @@ export default function Category() {
           {/* Top Promo Banners Swiper */}
           <div className="relative mb-7 w-full">
             <Swiper
-              modules={[Autoplay, Navigation, Pagination]}
+              modules={[Autoplay]}
               autoplay={{
                 delay: 3500,
                 disableOnInteraction: false,
@@ -508,9 +506,7 @@ export default function Category() {
               spaceBetween={20}
               speed={600}
               grabCursor={true}
-              navigation={true}
-              pagination={{ clickable: true }}
-              className="w-full !pb-[34px]"
+              className="w-full"
             >
               {promoBanners.map((banner, i) => (
                 <SwiperSlide key={i} className="w-auto!">
