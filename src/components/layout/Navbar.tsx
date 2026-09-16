@@ -7,6 +7,17 @@ import AuthModal from "../common/AuthModal";
 import LocationModal from "../common/LocationModal";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 
+const navbarCategories = [
+  { label: "Fresh Produce", query: "Fresh Produce" },
+  { label: "Dairy & Eggs", query: "Dairy" },
+  { label: "Meat & Seafood", query: "Meat" },
+  { label: "Bakery", query: "Bakery" },
+  { label: "Snacks", query: "Snacks" },
+  { label: "Beverages", query: "Beverages" },
+  { label: "Pantry", query: "Pantry" },
+  { label: "Household", query: "Household" },
+];
+
 export default function Navbar() {
   const { totalItems } = useCart();
   const { user, isLoggedIn, openAuthModal } = useAuth();
@@ -15,8 +26,10 @@ export default function Navbar() {
   const [pastSearches, setPastSearches] = useState<string[]>([]);
   const [showPastSearches, setShowPastSearches] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const searchContainerRef = useRef<HTMLDivElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const categoriesRef = useRef<HTMLDivElement | null>(null);
   const navigate = useNavigate();
   const avatarSrc = user?.image?.trim() || "https://ui-avatars.com/api/?name=User&background=b6349a&color=fff";
 
@@ -44,6 +57,17 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleMenuOutsideClick);
     return () => document.removeEventListener("mousedown", handleMenuOutsideClick);
   }, [menuOpen]);
+
+  useEffect(() => {
+    const handleCategoriesOutsideClick = (event: globalThis.MouseEvent): void => {
+      if (categoriesOpen && categoriesRef.current && !(event.target instanceof Node && categoriesRef.current.contains(event.target))) {
+        setCategoriesOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleCategoriesOutsideClick);
+    return () => document.removeEventListener("mousedown", handleCategoriesOutsideClick);
+  }, [categoriesOpen]);
 
   const handleSearch = (termToSearch: string = searchTerm): void => {
     if (termToSearch) {
@@ -99,6 +123,38 @@ export default function Navbar() {
           </button>
         </div>
 
+        <div className="relative order-2 hidden md:block" ref={categoriesRef}>
+          <button
+            type="button"
+            onClick={() => setCategoriesOpen((open) => !open)}
+            className="flex items-center gap-2 rounded-[22px] px-3 py-2 text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
+            aria-expanded={categoriesOpen}
+            aria-haspopup="menu"
+          >
+            <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            <span>Categories</span>
+            <span className={`text-xs transition-transform ${categoriesOpen ? "rotate-180" : ""}`}>⌄</span>
+          </button>
+          {categoriesOpen && (
+            <div className="absolute left-0 top-[calc(100%+12px)] z-40 grid w-[420px] grid-cols-2 gap-1 rounded-2xl border border-[#eee] bg-white p-3 shadow-[0_16px_35px_rgba(0,0,0,0.14)]" role="menu">
+              {navbarCategories.map((category) => (
+                <Link
+                  key={category.query}
+                  to={`/category?cat=${encodeURIComponent(category.query)}`}
+                  onClick={() => setCategoriesOpen(false)}
+                  className="rounded-xl px-3 py-3 text-sm font-medium text-[#444] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
+                  role="menuitem"
+                >
+                  {category.label}
+                </Link>
+              ))}
+              <Link to="/category" onClick={() => setCategoriesOpen(false)} className="col-span-2 mt-1 border-t border-[#eee] px-3 pt-3 text-sm font-bold text-[#b6349a]">View all categories →</Link>
+            </div>
+          )}
+        </div>
+
         <div className="order-2 md:order-3" ref={menuRef}>
           <label
             className="flex cursor-pointer flex-col gap-1.5 p-2 md:hidden"
@@ -137,6 +193,20 @@ export default function Navbar() {
               <span className="min-w-0 flex-1 truncate">{displayLocation || "Select delivery location"}</span>
               <span aria-hidden="true">›</span>
             </button>
+
+            <div className="rounded-[14px] border border-[#eee] bg-white p-4">
+              <div className="mb-3 flex items-center justify-between">
+                <h3 className="text-sm font-bold text-[#222]">Categories</h3>
+                <Link to="/category" onClick={() => setMenuOpen(false)} className="text-xs font-bold text-[#b6349a]">View all</Link>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {navbarCategories.map((category) => (
+                  <Link key={category.query} to={`/category?cat=${encodeURIComponent(category.query)}`} onClick={() => setMenuOpen(false)} className="rounded-lg bg-[#faf9fa] px-3 py-2.5 text-xs font-medium text-[#444] transition hover:bg-[#fff0fa] hover:text-[#b6349a]">
+                    {category.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
 
             <div className="flex w-full flex-col gap-6 rounded-[14px] bg-[#f8f7f8] p-4">
               <h3 className="text-base font-semibold text-[#222]">Filters</h3>
