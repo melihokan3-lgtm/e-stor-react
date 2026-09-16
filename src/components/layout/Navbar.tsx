@@ -100,14 +100,14 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-evenly md:px-0">
+      <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-start md:px-5">
         <div className="order-1 flex w-auto items-center gap-4 md:w-auto">
           <Link to="/">
             <img src="/img/icon/logo2.svg" alt="E-Storee" />
           </Link>
         </div>
 
-        <div className="relative order-2 hidden md:block" ref={categoriesRef}>
+        <div className="relative order-2 hidden md:ml-6 md:block" ref={categoriesRef}>
           <button
             type="button"
             onClick={() => setCategoriesOpen((open) => !open)}
@@ -234,7 +234,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:order-2 md:w-[40%]" ref={searchContainerRef}>
+        <div className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:order-2 md:ml-auto md:w-[40%]" ref={searchContainerRef}>
           <img src="/img/icon/Frame 28.svg" alt="Search" />
           <input
             type="text"
@@ -273,7 +273,7 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="order-3 ml-2 hidden items-center gap-4 md:flex md:ml-0">
+        <div className="order-3 ml-2 hidden items-center gap-4 md:ml-4 md:mr-0 md:flex">
 
           <button
             type="button"
