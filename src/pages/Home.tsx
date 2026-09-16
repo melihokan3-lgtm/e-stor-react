@@ -15,8 +15,8 @@ export default function Home() {
 
   const categories = Array.from(new Set(products.map((product: Product) => product.category).filter(Boolean)));
 
-  const selectedTrend = selectedTrendCat || categories[0] || "";
-  const selectedWeekly = selectedWeeklyCat || categories[0] || "";
+  const selectedTrend = selectedTrendCat;
+  const selectedWeekly = selectedWeeklyCat;
 
   const bannerRow1 = [
     "/img/Frame 33.png",
