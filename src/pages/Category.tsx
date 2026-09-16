@@ -341,10 +341,11 @@ export default function Category() {
                   <input
                     type="radio"
                     name="price_quick"
+                    className="peer sr-only"
                     checked={priceFilter === "100-10000"}
                     onChange={() => updateFilter("price", "100-10000")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span>$100 & Above</span>
                 </label>
               </div>
