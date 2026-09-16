@@ -234,7 +234,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:order-2 md:ml-auto md:w-[40%]" ref={searchContainerRef}>
+        <div className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:absolute md:left-1/2 md:top-1/2 md:order-2 md:ml-0 md:w-[40%] md:-translate-x-1/2 md:-translate-y-1/2" ref={searchContainerRef}>
           <img src="/img/icon/Frame 28.svg" alt="Search" />
           <input
             type="text"
