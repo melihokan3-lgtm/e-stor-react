@@ -244,6 +244,7 @@ export default function Category() {
                   <input
                     type="text"
                     placeholder="Search category..."
+                    className="w-full rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-xs text-[#0f172a] outline-none transition focus:border-[#d73f98] focus:bg-white"
                     value={categorySearch}
                     onChange={(e) => setCategorySearch(e.target.value)}
                   />
@@ -254,11 +255,12 @@ export default function Category() {
                 <label className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm transition hover:bg-[#f8fafc] ${catFilter === "all" ? "bg-[#fff5fc] text-[#d73f98]" : "text-[#475569]"}`}>
                   <input
                     type="radio"
+                    className="peer sr-only"
                     name="category"
                     checked={catFilter === "all"}
                     onChange={() => updateFilter("cat", "all")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span className="flex-1">All Categories</span>
                   <span className="text-xs text-[#94a3b8]">({products.length})</span>
                 </label>
@@ -270,11 +272,12 @@ export default function Category() {
                   >
                     <input
                       type="radio"
+                      className="peer sr-only"
                       name="category"
                       checked={catFilter.toLowerCase() === cat.name.toLowerCase()}
                       onChange={() => updateFilter("cat", cat.name)}
                     />
-                    <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                    <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                     <span className="flex-1">{cat.name}</span>
                     <span className="text-xs text-[#94a3b8]">({cat.count})</span>
                   </label>
@@ -293,41 +296,45 @@ export default function Category() {
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
+                    className="peer sr-only"
                     name="price_quick"
                     checked={priceFilter === "all"}
                     onChange={() => updateFilter("price", "all")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span>All Prices</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
+                    className="peer sr-only"
                     name="price_quick"
                     checked={priceFilter === "0-25"}
                     onChange={() => updateFilter("price", "0-25")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span>$0 - $25</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
+                    className="peer sr-only"
                     name="price_quick"
                     checked={priceFilter === "25-50"}
                     onChange={() => updateFilter("price", "25-50")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span>$25 - $50</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
                     type="radio"
+                    className="peer sr-only"
                     name="price_quick"
                     checked={priceFilter === "50-100"}
                     onChange={() => updateFilter("price", "50-100")}
                   />
-                  <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                  <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                   <span>$50 - $100</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
@@ -427,11 +434,12 @@ export default function Category() {
                   <label key={stars} className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 hover:bg-[#f8fafc]">
                     <input
                       type="radio"
+                      className="peer sr-only"
                       name="rating"
                       checked={minRatingFilter === stars}
                       onChange={() => updateFilter("rating", minRatingFilter === stars ? 0 : stars)}
                     />
-                    <span className="h-4 w-4 rounded-full border border-[#cbd5e1]"></span>
+                    <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
                     <div className="text-[15px] tracking-[1px] text-amber-500">
                       {"★".repeat(stars)}{"☆".repeat(5 - stars)}
                     </div>
