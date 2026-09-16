@@ -5,7 +5,7 @@ import { useCardForm } from "../../features/payments/useCardForm";
 import { CardThemeSelector } from "../../components/payments";
 import type { PaymentCard } from "../../types/payment";
 
-const inputClass = "w-full rounded-xl border border-[#ddd] px-3 py-3 text-sm outline-none focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/[.12]";
+const inputClass = "mt-1 w-full min-h-12 rounded-xl border border-[#e8e8e8] bg-[#fafafa] px-3.5 py-3 text-sm font-medium text-[#222] outline-none transition placeholder:text-[#b8b8b8] focus:border-[#b6349a] focus:bg-white focus:ring-4 focus:ring-[#b6349a]/10";
 
 export default function MyPayments() {
   const { user } = useAuth();

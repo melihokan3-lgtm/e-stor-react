@@ -2,6 +2,9 @@ import { useState, useEffect, type FormEvent } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import Button from "./ui/Button";
 
+const authFieldClass = "flex min-h-12 items-center gap-2 rounded-xl border border-[#e8e8e8] bg-[#fafafa] px-3.5 transition focus-within:border-[#b6349a] focus-within:bg-white focus-within:ring-4 focus-within:ring-[#b6349a]/10";
+const authInputClass = "min-w-0 w-full flex-1 border-0 bg-transparent px-1 py-0.5 text-sm text-[#222] outline-none placeholder:text-[#b8b8b8]";
+
 export default function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, loginUser, registerUser } = useAuth();
 
@@ -231,7 +234,7 @@ export default function AuthModal() {
           <form className="grid gap-4" onSubmit={handleLogin}>
             <div className="grid gap-1.5">
               <label className="text-sm font-semibold text-[#555]">E-posta</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -246,7 +249,7 @@ export default function AuthModal() {
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                   <circle cx="12" cy="7" r="4" />
                 </svg>
-                <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
+                <input className={authInputClass}
                   type="email"
                   placeholder="ornek@email.com"
                   value={username}
@@ -258,7 +261,7 @@ export default function AuthModal() {
 
             <div className="grid gap-1.5">
               <label className="text-sm font-semibold text-[#555]">Şifre</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -273,7 +276,7 @@ export default function AuthModal() {
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
-                <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
+                <input className={authInputClass}
                   type="password"
                   placeholder="••••••••"
                   value={password}
@@ -310,8 +313,8 @@ export default function AuthModal() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-1.5">
                 <label className="text-sm font-semibold text-[#555]">Ad</label>
-                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
-                  <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
+                <div className={authFieldClass}>
+                  <input className={authInputClass}
                     type="text"
                     placeholder="John"
                     value={regFirstName}
@@ -321,8 +324,8 @@ export default function AuthModal() {
               </div>
               <div className="grid gap-1.5">
                 <label className="text-sm font-semibold text-[#555]">Soyad</label>
-                <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 focus-within:border-[#b6349a]">
-                  <input className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-[#bbb]"
+                <div className={authFieldClass}>
+                  <input className={authInputClass}
                     type="text"
                     placeholder="Doe"
                     value={regLastName}
@@ -334,7 +337,7 @@ export default function AuthModal() {
 
             <div className="grid gap-1.5">
               <label>Kullanıcı Adı</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -350,6 +353,7 @@ export default function AuthModal() {
                   <circle cx="12" cy="7" r="4" />
                 </svg>
                 <input
+                  className={authInputClass}
                   type="text"
                   placeholder="johndoe"
                   value={regUsername}
@@ -360,7 +364,7 @@ export default function AuthModal() {
 
             <div className="grid gap-1.5">
               <label>E-posta</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -376,6 +380,7 @@ export default function AuthModal() {
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
                 <input
+                  className={authInputClass}
                   type="email"
                   placeholder="john@example.com"
                   value={regEmail}
@@ -386,7 +391,7 @@ export default function AuthModal() {
 
             <div className="grid gap-1.5">
               <label>Şifre</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -402,6 +407,7 @@ export default function AuthModal() {
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
                 <input
+                  className={authInputClass}
                   type="password"
                   placeholder="••••••••"
                   value={regPassword}
@@ -412,7 +418,7 @@ export default function AuthModal() {
 
             <div className="grid gap-1.5">
               <label>Şifre Tekrar</label>
-              <div className="flex items-center gap-2 rounded-lg border border-[#e5e5e5] px-3 py-2.5 transition focus-within:border-[#b6349a]">
+              <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="18"
@@ -428,6 +434,7 @@ export default function AuthModal() {
                   <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                 </svg>
                 <input
+                  className={authInputClass}
                   type="password"
                   placeholder="••••••••"
                   value={regPasswordConfirm}
