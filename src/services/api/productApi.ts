@@ -1,54 +1,29 @@
 import { isSupabaseConfigured, supabase } from "../../lib/supabase";
 import type { Product } from "../../types/product";
 
-const BASE_URL = "https://fakestoreapi.com";
 const PRODUCT_FIELDS = "id,title,price,description,category,image";
 
-const requestJson = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
-  const controller = new AbortController();
-  const timeoutId = window.setTimeout(() => controller.abort(), 10000);
-
-  try {
-    const response = await fetch(url, { ...options, signal: controller.signal });
-    if (!response.ok) throw new Error(`API request failed with status ${response.status}`);
-    return (await response.json()) as T;
-  } catch (error) {
-    if (error instanceof DOMException && error.name === "AbortError") {
-      throw new Error("İstek zaman aşımına uğradı.");
-    }
-    throw error;
-  } finally {
-    window.clearTimeout(timeoutId);
+const requireSupabase = () => {
+  if (!isSupabaseConfigured || !supabase) {
+    throw new Error("Supabase yapılandırılmamış. Vercel Production ortam değişkenlerini kontrol edin.");
   }
+  return supabase;
 };
 
 export const fetchProducts = async (): Promise<Product[]> => {
-  if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
-    if (error) throw error;
-    return (data || []) as Product[];
-  }
-
-  const data = await requestJson<Product[]>(`${BASE_URL}/products`);
-  if (!Array.isArray(data)) throw new Error("Ürün verisi geçersiz.");
-  return data;
+  const client = requireSupabase();
+  const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
+  if (error) throw error;
+  return (data || []) as Product[];
 };
 
 export const fetchProductById = async (id: string | number): Promise<Product | null> => {
   if (!String(id).trim()) return null;
 
-  if (isSupabaseConfigured && supabase) {
-    const { data, error } = await supabase.from("products").select(PRODUCT_FIELDS).eq("id", id).maybeSingle();
-    if (error) throw error;
-    return data ? (data as Product) : null;
-  }
-
-  try {
-    return await requestJson<Product>(`${BASE_URL}/products/${encodeURIComponent(id)}`);
-  } catch (error) {
-    if (error instanceof Error && error.message.includes("status 404")) return null;
-    throw error;
-  }
+  const client = requireSupabase();
+  const { data, error } = await client.from("products").select(PRODUCT_FIELDS).eq("id", id).maybeSingle();
+  if (error) throw error;
+  return data ? (data as Product) : null;
 };
 
 export const cleanImageUrl = (url: unknown): string => {
