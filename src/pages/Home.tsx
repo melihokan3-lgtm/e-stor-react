@@ -39,11 +39,10 @@ export default function Home() {
   const bannerRow2Slides = [...bannerRow2, ...bannerRow2, ...bannerRow2, ...bannerRow2];
 
 
-  const trendProducts = getTrendingProducts(products, selectedTrend).slice(0, 12);
+  const rankedProducts = getTrendingProducts(products);
+  const trendProducts = getTrendingProducts(rankedProducts, selectedTrend).slice(0, 12);
 
-  const weeklyProducts = selectedWeekly
-    ? products.filter((product) => product.category === selectedWeekly)
-    : products;
+  const weeklyProducts = getTrendingProducts(rankedProducts, selectedWeekly).slice(0, 12);
 
 
   return (
@@ -143,7 +142,7 @@ export default function Home() {
             }}
             className="w-full"
           >
-            {products.slice(0, 10).map((product) => (
+            {rankedProducts.slice(0, 10).map((product) => (
               <SwiperSlide key={product.id}>
                 <ProductCard product={product} />
               </SwiperSlide>
@@ -259,7 +258,7 @@ export default function Home() {
         <section className="mb-[60px] rounded-[24px] bg-[#fef9fc] p-10 [@media(max-width:768px)]:p-6 [@media(max-width:480px)]:p-4">
           <div className="flex items-center gap-10 [@media(max-width:1024px)]:flex-col-reverse">
             <div className="grid min-w-0 flex-[2] grid-cols-3 gap-5 [@media(max-width:1024px)]:w-full [@media(max-width:768px)]:grid-cols-2 [@media(max-width:480px)]:grid-cols-1!">
-              {products.slice(2, 5).map((p) => (
+              {rankedProducts.slice(2, 5).map((p) => (
                 <div key={p.id} className="flex h-full min-w-0 flex-col">
                   <ProductCard product={p} />
                 </div>
@@ -283,7 +282,7 @@ export default function Home() {
         <section className="mb-[60px] rounded-[24px] bg-[#fdf5f8] p-10 [@media(max-width:768px)]:p-6 [@media(max-width:480px)]:p-4">
           <div className="flex items-center gap-10 [@media(max-width:1024px)]:flex-col-reverse">
             <div className="grid min-w-0 flex-[2] grid-cols-3 gap-5 [@media(max-width:1024px)]:w-full [@media(max-width:768px)]:grid-cols-2 [@media(max-width:480px)]:grid-cols-1!">
-              {products.slice(5, 8).map((p) => (
+              {rankedProducts.slice(5, 8).map((p) => (
                 <div key={p.id} className="flex h-full min-w-0 flex-col rounded-[20px] bg-white p-[14px] shadow-[0_6px_20px_rgba(0,0,0,0.04)] transition-transform duration-200 hover:-translate-y-1 [&_.card-img-wrapper]:bg-[#faf8fa]">
                   <ProductCard product={p} />
                 </div>
