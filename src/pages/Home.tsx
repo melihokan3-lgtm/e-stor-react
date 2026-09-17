@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, Navigation } from "swiper/modules";
+import { Autoplay } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
-import { ProductCard, WeeklyProductCard } from "../components/product";
+import { ProductCard, ProductSection } from "../components/product";
 import { getTrendingProducts } from "../features/products/trending";
 import type { Product } from "../types/product";
 
@@ -119,36 +119,13 @@ export default function Home() {
         </section>
 
         {/* ─── 3. BEST SELLER ─── */}
-        <section className="mb-[60px] [@media(max-width:768px)]:px-5">
-          <div className="mb-6 flex items-center justify-between [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:items-start [@media(max-width:768px)]:gap-3">
-            <h2 className="m-0 text-[24px] font-bold text-[#111]">Best Seller</h2>
-            <div className="flex items-center gap-[14px]">
-              <Link to="/category" className="inline-block rounded-[30px] border-[1.5px] border-[#e0e0e0] px-5 py-2 text-[13px] font-semibold text-[#333] transition-all duration-200 hover:border-[#b6349a] hover:text-[#b6349a]">Sana al →</Link>
-              <div className="flex gap-3">
-                <button className="prev-best flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#eee] bg-white text-[20px] text-[#555] transition-all duration-200 hover:border-[#b6349a] hover:bg-[#fdf5fb] hover:text-[#b6349a]">‹</button>
-                <button className="next-best flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#eee] bg-white text-[20px] text-[#555] transition-all duration-200 hover:border-[#b6349a] hover:bg-[#fdf5fb] hover:text-[#b6349a]">›</button>
-              </div>
-            </div>
-          </div>
-          <Swiper
-            modules={[Navigation]}
-            navigation={{ nextEl: ".next-best", prevEl: ".prev-best" }}
-            slidesPerView={2}
-            spaceBetween={20}
-            breakpoints={{
-              540: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
-            }}
-            className="w-full"
-          >
-            {rankedProducts.slice(0, 10).map((product) => (
-              <SwiperSlide key={product.id}>
-                <ProductCard product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+        <ProductSection
+          title="Best Seller"
+          products={rankedProducts.slice(0, 10)}
+          viewAllHref="/category"
+          sectionKey="best-seller"
+          className="bg-transparent [@media(max-width:768px)]:px-5"
+        />
 
         {/* ─── 6. WEEKLY SOLD — FULL WIDTH ─── */}
         <section className="relative left-1/2 box-border flex w-[100vw] max-w-[100vw] -translate-x-1/2 justify-center bg-[#faf9fa] px-5 pt-12 pb-[50px] [@media(max-width:640px)]:px-3 [@media(max-width:640px)]:pt-7 [@media(max-width:640px)]:pb-8">
@@ -190,69 +167,24 @@ export default function Home() {
 
 
             <div className="relative z-[2] w-full rounded-[0_32px_24px_24px] bg-white px-5 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:overflow-hidden [@media(max-width:640px)]:rounded-none [@media(max-width:640px)]:rounded-b-[18px] [@media(max-width:640px)]:bg-white [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-[14px] [@media(max-width:640px)]:pb-[18px]">
-              <Swiper
-                slidesPerView={2}
-                spaceBetween={20}
-                breakpoints={{
-                  540: { slidesPerView: 3 },
-                  768: { slidesPerView: 4 },
-                  1024: { slidesPerView: 5 },
-                }}
-                className="w-full"
-              >
-                {weeklyProducts.map((product) => (
-                  <SwiperSlide key={product.id}>
-                    <WeeklyProductCard product={product} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <ProductSection title="Weekly Sold" products={weeklyProducts} variant="weekly" sectionKey="weekly-sold" embedded />
             </div>
 
           </div>
         </section>
 
         {/* ─── 4. TRENDING STORE FAVORITES ─── */}
-        <section className="mb-[60px] rounded-[24px] bg-transparent px-6 py-7 [@media(max-width:768px)]:px-4 [@media(max-width:640px)]:rounded-[18px] [@media(max-width:640px)]:py-5">
-          <div className="mb-6 flex items-center justify-between [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:items-start [@media(max-width:768px)]:gap-3">
-            <h2 className="m-0 text-[24px] font-bold tracking-normal text-[#111] [@media(max-width:640px)]:text-[20px]">Trending Store Favorites</h2>
-            <Link to="/category" className="inline-flex items-center rounded-[30px] border border-[#b6349a] bg-white px-4 py-2 text-[13px] font-semibold text-[#b6349a] transition-colors duration-200 hover:bg-[#b6349a] hover:text-white">View All →</Link>
-          </div>
-          <div className="mb-6 flex items-start justify-between gap-5 [@media(max-width:768px)]:flex-col [@media(max-width:768px)]:gap-3">
-            <div className="flex flex-wrap gap-[10px]">
-              {categories.slice(0, 10).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedTrendCat(cat)}
-                  className={`cursor-pointer rounded-[30px] border px-[18px] py-[7px] text-[13px] font-medium transition-all duration-200 hover:border-[#b6349a] ${selectedTrend === cat ? "border-[#b6349a] bg-[#fdf5fd] text-[#b6349a]" : "border-[#e0e0e0] bg-white text-[#555]"}`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-            <div className="flex gap-3">
-              <button className="prev-trend flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#eee] bg-white text-[20px] text-[#555] transition-all duration-200 hover:border-[#b6349a] hover:bg-[#fdf5fb] hover:text-[#b6349a]">‹</button>
-              <button className="next-trend flex size-10 cursor-pointer items-center justify-center rounded-full border border-[#eee] bg-white text-[20px] text-[#555] transition-all duration-200 hover:border-[#b6349a] hover:bg-[#fdf5fb] hover:text-[#b6349a]">›</button>
-            </div>
-          </div>
-          <Swiper
-            modules={[Navigation]}
-            navigation={{ nextEl: ".next-trend", prevEl: ".prev-trend" }}
-            slidesPerView={2}
-            spaceBetween={20}
-            breakpoints={{
-              540: { slidesPerView: 3 },
-              768: { slidesPerView: 4 },
-              1024: { slidesPerView: 5 },
-            }}
-            className="w-full"
-          >
-            {trendProducts.map((product) => (
-              <SwiperSlide key={product.id}>
-                <ProductCard product={product} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </section>
+        <ProductSection
+          title="Trending Store Favorites"
+          products={trendProducts}
+          viewAllHref="/category"
+          showFilters
+          filterOptions={categories.slice(0, 10)}
+          selectedFilter={selectedTrend}
+          onFilterChange={setSelectedTrendCat}
+          sectionKey="trending-favorites"
+          className="bg-transparent"
+        />
 
         {/* ─── 5. MIDDLE PROMO ─── */}
         <section className="mb-[60px] rounded-[24px] bg-[#fef9fc] p-10 [@media(max-width:768px)]:p-6 [@media(max-width:480px)]:p-4">
