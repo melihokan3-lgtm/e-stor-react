@@ -52,7 +52,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   }, [userStorageId]);
 
   useEffect(() => {
-    if (ordersOwnerId === currentOwnerId && !ordersLoading && !ordersError) {
+    if (ordersOwnerId === currentOwnerId && !ordersLoading && !ordersError && !isSupabaseDataEnabled(user)) {
       writeUserStorage("orders", user, orders);
     }
   }, [orders, ordersOwnerId, ordersLoading, ordersError, user, userStorageId]);

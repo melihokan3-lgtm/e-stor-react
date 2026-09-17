@@ -17,23 +17,25 @@ export const LocationContext = createContext<LocationContextValue | null>(null);
 export function LocationProvider({ children }: { children: ReactNode }) {
   const auth = useContext(AuthContext);
   const user = auth?.user ?? null;
-  const [location, setLocation] = useState<string>(() => {
-    try {
-      return localStorage.getItem("userLocation") || DEFAULT_LOCATION;
-    } catch (error) {
-      console.error("Failed to read user location", error);
-      return DEFAULT_LOCATION;
-    }
-  });
+  const [location, setLocation] = useState<string>(DEFAULT_LOCATION);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [addresses, setAddresses] = useState<Address[]>([]);
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
+  const hydratedLocationId = useRef<string | null>(null);
   const hydratedStorageId = useRef<string | null>(null);
   const isHydrating = useRef(false);
 
   useEffect(() => {
-    localStorage.setItem("userLocation", location);
-  }, [location]);
+    const storedLocation = readUserStorage<string>("userLocation", user, DEFAULT_LOCATION);
+    setLocation(storedLocation || DEFAULT_LOCATION);
+    hydratedLocationId.current = String(userStorageId);
+  }, [userStorageId]);
+
+  useEffect(() => {
+    if (hydratedLocationId.current === String(userStorageId)) {
+      writeUserStorage("userLocation", user, location);
+    }
+  }, [location, user, userStorageId]);
 
   useEffect(() => {
     isHydrating.current = true;

@@ -8,22 +8,38 @@ import {
   FALLBACK_IMG,
 } from "../services/api/productApi";
 import { useCart } from "../features/cart/CartContext";
-import { useAuth } from "../features/auth/AuthContext";
-import { readUserStorage } from "../utils/userStorage";
 import { ProductCard } from "../components/product";
-import type { CartItem } from "../types/cart";
 import type { Product } from "../types/product";
 
-const StarIcon = ({ filled = true, width = 14, height = 14 }: { filled?: boolean; width?: number; height?: number }) => (
-  <svg width={width} height={height} viewBox="0 0 24 24" fill={filled ? "#ffc107" : "none"} stroke={filled ? "#ffc107" : "#ddd"} strokeWidth="2" xmlns="http://www.w3.org/0000/svg">
-    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" strokeLinecap="round" strokeLinejoin="round"/>
+const StarIcon = ({
+  filled = true,
+  width = 14,
+  height = 14,
+}: {
+  filled?: boolean;
+  width?: number;
+  height?: number;
+}) => (
+  <svg
+    width={width}
+    height={height}
+    viewBox="0 0 24 24"
+    fill={filled ? "#ffc107" : "none"}
+    stroke={filled ? "#ffc107" : "#ddd"}
+    strokeWidth="2"
+    xmlns="http://www.w3.org/0000/svg"
+  >
+    <path
+      d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
 export default function ProductDetail() {
   const { productId } = useParams();
   const { addToCart } = useCart();
-  const { user } = useAuth();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -56,14 +72,7 @@ export default function ProductDetail() {
           );
           if (found) return found;
 
-          // Fallback: The product might be in the cart (localStorage) but removed from API
-          const localCart = readUserStorage<CartItem[]>("cart", user, []);
-          const cartFound = localCart.find(
-            (item) =>
-              item.data.id.toString() === productId ||
-              item.data.title?.toLowerCase().replace(/\s+/g, "-") === productId,
-          );
-          return cartFound?.data ?? null;
+          return null;
         }
         return data;
       })
@@ -72,15 +81,25 @@ export default function ProductDetail() {
         if (data) setProduct(data);
         else setError(true);
       })
-      .catch(() => { if (active) setError(true); })
-      .finally(() => { if (active) setLoading(false); });
+      .catch(() => {
+        if (active) setError(true);
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
 
     fetchProducts()
-      .then((all) => { if (active) setRecommended(all.slice(0, 10)); })
-      .catch(() => { if (active) setRecommended([]); });
+      .then((all) => {
+        if (active) setRecommended(all.slice(0, 10));
+      })
+      .catch(() => {
+        if (active) setRecommended([]);
+      });
 
-    return () => { active = false; };
-  }, [productId, user]);
+    return () => {
+      active = false;
+    };
+  }, [productId]);
 
   if (loading)
     return (
@@ -99,7 +118,7 @@ export default function ProductDetail() {
       </main>
     );
 
-  const images = product.image ? [product.image] : (product.images || []);
+  const images = product.image ? [product.image] : product.images || [];
   const mainImg =
     images.length > 0 ? cleanImageUrl(images[activeImgIndex]) : FALLBACK_IMG;
 
@@ -107,8 +126,8 @@ export default function ProductDetail() {
     <main className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
       <section className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
         <Link to="/"> Home &gt; &nbsp; </Link>
-        <Link to="/category"> Settings &gt; &nbsp; </Link>
-        <p className="text-[#b6349a]"> Team </p>
+        <Link to="/category"> Catagorty &gt; &nbsp; </Link>
+        <p className="text-[#b6349a]"> Detaylis </p>
       </section>
 
       <div className="mx-auto w-full max-w-[1544px]">
@@ -142,11 +161,7 @@ export default function ProductDetail() {
 
           <div className="flex w-full flex-col gap-[30px] px-2.5 py-[30px] lg:w-1/2">
             <div>
-              <h2
-                className="text-3xl font-bold text-black"
-              >
-                {product.title}
-              </h2>
+              <h2 className="text-3xl font-bold text-black">{product.title}</h2>
               {product.description && (
                 <p className="mt-3 mb-4 leading-6 text-[#555]">
                   {product.description}
@@ -155,22 +170,14 @@ export default function ProductDetail() {
               <div className="mt-5">
                 <p className="mb-2 text-sm text-[#888]">$2.71/lb</p>
                 <div className="flex items-center gap-2.5">
-                  <h3
-                    className="text-[32px] font-bold text-black"
-                  >
+                  <h3 className="text-[32px] font-bold text-black">
                     ${product.price}
                   </h3>
-                  <span
-                    className="text-lg text-[#888] line-through"
-                  >
+                  <span className="text-lg text-[#888] line-through">
                     $99.99
                   </span>
                 </div>
-                <p
-                  className="mt-2 text-sm font-bold text-[#b6349a]"
-                >
-                  12 Left
-                </p>
+                <p className="mt-2 text-sm font-bold text-[#b6349a]">12 Left</p>
               </div>
             </div>
 
@@ -223,13 +230,20 @@ export default function ProductDetail() {
             </button>
 
             <div className="mt-8 border-t border-[#eee] pt-6">
-              <h3 className="mb-4 text-[22px] font-medium text-[#6b7280]">About Product</h3>
+              <h3 className="mb-4 text-[22px] font-medium text-[#6b7280]">
+                About Product
+              </h3>
               <div className="mb-3 flex items-center gap-3 text-[22px]">
                 <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#fff0fa] text-base">
                   🏆
                 </div>
-                <p className="flex-1 font-medium text-[#1f2937]">Best Seller Product</p>
-                <a href="#" className="ml-auto whitespace-nowrap text-base font-semibold text-[#b6349a]">
+                <p className="flex-1 font-medium text-[#1f2937]">
+                  Best Seller Product
+                </p>
+                <a
+                  href="#"
+                  className="ml-auto whitespace-nowrap text-base font-semibold text-[#b6349a]"
+                >
                   View More &gt;
                 </a>
               </div>
@@ -254,9 +268,14 @@ export default function ProductDetail() {
               <div className="mt-5 space-y-3">
                 {[5, 4, 3, 2, 1].map((star) => (
                   <div key={star} className="flex items-center gap-3">
-                    <span className="flex w-10 items-center gap-1 text-sm">{star} <StarIcon filled={false} /></span>
+                    <span className="flex w-10 items-center gap-1 text-sm">
+                      {star} <StarIcon filled={false} />
+                    </span>
                     <div className="h-2 flex-1 overflow-hidden rounded-full bg-[#eee]">
-                      <div className="h-full bg-[#b6349a]" style={{ width: `${star * 20}%` }}></div>
+                      <div
+                        className="h-full bg-[#b6349a]"
+                        style={{ width: `${star * 20}%` }}
+                      ></div>
                     </div>
                     <span className="text-xs text-[#777]">4.28K</span>
                   </div>
@@ -269,22 +288,40 @@ export default function ProductDetail() {
                   <h3 className="font-semibold">Reviews</h3>
                   <span className="text-sm text-[#777]">Recent</span>
                 </summary>
-                
+
                 <div className="space-y-5 pt-4">
                   <div className="border-b border-[#eee] pb-5">
                     <h4 className="font-semibold">Perfect Combination!!</h4>
                     <div className="my-2 flex gap-1">
-                      <StarIcon/><StarIcon/><StarIcon/><StarIcon/><StarIcon filled={false}/>
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon filled={false} />
                     </div>
-                    <p className="text-sm leading-6 text-[#666]">This review was collected as part of a promotion.) I forgot to post my photos from my review! So here is my review again. A perfect combination of softness, strength, and proper friction to make any user leaving clean and spotless!!</p>
+                    <p className="text-sm leading-6 text-[#666]">
+                      This review was collected as part of a promotion.) I
+                      forgot to post my photos from my review! So here is my
+                      review again. A perfect combination of softness, strength,
+                      and proper friction to make any user leaving clean and
+                      spotless!!
+                    </p>
                   </div>
 
                   <div>
                     <h4 className="font-semibold">Perfect Combination!!</h4>
                     <div className="my-2 flex gap-1">
-                      <StarIcon/><StarIcon/><StarIcon/><StarIcon/><StarIcon filled={false}/>
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon />
+                      <StarIcon filled={false} />
                     </div>
-                    <p className="text-sm leading-6 text-[#666]">This review was collected as part of a promotion.) A perfect combination of softness, strength, and proper friction for a clean result.</p>
+                    <p className="text-sm leading-6 text-[#666]">
+                      This review was collected as part of a promotion.) A
+                      perfect combination of softness, strength, and proper
+                      friction for a clean result.
+                    </p>
                   </div>
                 </div>
               </details>
@@ -297,30 +334,34 @@ export default function ProductDetail() {
           <details className="rounded-xl border border-[#eee] p-4" open>
             <summary className="cursor-pointer font-semibold">Details</summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
-              {product.description || "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
+              {product.description ||
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
             </div>
           </details>
           <details className="rounded-xl border border-[#eee] p-4">
-            <summary className="cursor-pointer font-semibold">Conservation and storage</summary>
+            <summary className="cursor-pointer font-semibold">
+              Conservation and storage
+            </summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
               Store in a cool, dry place. Keep away from direct sunlight.
             </div>
           </details>
           <details className="rounded-xl border border-[#eee] p-4">
-            <summary className="cursor-pointer font-semibold">Ingredients</summary>
+            <summary className="cursor-pointer font-semibold">
+              Ingredients
+            </summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
               100% Natural ingredients.
             </div>
           </details>
         </section>
-
       </div>
 
       <section className="mt-12 min-w-0 overflow-hidden">
         <section>
           <div className="mb-5 flex items-center justify-between">
             <h2 className="text-2xl font-semibold">Recomended For You</h2>
-            <Link 
+            <Link
               to={`/category?cat=${encodeURIComponent(product.category || "all")}`}
               className="rounded-lg border border-[#b6349a] px-5 py-2.5 text-sm font-semibold text-[#b6349a]"
             >

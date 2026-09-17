@@ -10,15 +10,7 @@ on storage.objects for select
 to public
 using (bucket_id = 'product-images');
 
+-- Product images are deployment assets. Client-side users must not be able to
+-- upload or overwrite files in this shared public bucket.
 drop policy if exists "product_images_authenticated_upload" on storage.objects;
-create policy "product_images_authenticated_upload"
-on storage.objects for insert
-to authenticated
-with check (bucket_id = 'product-images');
-
 drop policy if exists "product_images_authenticated_update" on storage.objects;
-create policy "product_images_authenticated_update"
-on storage.objects for update
-to authenticated
-using (bucket_id = 'product-images')
-with check (bucket_id = 'product-images');

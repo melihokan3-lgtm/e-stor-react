@@ -20,7 +20,9 @@ const requireUserId = (user: AuthUser | null): string => {
   return userId;
 };
 
-export const isSupabaseDataEnabled = (user: AuthUser | null): boolean => Boolean(isSupabaseConfigured && supabase && user?.id);
+export const isSupabaseDataEnabled = (user: AuthUser | null): boolean => Boolean(
+  isSupabaseConfigured && supabase && user?.id && UUID_PATTERN.test(String(user.id)),
+);
 
 export const fetchUserCart = async (user: AuthUser | null): Promise<CartItem[]> => {
   const userId = requireUserId(user);
@@ -56,6 +58,21 @@ export const fetchUserOrders = async (user: AuthUser | null): Promise<Order[]> =
 
 export const saveUserOrder = async (user: AuthUser | null, order: CreateOrderInput): Promise<Order> => {
   const userId = requireUserId(user);
+  if (!Number.isFinite(order.total) || order.total < 0) throw new Error("Geçersiz sipariş toplamı.");
+  if (!order.deliveryAddress?.trim()) throw new Error("Teslimat adresi gerekli.");
+  if (!Array.isArray(order.items) || order.items.length === 0 || order.items.length > 100) {
+    throw new Error("Geçersiz sipariş ürünleri.");
+  }
+  const hasInvalidItem = order.items.some((item) =>
+    !Number.isInteger(item.id)
+    || item.id < 1
+    || !Number.isFinite(item.price)
+    || item.price < 0
+    || !Number.isInteger(item.qty)
+    || item.qty < 1
+    || item.qty > 100,
+  );
+  if (hasInvalidItem) throw new Error("Geçersiz sipariş ürünü.");
   const { data, error } = await getClient().from("orders").insert({
     user_id: userId,
     status: order.status || "Processing",

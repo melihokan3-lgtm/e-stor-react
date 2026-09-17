@@ -141,7 +141,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateUser = useCallback((newFields: Partial<AuthUser>): void => {
     setUser((prev) => {
       if (!prev) return prev;
+
       const updated = { ...prev, ...newFields };
+      const client = supabase;
+      if (isSupabaseConfigured && client && typeof updated.id === "string") {
+        const profileUpdate = {
+          username: updated.username.trim(),
+          first_name: updated.firstName.trim(),
+          last_name: updated.lastName.trim(),
+          avatar_url: updated.image.trim() || null,
+          phone: updated.phone.trim(),
+          updated_at: new Date().toISOString(),
+        };
+
+        void Promise.all([
+          client.from("profiles").update(profileUpdate).eq("id", updated.id),
+          newFields.email && newFields.email !== prev.email
+            ? client.auth.updateUser({ email: updated.email.trim().toLowerCase() })
+            : Promise.resolve({ error: null }),
+          client.auth.updateUser({
+            data: {
+              username: updated.username,
+              firstName: updated.firstName,
+              lastName: updated.lastName,
+              avatarUrl: updated.image,
+              phone: updated.phone,
+            },
+          }),
+        ]).then(([profileResult, emailResult, metadataResult]) => {
+          const error = profileResult.error || emailResult.error || metadataResult.error;
+          if (error) console.error("Failed to persist profile changes", error);
+        });
+      }
+
       return updated;
     });
   }, []);

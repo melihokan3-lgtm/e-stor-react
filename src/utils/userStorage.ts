@@ -23,9 +23,17 @@ export const readUserStorage = <T>(prefix: string, user: StorageUser | null | un
 };
 
 export const writeUserStorage = <T>(prefix: string, user: StorageUser | null | undefined, value: T): void => {
-  localStorage.setItem(getUserStorageKey(prefix, user), JSON.stringify(value));
+  try {
+    localStorage.setItem(getUserStorageKey(prefix, user), JSON.stringify(value));
+  } catch (error) {
+    console.error(`Failed to write ${prefix} to localStorage`, error);
+  }
 };
 
 export const removeUserStorage = (prefix: string, user: StorageUser | null | undefined): void => {
-  localStorage.removeItem(getUserStorageKey(prefix, user));
+  try {
+    localStorage.removeItem(getUserStorageKey(prefix, user));
+  } catch (error) {
+    console.error(`Failed to remove ${prefix} from localStorage`, error);
+  }
 };
