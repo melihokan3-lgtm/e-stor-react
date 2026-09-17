@@ -6,6 +6,10 @@ export interface Product {
   category: string;
   image?: string;
   images?: string[];
+  oldPrice?: number | string;
+  isNew?: boolean;
+  stock?: number;
+  brand?: string;
   rating?: {
     rate: number;
     count?: number;

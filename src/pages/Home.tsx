@@ -4,6 +4,7 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { Link } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
 import { ProductCard, WeeklyProductCard } from "../components/product";
+import { getTrendingProducts } from "../features/products/trending";
 import type { Product } from "../types/product";
 
 export default function Home() {
@@ -38,9 +39,7 @@ export default function Home() {
   const bannerRow2Slides = [...bannerRow2, ...bannerRow2, ...bannerRow2, ...bannerRow2];
 
 
-  const trendProducts = selectedTrend
-    ? products.filter((product) => product.category === selectedTrend)
-    : products;
+  const trendProducts = getTrendingProducts(products, selectedTrend).slice(0, 12);
 
   const weeklyProducts = selectedWeekly
     ? products.filter((product) => product.category === selectedWeekly)

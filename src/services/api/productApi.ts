@@ -16,6 +16,10 @@ interface NokshaProduct {
   category?: unknown;
   image?: unknown;
   rating?: unknown;
+  oldPrice?: unknown;
+  isNew?: unknown;
+  stock?: unknown;
+  brand?: unknown;
 }
 
 interface NokshaPage {
@@ -51,6 +55,10 @@ const normalizeNokshaProduct = (raw: unknown): Product | null => {
     description: typeof product.description === "string" ? product.description.trim() : "",
     category: `Collection · ${typeof product.category === "string" ? product.category.trim() : "general"}`,
     image: product.image.trim(),
+    oldPrice: typeof product.oldPrice === "string" || typeof product.oldPrice === "number" ? product.oldPrice : undefined,
+    isNew: product.isNew === true,
+    stock: Number.isFinite(Number(product.stock)) ? Number(product.stock) : undefined,
+    brand: typeof product.brand === "string" ? product.brand.trim() : undefined,
     ...(Number.isFinite(rating) ? { rating: { rate: rating } } : {}),
   };
 };
@@ -90,7 +98,7 @@ const requestFakeProducts = async (): Promise<Product[]> => {
     price,
     title: raw.title.trim(),
     description: typeof raw.description === "string" ? raw.description : "",
-    category: `Featured · ${typeof raw.category === "string" ? raw.category : "general"}`,
+      category: `Featured · ${typeof raw.category === "string" ? raw.category : "general"}`,
     } as Product;
   }).filter((product): product is Product => product !== null);
 };
