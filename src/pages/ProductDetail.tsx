@@ -10,6 +10,9 @@ import {
 import { useCart } from "../features/cart/CartContext";
 import { ProductCard } from "../components/product";
 import type { Product } from "../types/product";
+import { SeoMeta } from "../components/common";
+
+const PUBLIC_SITE_URL = "https://e-stor-react-nttt.vercel.app";
 
 const StarIcon = ({
   filled = true,
@@ -38,7 +41,7 @@ const StarIcon = ({
 );
 
 export default function ProductDetail() {
-  const { productId } = useParams();
+  const { categorySlug, productId } = useParams();
   const { addToCart } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,6 +107,7 @@ export default function ProductDetail() {
   if (loading)
     return (
       <main className="min-h-screen bg-white">
+        <SeoMeta title="Ürün Detayı | E-Storee" description="E-Storee ürün detaylarını inceleyin ve online sipariş verin." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} />
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Loading product details...</p>
         </div>
@@ -112,6 +116,7 @@ export default function ProductDetail() {
   if (error || !product)
     return (
       <main className="min-h-screen bg-white">
+        <SeoMeta title="Ürün Bulunamadı | E-Storee" description="Aradığınız ürün bulunamadı." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} robots="noindex,nofollow" />
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
           <p>Product not found.</p>
         </div>
@@ -121,14 +126,50 @@ export default function ProductDetail() {
   const images = product.image ? [product.image] : product.images || [];
   const mainImg =
     images.length > 0 ? cleanImageUrl(images[activeImgIndex]) : FALLBACK_IMG;
+  const productPath = `/${categorySlug || product.category.toLowerCase().replace(/\s+/g, "-") || "category"}/${productId}`;
+  const productImageUrls = images
+    .map((image) => cleanImageUrl(image))
+    .filter((image) => image && !image.startsWith("data:"))
+    .map((image) => image.startsWith("http") ? image : `${PUBLIC_SITE_URL}${image.startsWith("/") ? "" : "/"}${image}`);
+  const productStructuredData: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.description || `${product.title} ürününü E-Storee'de keşfedin.`,
+    ...(productImageUrls.length > 0 ? { image: productImageUrls } : {}),
+    sku: String(product.id),
+    category: product.category,
+    ...(product.brand ? { brand: { "@type": "Brand", name: product.brand } } : {}),
+    offers: {
+      "@type": "Offer",
+      url: `https://e-stor-react-nttt.vercel.app${productPath}`,
+      priceCurrency: "USD",
+      price: product.price.toFixed(2),
+      availability: product.stock === 0 ? "https://schema.org/OutOfStock" : "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
+    },
+    ...(product.rating?.rate && product.rating.count ? {
+      aggregateRating: {
+        "@type": "AggregateRating",
+        ratingValue: product.rating.rate,
+        ratingCount: product.rating.count,
+      },
+    } : {}),
+  };
 
   return (
     <main className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
-      <section className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
+      <SeoMeta
+        title={`${product.title} | E-Storee`}
+        description={(product.description || `${product.title} ürününü E-Storee'de keşfedin ve online sipariş verin.`).slice(0, 160)}
+        canonicalPath={productPath}
+        structuredData={productStructuredData}
+      />
+      <nav aria-label="Breadcrumb" className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
         <Link to="/"> Home &gt; &nbsp; </Link>
-        <Link to="/category"> Catagorty &gt; &nbsp; </Link>
-        <p className="text-[#b6349a]"> Detaylis </p>
-      </section>
+        <Link to="/category"> Category &gt; &nbsp; </Link>
+        <span className="text-[#b6349a]"> Details </span>
+      </nav>
 
       <div className="mx-auto w-full max-w-[1544px]">
         <div className="mt-5 flex flex-col gap-[50px] bg-white lg:flex-row">
@@ -161,7 +202,7 @@ export default function ProductDetail() {
 
           <div className="flex w-full flex-col gap-[30px] px-2.5 py-[30px] lg:w-1/2">
             <div>
-              <h2 className="text-3xl font-bold text-black">{product.title}</h2>
+              <h1 className="text-3xl font-bold text-black">{product.title}</h1>
               {product.description && (
                 <p className="mt-3 mb-4 leading-6 text-[#555]">
                   {product.description}

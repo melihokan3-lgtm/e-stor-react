@@ -5,6 +5,7 @@ export interface SeoMetaProps {
   description: string;
   canonicalPath: string;
   robots?: "index,follow" | "noindex,nofollow";
+  structuredData?: Record<string, unknown>;
 }
 
 const SITE_URL = "https://e-stor-react-nttt.vercel.app";
@@ -29,7 +30,7 @@ function setCanonical(url: string) {
   element.href = url;
 }
 
-export default function SeoMeta({ title, description, canonicalPath, robots = "index,follow" }: SeoMetaProps) {
+export default function SeoMeta({ title, description, canonicalPath, robots = "index,follow", structuredData }: SeoMetaProps) {
   useEffect(() => {
     const canonicalUrl = `${SITE_URL}${canonicalPath}`;
 
@@ -42,7 +43,20 @@ export default function SeoMeta({ title, description, canonicalPath, robots = "i
     setMeta("name", "twitter:title", title);
     setMeta("name", "twitter:description", description);
     setCanonical(canonicalUrl);
-  }, [canonicalPath, description, robots, title]);
+
+    const scriptId = "seo-structured-data";
+    const previousScript = document.getElementById(scriptId);
+    previousScript?.remove();
+    if (structuredData) {
+      const script = document.createElement("script");
+      script.id = scriptId;
+      script.type = "application/ld+json";
+      script.textContent = JSON.stringify(structuredData);
+      document.head.appendChild(script);
+    }
+
+    return () => document.getElementById(scriptId)?.remove();
+  }, [canonicalPath, description, robots, structuredData, title]);
 
   return null;
 }
