@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
+import { ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import { loadProfileNotifications, saveProfileNotifications, type NotificationType, type ProfileNotification } from "../../features/profile/notifications";
 
 export default function NotificationSetting() {
@@ -109,14 +110,7 @@ export default function NotificationSetting() {
   return (
     <div className="w-full">
       {/* Toast Alert */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12"></polyline>
-          </svg>
-          <span>{toastMessage}</span>
-        </div>
-      )}
+      <ProfileToast message={toastMessage} />
 
       {/* Header */}
       <div className="mb-6 flex items-start justify-between gap-4 max-md:flex-col">
@@ -162,27 +156,20 @@ export default function NotificationSetting() {
       </div>
 
       {/* Filter Tabs */}
-      <div className="mb-4 flex gap-2">
-        <button
-          type="button"
-          className={`rounded-lg border px-3 py-2 text-xs font-semibold ${activeFilter === "all" ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] text-[#777]"}`}
-          onClick={() => setActiveFilter("all")}
-        >
-          Tüm Bildirimler ({notifications.length})
-        </button>
-        <button
-          type="button"
-          className={`rounded-lg border px-3 py-2 text-xs font-semibold ${activeFilter === "unread" ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] text-[#777]"}`}
-          onClick={() => setActiveFilter("unread")}
-        >
-          Okunmamışlar ({unreadCount})
-        </button>
-      </div>
+      <ProfileFilterTabs
+        className="mb-4"
+        options={[
+          { id: "all", label: `Tüm Bildirimler (${notifications.length})` },
+          { id: "unread", label: `Okunmamışlar (${unreadCount})` },
+        ]}
+        selected={activeFilter}
+        onSelect={setActiveFilter}
+      />
 
       {/* Notifications List */}
       <div className="space-y-3">
         {filteredNotifications.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#ddd] p-10 text-center text-sm text-[#777]">
+          <ProfileEmptyState className="text-sm text-[#777]">
             <div className="empty-state-icon">
               <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -195,7 +182,7 @@ export default function NotificationSetting() {
                 ? "Okunmamış bildiriminiz bulunmuyor. Tüm güncel haberleri takip ettiniz!"
                 : "Yeni bir bildirim aldığınızda burada görüntülenecektir."}
             </p>
-          </div>
+          </ProfileEmptyState>
         ) : (
           filteredNotifications.map((item) => (
             <div

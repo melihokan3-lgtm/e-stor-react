@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ProfileEmptyState, ProfileToast } from "../../components/profile";
 
 type CouponType = "discount" | "shipping" | "special";
 type CouponStatus = "active" | "expired" | "used";
@@ -144,11 +145,11 @@ export default function Coupons() {
 
       {/* COUPONS GRID */}
       {COUPONS_DATA.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#ddd] p-10 text-center">
+        <ProfileEmptyState>
           <div className="coupons-empty-icon">🎟️</div>
           <h3 className="font-bold text-[#111]">Henüz kuponunuz yok</h3>
           <p className="text-sm text-[#777]">Kampanyalarımızı takip ederek yeni kuponlar kazanabilirsiniz.</p>
-        </div>
+        </ProfileEmptyState>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
           {COUPONS_DATA.map((coupon) => (
@@ -217,7 +218,7 @@ export default function Coupons() {
       )}
 
       {/* TOAST */}
-      {toast && <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">{toast}</div>}
+      <ProfileToast message={toast} />
     </div>
   );
 }

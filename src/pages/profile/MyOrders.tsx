@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useOrders } from "../../features/orders/OrdersContext";
 import { isPendingOrder } from "../../features/orders/orderStatus";
-import { EditOrderAddressModal, OrderCard } from "../../components/profile";
+import { EditOrderAddressModal, OrderCard, ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import type { Order } from "../../types/order";
 
 export default function MyOrders() {
@@ -27,7 +27,7 @@ export default function MyOrders() {
 
   const renderOrderList = (orderList: Order[]) => (
     orderList.length === 0 ? (
-      <div className="rounded-2xl border border-dashed border-[#ddd] p-8 text-center text-sm text-[#777]">Bu kategoride siparişiniz bulunmuyor.</div>
+      <ProfileEmptyState compact className="text-sm text-[#777]">Bu kategoride siparişiniz bulunmuyor.</ProfileEmptyState>
     ) : (
       <div className="flex flex-col gap-4">
         {orderList.map((order) => (
@@ -44,26 +44,15 @@ export default function MyOrders() {
         
         {/* Filters Tabs */}
         {!ordersLoading && !ordersError && orders.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            <button 
-              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'all' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
-              onClick={() => setFilterTab('all')}
-            >
-              Tüm Siparişlerim ({orders.length})
-            </button>
-            <button 
-              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'pending' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
-              onClick={() => setFilterTab('pending')}
-            >
-              Devam Eden / Teslim Edilmeyenler ({pendingOrders.length})
-            </button>
-            <button 
-              className={`rounded-lg border px-3 py-2 text-xs font-semibold transition ${filterTab === 'delivered' ? 'border-[#b6349a] bg-[#b6349a] text-white' : 'border-[#eee] bg-white text-[#777]'}`}
-              onClick={() => setFilterTab('delivered')}
-            >
-              Teslim Edilenler ({deliveredOrders.length})
-            </button>
-          </div>
+          <ProfileFilterTabs
+            options={[
+              { id: "all", label: `Tüm Siparişlerim (${orders.length})` },
+              { id: "pending", label: `Devam Eden / Teslim Edilmeyenler (${pendingOrders.length})` },
+              { id: "delivered", label: `Teslim Edilenler (${deliveredOrders.length})` },
+            ]}
+            selected={filterTab}
+            onSelect={setFilterTab}
+          />
         )}
       </div>
 
@@ -72,7 +61,7 @@ export default function MyOrders() {
       ) : ordersError ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{ordersError}</div>
       ) : orders.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-[#ddd] p-10 text-center">
+        <ProfileEmptyState>
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
             <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -80,7 +69,7 @@ export default function MyOrders() {
           </svg>
           <p className="font-semibold text-[#555]">You have no orders yet.</p>
           <span className="text-sm text-[#999]">Your past orders will appear here after you complete a purchase.</span>
-        </div>
+        </ProfileEmptyState>
       ) : (
         <div className="flex flex-col gap-8">
           
@@ -114,11 +103,7 @@ export default function MyOrders() {
       />
 
       {/* Toast Notification */}
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">
-          {toastMessage}
-        </div>
-      )}
+      <ProfileToast message={toastMessage} />
     </div>
   );
 }

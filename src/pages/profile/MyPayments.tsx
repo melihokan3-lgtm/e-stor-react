@@ -6,6 +6,7 @@ import {
 } from "../../features/payments/savedCards";
 import { useCardForm } from "../../features/payments/useCardForm";
 import { CardThemeSelector } from "../../components/payments";
+import { ProfileEmptyState, ProfileToast } from "../../components/profile";
 import type { PaymentCard } from "../../types/payment";
 import { getCardThemeGradient } from "../../utils/cardUtils";
 
@@ -68,11 +69,7 @@ export default function MyPayments() {
 
   return (
     <div className="w-full">
-      {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">
-          {toastMessage}
-        </div>
-      )}
+      <ProfileToast message={toastMessage} />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
           <h2 className="text-[28px] font-extrabold text-[#111]">
@@ -145,9 +142,9 @@ export default function MyPayments() {
           </article>
         ))}
         {cards.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-[#ddd] p-8 text-center text-sm text-[#777]">
+          <ProfileEmptyState compact className="text-sm text-[#777]">
             Kayıtlı kartınız bulunmuyor.
-          </div>
+          </ProfileEmptyState>
         )}
         <button
           type="button"

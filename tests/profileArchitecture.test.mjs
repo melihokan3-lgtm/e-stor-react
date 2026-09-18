@@ -10,6 +10,10 @@ let loadSavedCards;
 let saveSavedCards;
 let OrderCard;
 let AddressCard;
+let ProfileDetailRow;
+let ProfileEmptyState;
+let ProfileFilterTabs;
+let ProfileToast;
 let canEditOrderAddress;
 let loadAccountSettings;
 let saveAccountSettings;
@@ -30,6 +34,10 @@ before(async () => {
   ({ loadSavedCards, saveSavedCards } = await vite.ssrLoadModule("/src/features/payments/savedCards.ts"));
   ({ default: OrderCard } = await vite.ssrLoadModule("/src/components/profile/OrderCard.tsx"));
   ({ default: AddressCard } = await vite.ssrLoadModule("/src/components/profile/AddressCard.tsx"));
+  ({ default: ProfileDetailRow } = await vite.ssrLoadModule("/src/components/profile/ProfileDetailRow.tsx"));
+  ({ default: ProfileEmptyState } = await vite.ssrLoadModule("/src/components/profile/ProfileEmptyState.tsx"));
+  ({ default: ProfileFilterTabs } = await vite.ssrLoadModule("/src/components/profile/ProfileFilterTabs.tsx"));
+  ({ default: ProfileToast } = await vite.ssrLoadModule("/src/components/profile/ProfileToast.tsx"));
   ({ canEditOrderAddress } = await vite.ssrLoadModule("/src/features/orders/orderStatus.ts"));
   ({ loadAccountSettings, saveAccountSettings, clearLocalAccountData } = await vite.ssrLoadModule("/src/features/profile/settings.ts"));
   ({ loadReferralData } = await vite.ssrLoadModule("/src/features/profile/referrals.ts"));
@@ -120,4 +128,36 @@ test("address card renders the selected address with existing CSS classes", () =
     selected: true, onSelect: () => {}, onRemove: () => {},
   }));
   assert.match(html, /address-card active|Home|Nilüfer, Bursa|address-card__main/);
+});
+
+test("profile detail row keeps read and edit states distinct", () => {
+  const props = {
+    label: "Email Address", value: "a@example.test", inputs: [{ name: "email", value: "a@example.test", placeholder: "Email Address", type: "email" }],
+    error: "", onEdit: () => {}, onChange: () => {}, onSave: () => {}, onCancel: () => {},
+  };
+  const read = renderToString(createElement(ProfileDetailRow, { ...props, editing: false }));
+  assert.match(read, /a@example\.test/);
+  assert.match(read, /Edit Email Address/);
+  assert.doesNotMatch(read, /type="email"/);
+
+  const edit = renderToString(createElement(ProfileDetailRow, { ...props, editing: true, error: "Invalid email" }));
+  for (const value of ['type="email"', "Invalid email", "Save", "Cancel"]) assert.ok(edit.includes(value));
+  assert.match(edit, /role="alert"/);
+});
+
+test("profile filter, empty state, and toast render their shared UI", () => {
+  const filters = renderToString(createElement(ProfileFilterTabs, {
+    options: [{ id: "all", label: "All" }, { id: "unread", label: "Unread" }],
+    selected: "unread", onSelect: () => {},
+  }));
+  assert.match(filters, /aria-pressed="true"[^>]*>Unread/);
+  assert.match(filters, /aria-pressed="false"[^>]*>All/);
+
+  const empty = renderToString(createElement(ProfileEmptyState, { compact: true }, "No items"));
+  assert.match(empty, /border-dashed/);
+  assert.match(empty, /No items/);
+  assert.equal(renderToString(createElement(ProfileToast, { message: "" })), "");
+  const toast = renderToString(createElement(ProfileToast, { message: "Saved" }));
+  assert.match(toast, /role="status"/);
+  assert.match(toast, /Saved/);
 });

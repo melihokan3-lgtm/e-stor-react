@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ProfileEmptyState } from "../../components/profile";
 
 const FAQ_ITEMS = [
   {
@@ -121,14 +122,14 @@ export default function HelpCenter() {
       {/* Accordion FAQ List */}
       <div className="space-y-3">
         {filteredFaqs.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#ddd] p-8 text-center text-sm text-[#777]">
+          <ProfileEmptyState compact className="text-sm text-[#777]">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
             <p>"{searchQuery}" aramasıyla eşleşen bir soru bulunamadı.</p>
             <span>Farklı bir anahtar kelime deneyebilir veya aşağıdaki Canlı Destek ekibimizle iletişime geçebilirsiniz.</span>
-          </div>
+          </ProfileEmptyState>
         ) : (
           filteredFaqs.map((item) => {
             const isOpen = openItemIds.includes(item.id);

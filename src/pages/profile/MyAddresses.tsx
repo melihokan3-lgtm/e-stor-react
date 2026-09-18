@@ -1,5 +1,5 @@
 import { useLocation } from "../../features/addresses/LocationContext";
-import { AddressCard } from "../../components/profile";
+import { AddressCard, ProfileEmptyState } from "../../components/profile";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();
@@ -17,13 +17,13 @@ export default function MyAddresses() {
       </div>
 
       {addresses.length === 0 ? (
-        <div className="rounded-[20px] border border-dashed border-[#ddd] p-10 text-center">
+        <ProfileEmptyState largeRadius>
           <h3 className="mb-2 text-lg font-bold text-[#111]">No saved addresses yet</h3>
           <p className="mb-5 text-sm text-[#777]">OpenStreetMap üzerinden bir adres seçip daha hızlı ödeme için buraya kaydedebilirsin.</p>
           <button type="button" className="rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white" onClick={openLocationModal}>
             Add your first address
           </button>
-        </div>
+        </ProfileEmptyState>
       ) : (
         <div className="flex flex-col gap-4">
           {addresses.map((item) => (
