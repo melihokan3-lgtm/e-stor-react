@@ -9,6 +9,7 @@ import { CardThemeSelector } from "../../components/payments";
 import { ProfileEmptyState, ProfileToast } from "../../components/profile";
 import type { PaymentCard } from "../../types/payment";
 import { getCardThemeGradient } from "../../utils/cardUtils";
+import { SeoMeta } from "../../components/common";
 
 const inputClass =
   "mt-1 box-border min-h-12 w-full appearance-none rounded-xl border border-[#e8e8e8] bg-[#fafafa] px-3.5 py-3 text-sm font-medium leading-5 text-[#222] outline-none transition placeholder:text-[#b8b8b8] focus:border-[#b6349a] focus:bg-white focus:ring-4 focus:ring-[#b6349a]/10";
@@ -69,12 +70,13 @@ export default function MyPayments() {
 
   return (
     <div className="w-full">
+      <SeoMeta title="Ödeme Yöntemlerim | E-Storee" description="E-Storee kayıtlı ödeme yöntemlerinizi güvenli şekilde yönetin." canonicalPath="/profile/payments" robots="noindex,nofollow" />
       <ProfileToast message={toastMessage} />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
-          <h2 className="text-[28px] font-extrabold text-[#111]">
+          <h1 className="text-[28px] font-extrabold text-[#111]">
             Ödeme Yöntemlerim
-          </h2>
+          </h1>
           <p className="mt-2 text-sm text-[#777]">
             Demo kart görünümlerinizi yönetin. Bu ekranda gerçek ödeme yapılmaz.
           </p>

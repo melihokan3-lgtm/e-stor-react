@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import { loadProfileNotifications, saveProfileNotifications, type NotificationType, type ProfileNotification } from "../../features/profile/notifications";
+import { SeoMeta } from "../../components/common";
 
 export default function NotificationSetting() {
   const { user } = useAuth();
@@ -109,13 +110,14 @@ export default function NotificationSetting() {
 
   return (
     <div className="w-full">
+      <SeoMeta title="Bildirimlerim | E-Storee" description="E-Storee bildirim tercihlerinizi ve hesap güncellemelerinizi yönetin." canonicalPath="/profile/notifications" robots="noindex,nofollow" />
       {/* Toast Alert */}
       <ProfileToast message={toastMessage} />
 
       {/* Header */}
       <div className="mb-6 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <div className="flex items-center gap-3"><h2 className="text-[28px] font-extrabold text-[#111]">Bildirimlerim (Notifications)</h2>
+          <div className="flex items-center gap-3"><h1 className="text-[28px] font-extrabold text-[#111]">Bildirimlerim (Notifications)</h1>
             {unreadCount > 0 && (
               <span className="rounded-full bg-[#b6349a] px-2.5 py-1 text-xs font-semibold text-white">{unreadCount} Yeni</span>
             )}

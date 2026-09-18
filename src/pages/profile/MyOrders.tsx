@@ -3,6 +3,7 @@ import { useOrders } from "../../features/orders/OrdersContext";
 import { isPendingOrder } from "../../features/orders/orderStatus";
 import { EditOrderAddressModal, OrderCard, ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import type { Order } from "../../types/order";
+import { SeoMeta } from "../../components/common";
 
 export default function MyOrders() {
   const { orders, ordersLoading, ordersError, updateOrderAddress } = useOrders();
@@ -39,8 +40,9 @@ export default function MyOrders() {
 
   return (
     <div className="w-full">
+      <SeoMeta title="Siparişlerim | E-Storee" description="E-Storee sipariş geçmişinizi ve teslimat durumlarınızı görüntüleyin." canonicalPath="/profile/orders" robots="noindex,nofollow" />
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
-        <h2 className="text-[28px] font-extrabold text-[#111]">Siparişlerim (My Orders)</h2>
+        <h1 className="text-[28px] font-extrabold text-[#111]">Siparişlerim (My Orders)</h1>
         
         {/* Filters Tabs */}
         {!ordersLoading && !ordersError && orders.length > 0 && (

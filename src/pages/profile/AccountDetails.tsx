@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ProfileDetailRow } from "../../components/profile";
 import { useAuth } from "../../features/auth/AuthContext";
+import { SeoMeta } from "../../components/common";
 
 type EditableField = "name" | "username" | "email" | "phone";
 type ProfileForm = Record<"firstName" | "lastName" | "username" | "email" | "phone", string>;
@@ -85,7 +86,8 @@ export default function AccountDetails() {
 
   return (
     <div className="w-full">
-      <h2 className="mb-10 text-[28px] font-extrabold text-[#111]">Account Details</h2>
+      <SeoMeta title="Hesap Bilgilerim | E-Storee" description="E-Storee hesap bilgilerinizi ve kişisel profil bilgilerinizi yönetin." canonicalPath="/profile/details" robots="noindex,nofollow" />
+      <h1 className="mb-10 text-[28px] font-extrabold text-[#111]">Account Details</h1>
       <div className="flex flex-col rounded-[20px] border border-[#f2f2f2] px-[30px] max-md:px-4">
         {rows.map((row, index) => (
           <ProfileDetailRow

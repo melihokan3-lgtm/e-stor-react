@@ -1,14 +1,16 @@
 import { useLocation } from "../../features/addresses/LocationContext";
 import { AddressCard, ProfileEmptyState } from "../../components/profile";
+import { SeoMeta } from "../../components/common";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();
 
   return (
     <div className="w-full">
+      <SeoMeta title="Adreslerim | E-Storee" description="E-Storee kayıtlı teslimat adreslerinizi yönetin ve yeni adres ekleyin." canonicalPath="/profile/addresses" robots="noindex,nofollow" />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
-          <h2 className="mb-2 text-[28px] font-extrabold text-[#111]">My Addresses</h2>
+          <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">My Addresses</h1>
           <p className="m-0 text-sm text-[#999]">Current location: {location}</p>
         </div>
         <button type="button" className="rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#92277a]" onClick={openLocationModal}>

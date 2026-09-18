@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { loadReferralData, type ReferralData } from "../../features/profile/referrals";
+import { SeoMeta } from "../../components/common";
 
 export default function ReferFriends() {
   const { user } = useAuth();
@@ -33,10 +34,11 @@ export default function ReferFriends() {
   
   return (
     <div className="space-y-8">
+      <SeoMeta title="Arkadaşlarını Davet Et | E-Storee" description="E-Storee davet programıyla arkadaşlarınızı davet edin ve indirim fırsatlarından yararlanın." canonicalPath="/profile/refer" robots="noindex,nofollow" />
       {/* 1. Hero & Kampanya Alanı */}
       <section className="rounded-2xl bg-gradient-to-br from-[#b6349a] to-[#831843] p-8 text-white">
         <div className="max-w-2xl">
-          <h2 className="text-3xl font-extrabold max-sm:text-2xl">Arkadaşını Davet Et,<br/>İkiniz de 100 TL İndirim Kazanın!</h2>
+          <h1 className="text-3xl font-extrabold max-sm:text-2xl">Arkadaşını Davet Et,<br/>İkiniz de 100 TL İndirim Kazanın!</h1>
           <p className="mt-3 text-sm leading-6 text-white/85">Favori ürünlerini arkadaşlarınla paylaş, onlar ilk alışverişlerinde 100 TL kazansın, sen de her başarılı davet için 100 TL indirim kuponu kazan!</p>
         </div>
       </section>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProfileEmptyState } from "../../components/profile";
+import { SeoMeta } from "../../components/common";
 
 const FAQ_ITEMS = [
   {
@@ -73,9 +74,10 @@ export default function HelpCenter() {
 
   return (
     <div className="w-full space-y-5">
+      <SeoMeta title="Yardım ve Destek | E-Storee" description="E-Storee yardım merkeziyle sipariş, teslimat ve hesap sorularınıza yanıt bulun." canonicalPath="/profile/help" robots="noindex,nofollow" />
       {/* Header Banner */}
       <div className="rounded-2xl bg-[#fff8fd] p-6">
-        <h2 className="mb-2 text-[28px] font-extrabold text-[#111]">Yardım ve Destek Merkezi</h2>
+        <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">Yardım ve Destek Merkezi</h1>
         <p className="mb-5 text-sm text-[#777]">
           Siparişleriniz, iade süreçleriniz ve ödeme güvenliği hakkında merak ettiğiniz tüm soruların yanıtları.
         </p>

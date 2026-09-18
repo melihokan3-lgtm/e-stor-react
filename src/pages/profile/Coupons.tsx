@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ProfileEmptyState, ProfileToast } from "../../components/profile";
+import { SeoMeta } from "../../components/common";
 
 type CouponType = "discount" | "shipping" | "special";
 type CouponStatus = "active" | "expired" | "used";
@@ -116,9 +117,10 @@ export default function Coupons() {
 
   return (
     <div className="w-full">
+      <SeoMeta title="Kuponlarım | E-Storee" description="E-Storee hesabınızdaki indirim kuponlarını ve kampanyaları görüntüleyin." canonicalPath="/profile/coupons" robots="noindex,nofollow" />
       {/* HEADER */}
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
-        <h2 className="text-[28px] font-extrabold text-[#111]">Kuponlarım</h2>
+        <h1 className="text-[28px] font-extrabold text-[#111]">Kuponlarım</h1>
         <div className="flex flex-wrap gap-2">
           <span className="rounded-full bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
