@@ -5,6 +5,7 @@ import { ProductSection } from "../components/product";
 import { HomeBannerCarousel, HomePromoSection } from "../components/home";
 import { getTrendingProducts } from "../features/products/trending";
 import type { Product } from "../types/product";
+import { SeoMeta } from "../components/common";
 
 export default function Home() {
   const { products, loading, error } = useProducts();
@@ -51,6 +52,12 @@ export default function Home() {
 
   return (
     <main className="mx-auto flex max-w-[1600px] overflow-visible bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
+      <SeoMeta
+        title="E-Storee | Online Market Alışverişi"
+        description="E-Storee ile taze market ürünlerini keşfedin, uygun fiyatlarla güvenli ve hızlı online alışveriş yapın."
+        canonicalPath="/"
+      />
+      <h1 className="sr-only">E-Storee Online Market</h1>
       <div className="mx-auto w-full max-w-[1600px]">
         {error && (
           <p className="text-center text-[15px] text-[#888]">{error}</p>
