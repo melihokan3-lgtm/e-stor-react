@@ -7,6 +7,7 @@ import { fetchProducts } from "../services/api/productApi";
 import { ProductCard } from "../components/product";
 import type { FormEvent } from "react";
 import type { Product } from "../types/product";
+import { SeoMeta } from "../components/common";
 
 const promoBanners = [
   { img: "/img/Frame 33.png", alt: "Special Deals", link: "/category?deals=true" },
@@ -33,6 +34,10 @@ export default function Category() {
   const newFilter = searchParams.get("new") === "true";
   const fastShippingFilter = searchParams.get("fast_shipping") === "true";
   const minRatingFilter = Number(searchParams.get("rating")) || 0;
+  const categoryLabel = catFilter === "all"
+    ? "Tüm Ürünler"
+    : catFilter.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  const categoryCanonical = catFilter === "all" ? "/category" : `/category?cat=${encodeURIComponent(catFilter)}`;
 
   useEffect(() => {
     fetchProducts().then((data) => {
@@ -149,6 +154,11 @@ export default function Category() {
 
   return (
     <main className="min-h-screen bg-[#fafafa] px-6 py-8 max-[640px]:px-3 max-[640px]:py-4">
+      <SeoMeta
+        title={`${categoryLabel} | E-Storee`}
+        description={`${categoryLabel} ürünlerini E-Storee'de keşfedin. Güncel fiyatları karşılaştırın ve online sipariş verin.`}
+        canonicalPath={categoryCanonical}
+      />
       <div className="mx-auto flex max-w-[1600px] gap-6 max-[1024px]:flex-col">
         
         {/* MOBILE FILTER TOGGLE BUTTON */}
@@ -521,7 +531,7 @@ export default function Category() {
           {/* Results Toolbar / Sort */}
           <div className="mb-6 flex items-center justify-between rounded-[14px] border border-[#e2e8f0] bg-white px-5 py-3.5 shadow-[0_1px_4px_rgba(15,23,42,0.03)]">
             <div className="flex items-baseline gap-2.5">
-              <h2 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{catFilter && catFilter !== "all" ? catFilter : "All Products"}</h2>
+              <h1 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{categoryLabel}</h1>
               <span className="text-[13.5px] text-[#64748b]">
                 (<strong className="text-[#0f172a]">{filtered.length}</strong> products found)
               </span>

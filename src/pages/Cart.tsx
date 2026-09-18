@@ -9,6 +9,7 @@ import "swiper/css/navigation";
 import { SearchProductCard } from "../components/search";
 import { useLocation } from "../features/addresses/LocationContext";
 import type { Product } from "../types/product";
+import { SeoMeta } from "../components/common";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
@@ -31,6 +32,12 @@ export default function Cart() {
   if (cart.length === 0) {
     return (
       <main className="flex min-h-[60vh] flex-col items-center justify-center px-5 py-10 text-center">
+          <SeoMeta
+            title="Sepetim | E-Storee"
+            description="E-Storee alışveriş sepetinizi görüntüleyin ve siparişinizi kolayca tamamlayın."
+            canonicalPath="/cart"
+            robots="noindex,nofollow"
+          />
           <div className="mb-4">
             <svg
               className="h-[180px] w-[180px]"
@@ -52,7 +59,7 @@ export default function Cart() {
             </svg>
           </div>
 
-          <h2 className="mb-2 text-2xl font-bold text-[#111]">Sepetin şu an boş</h2>
+          <h1 className="mb-2 text-2xl font-bold text-[#111]">Sepetin şu an boş</h1>
           <p className="mb-6 max-w-[520px] text-sm text-[#777]">Sepetini fırsatlarla dolu dünyamızdan doldurmak için hemen alışverişe başlayabilirsin.</p>
 
           <Link to="/" className="rounded-xl bg-[#b6349a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#de57c4]">
@@ -64,6 +71,13 @@ export default function Cart() {
 
   return (
     <main className="mx-auto flex w-full max-w-[1400px] justify-center px-[60px] py-10 max-[768px]:px-6">
+      <SeoMeta
+        title="Sepetim | E-Storee"
+        description="E-Storee alışveriş sepetinizdeki ürünleri kontrol edin ve siparişinizi tamamlayın."
+        canonicalPath="/cart"
+        robots="noindex,nofollow"
+      />
+      <h1 className="sr-only">Sepetim</h1>
       <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] items-start gap-10 max-[992px]:grid-cols-1">
 
         {/* LEFT COLUMN */}

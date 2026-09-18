@@ -9,6 +9,7 @@ import { PaymentSelectionModal } from "../components/checkout";
 import { loadSavedCards } from "../features/payments/savedCards";
 import type { PaymentCard } from "../types/payment";
 import type { CreateOrderInput } from "../types/order";
+import { SeoMeta } from "../components/common";
 
 type CouponIconType = "discount" | "shipping" | "special";
 type CouponDiscountType = "percent" | "fixed" | "shipping";
@@ -204,6 +205,13 @@ export default function Checkout() {
 
   return (
     <main className="mx-auto max-w-[1400px] bg-[#fafafa] px-[60px] py-10 max-[768px]:px-6 max-[768px]:py-6">
+      <SeoMeta
+        title="Ödeme | E-Storee"
+        description="E-Storee siparişinizi güvenli ödeme adımlarıyla tamamlayın. Teslimat adresinizi ve ödeme yönteminizi seçin."
+        canonicalPath="/checkout"
+        robots="noindex,nofollow"
+      />
+      <h1 className="sr-only">Siparişi Tamamla</h1>
       <div className="grid grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] items-start gap-10 max-[1024px]:grid-cols-1">
 
         {/* LEFT COLUMN */}
@@ -218,7 +226,7 @@ export default function Checkout() {
                   <line x1="2" y1="10" x2="22" y2="10"></line>
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#111]">Checkout</h2>
+              <h2 className="text-2xl font-bold text-[#111]">Ödeme ve Teslimat</h2>
             </div>
             <div className="flex max-w-[55%] items-center gap-2 truncate text-sm text-[#555] max-[640px]:text-xs">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
