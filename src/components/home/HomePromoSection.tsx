@@ -27,9 +27,9 @@ export default function HomePromoSection({ products, categories, variant }: Home
           {isStats ? (
             <>
               <div className="mb-7 flex gap-7">
-                <div><h4 className="mb-1 text-[26px] font-extrabold text-[#111]">1k+</h4><p className="text-[12px] font-medium text-[#777]">Items</p></div>
-                <div><h4 className="mb-1 text-[26px] font-extrabold text-[#111]">20</h4><p className="text-[12px] font-medium text-[#777]">Minutes</p></div>
-                <div><h4 className="mb-1 text-[26px] font-extrabold text-[#111]">30%</h4><p className="text-[12px] font-medium text-[#777]">Up to off firm</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">1k+</h3><p className="text-[12px] font-medium text-[#777]">Items</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">20</h3><p className="text-[12px] font-medium text-[#777]">Minutes</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">30%</h3><p className="text-[12px] font-medium text-[#777]">Up to off firm</p></div>
               </div>
               <button type="button" className="cursor-pointer rounded-[30px] bg-[#b6349a] px-[34px] py-[14px] text-[15px] font-bold text-white transition-colors duration-200 hover:bg-[#92277a]">Order Now →</button>
             </>

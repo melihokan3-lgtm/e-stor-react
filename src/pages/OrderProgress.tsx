@@ -71,7 +71,7 @@ export default function OrderProgress() {
 
         {/* Top Actions */}
         <div className="mb-6 flex items-center justify-between">
-          <button className="grid h-10 w-10 place-items-center rounded-full border border-[#eee] bg-white text-[#555] hover:border-[#b6349a]" onClick={() => navigate(-1)}>
+          <button type="button" aria-label="Go back" className="grid h-10 w-10 place-items-center rounded-full border border-[#eee] bg-white text-[#555] hover:border-[#b6349a]" onClick={() => navigate(-1)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
@@ -93,7 +93,7 @@ export default function OrderProgress() {
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h1>Order {status === "Processing" ? "In Progress" : status}</h1>
+                  <h2>Order {status === "Processing" ? "In Progress" : status}</h2>
                   <p>Order placed on {placedAt}</p>
                 </div>
                 <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{status}</div>
@@ -152,6 +152,10 @@ export default function OrderProgress() {
                           <img
                             src={imageSrc}
                             alt={item.title}
+                            width={64}
+                            height={64}
+                            loading="lazy"
+                            decoding="async"
                             onError={(e) => {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = FALLBACK_IMG;

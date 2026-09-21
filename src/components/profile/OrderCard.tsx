@@ -79,6 +79,8 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
               <img
                 src={item.img || FALLBACK_IMG}
                 alt={item.title}
+                width={56}
+                height={56}
                 className="h-14 w-14 rounded-lg bg-[#faf9fa] object-contain p-1"
                 onError={(event) => {
                   event.currentTarget.onerror = null;

@@ -178,6 +178,10 @@ export default function ProductDetail() {
               className="max-h-[640px] max-w-full object-contain"
               src={mainImg}
               alt={product.title}
+              width={640}
+              height={640}
+              fetchPriority="high"
+              decoding="async"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = FALLBACK_IMG;
@@ -185,17 +189,27 @@ export default function ProductDetail() {
             />
             <div className="flex gap-5 overflow-x-auto">
               {images.map((imgUrl, idx) => (
-                <img
+                <button
                   key={`${imgUrl}-${idx}`}
+                  type="button"
+                  aria-label={`${product.title} görsel ${idx + 1}`}
+                  aria-pressed={activeImgIndex === idx}
+                  onClick={() => setActiveImgIndex(idx)}
+                  className={`h-20 w-[100px] max-w-full rounded-2xl border-2 p-1 ${activeImgIndex === idx ? "border-[#b6349a]" : "border-transparent"}`}
+                >
+                  <img
                   src={cleanImageUrl(imgUrl)}
                   alt=""
-                  onClick={() => setActiveImgIndex(idx)}
+                  aria-hidden="true"
+                  width={100}
+                  height={80}
                   onError={(e) => {
                     e.currentTarget.onerror = null;
                     e.currentTarget.src = FALLBACK_IMG;
                   }}
-                  className={`h-20 w-[100px] max-w-full cursor-pointer rounded-2xl border-2 object-contain p-1 ${activeImgIndex === idx ? "border-[#b6349a]" : "border-transparent"}`}
-                />
+                  className="h-full w-full object-contain"
+                  />
+                </button>
               ))}
             </div>
           </div>
@@ -211,9 +225,9 @@ export default function ProductDetail() {
               <div className="mt-5">
                 <p className="mb-2 text-sm text-[#888]">$2.71/lb</p>
                 <div className="flex items-center gap-2.5">
-                  <h3 className="text-[32px] font-bold text-black">
+                  <p className="text-[32px] font-bold text-black">
                     ${product.price}
-                  </h3>
+                  </p>
                   <span className="text-lg text-[#888] line-through">
                     $99.99
                   </span>
@@ -271,9 +285,9 @@ export default function ProductDetail() {
             </button>
 
             <div className="mt-8 border-t border-[#eee] pt-6">
-              <h3 className="mb-4 text-[22px] font-medium text-[#6b7280]">
+              <h2 className="mb-4 text-[22px] font-medium text-[#6b7280]">
                 About Product
-              </h3>
+              </h2>
               <div className="mb-3 flex items-center gap-3 text-[22px]">
                 <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#fff0fa] text-base">
                   🏆
@@ -304,7 +318,7 @@ export default function ProductDetail() {
         <section className="rounded-2xl border border-[#eee] p-6">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
-              <h3 className="mb-2.5 text-2xl">Customer Reviews</h3>
+              <h2 className="mb-2.5 text-2xl">Customer Reviews</h2>
               <p className="text-sm text-[#777]">Average rating: 4.5 (5391)</p>
               <div className="mt-5 space-y-3">
                 {[5, 4, 3, 2, 1].map((star) => (

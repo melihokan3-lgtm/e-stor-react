@@ -152,6 +152,10 @@ export default function Cart() {
                       <img
                         src={imageSrc}
                         alt={product.title}
+                        width={64}
+                        height={64}
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = FALLBACK_IMG;
@@ -159,7 +163,7 @@ export default function Cart() {
                       />
                     </div>
                     <div className="flex min-w-0 flex-col gap-1.5">
-                      <h4 className="truncate text-sm font-semibold text-[#111]">{product.title || "Sweet Green Seedless Grapes 1.5-2 lb"}</h4>
+                      <p className="truncate text-sm font-semibold text-[#111]">{product.title || "Sweet Green Seedless Grapes 1.5-2 lb"}</p>
                       <div className="flex items-baseline gap-2">
                         <span className="text-sm font-extrabold text-[#b6349a]">${product.price.toFixed(2)}</span>
                         <span className="text-xs text-[#aaa] line-through">${oldPrice}</span>
@@ -170,6 +174,8 @@ export default function Cart() {
                   <div className="flex items-center gap-6 max-[992px]:w-full max-[992px]:justify-between max-[640px]:gap-3">
                     <div className="flex items-center gap-3 rounded-[30px] bg-[#f8f7f8] p-[5px]">
                       <button
+                        type="button"
+                        aria-label={`Decrease ${product.title} quantity`}
                         className="flex h-7 w-7 items-center justify-center rounded-full border border-[#ddd] bg-white text-base text-[#555]"
                         onClick={() => updateQuantity(product.id, -1)}
                       >
@@ -186,6 +192,8 @@ export default function Cart() {
                       </button>
                       <span className="min-w-4 text-center text-sm font-semibold">{item.unit}</span>
                       <button
+                        type="button"
+                        aria-label={`Increase ${product.title} quantity`}
                         className="flex h-7 w-7 items-center justify-center rounded-full border border-[#b6349a] bg-[#b6349a] text-base text-white"
                         onClick={() => updateQuantity(product.id, 1)}
                       >
@@ -193,6 +201,8 @@ export default function Cart() {
                       </button>
                     </div>
                     <button
+                      type="button"
+                      aria-label={`Remove ${product.title} from cart`}
                       className="border-0 bg-transparent text-xs font-semibold text-[#b6349a]"
                       onClick={() => removeFromCart(product.id)}
                     >
@@ -212,8 +222,8 @@ export default function Cart() {
             <div className="mb-6 flex items-center justify-between">
               <h2 className="m-0 text-xl font-bold">Recommendations</h2>
               <div className="flex gap-3">
-                <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] prev-rec">‹</button>
-                <button className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] next-rec">›</button>
+                <button type="button" aria-label="Previous recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] prev-rec">‹</button>
+                <button type="button" aria-label="Next recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] next-rec">›</button>
               </div>
             </div>
             <Swiper

@@ -1,4 +1,4 @@
-import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import { getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
 import type { Product } from "../../types/product";
 
 const PRODUCT_FIELDS = "id,title,price,description,category,image";
@@ -105,18 +105,19 @@ const requestFakeProducts = async (): Promise<Product[]> => {
   }).filter((product): product is Product => product !== null);
 };
 
-const requireSupabase = () => {
-  if (!isSupabaseConfigured || !supabase) {
+const requireSupabase = async () => {
+  const client = await getSupabaseClient();
+  if (!isSupabaseConfigured || !client) {
     throw new Error("Supabase yapılandırılmamış. Vercel Production ortam değişkenlerini kontrol edin.");
   }
-  return supabase;
+  return client;
 };
 
 export const fetchProducts = async (): Promise<Product[]> => {
   if (productsCache) return productsCache;
   if (!productsPromise) {
     productsPromise = (async () => {
-      const client = requireSupabase();
+      const client = await requireSupabase();
       const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
       if (error) throw error;
 
@@ -129,7 +130,6 @@ export const fetchProducts = async (): Promise<Product[]> => {
       ]);
       const supplementalProducts = supplementalResults.flatMap((result) => {
         if (result.status === "fulfilled") return result.value;
-        console.warn("Supplemental products could not be loaded; using available sources only.", result.reason);
         return [];
       });
       return [...supabaseProducts, ...supplementalProducts];
@@ -184,7 +184,7 @@ export const fetchProductById = async (id: string | number): Promise<Product | n
     }
   }
 
-  const client = requireSupabase();
+  const client = await requireSupabase();
   const { data, error } = await client.from("products").select(PRODUCT_FIELDS).eq("id", id).maybeSingle();
   if (error) throw error;
   return data ? (data as Product) : null;

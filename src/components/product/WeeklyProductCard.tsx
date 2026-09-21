@@ -17,6 +17,8 @@ export default function WeeklyProductCard({ product }: { product: Product }) {
         <img
           src={imageSrc}
           alt={product.title}
+          width={200}
+          height={185}
           loading="lazy"
           decoding="async"
           className="h-full w-full object-contain mix-blend-multiply"

@@ -19,6 +19,8 @@ export default function SearchProductCard({ product }: { product: Product }) {
         <img
           src={imageSrc}
           alt={product.title}
+          width={200}
+          height={200}
           loading="lazy"
           decoding="async"
           className="h-full w-full max-h-[200px] max-w-[200px] object-contain"

@@ -341,6 +341,10 @@ export default function Checkout() {
                       <img
                         src={imageSrc}
                         alt={item.data.title}
+                        width={64}
+                        height={64}
+                        loading="lazy"
+                        decoding="async"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = FALLBACK_IMG;
@@ -357,7 +361,7 @@ export default function Checkout() {
                 {/* Fallback dummy images if cart is empty, so layout matches exact mockup */}
                 {cart.length === 0 && (
                   <>
-                    {Array.from({ length: 6 }).map((_, index) => <div key={index} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2"><img src={FALLBACK_IMG} alt="" aria-hidden="true" /></div>)}
+                    {Array.from({ length: 6 }).map((_, index) => <div key={index} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2"><img src={FALLBACK_IMG} alt="" aria-hidden="true" width={64} height={64} /></div>)}
                     <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#fdf5fb] text-sm font-bold text-[#b6349a]">+12</div>
                   </>
                 )}

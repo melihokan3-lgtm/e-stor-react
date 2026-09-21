@@ -75,6 +75,8 @@ export default function ProfileLayout() {
             <img
               src={user.image || "https://i.pravatar.cc/150?img=11"}
               alt={user.firstName}
+              width={56}
+              height={56}
               className="h-14 w-14 rounded-full border-2 border-[#f0f0f0] object-cover"
             />
             <span className="text-lg font-bold text-[#111]">

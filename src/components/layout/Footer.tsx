@@ -46,12 +46,12 @@ export default function Footer() {
     <footer className="flex flex-col border-t border-[var(--border-light)] px-20 py-[60px] [@media(max-width:768px)]:px-5 [@media(max-width:768px)]:py-[30px]">
       <div className="flex flex-col items-center">
         <Link to="/" className="mb-10 text-[var(--text-secondary)]">
-          <img src="/img/icon/Logo.svg" alt="E-Storee" />
+          <img src="/img/icon/Logo.svg" alt="E-Storee" width={50} height={50} />
         </Link>
         <div className="grid w-full grid-cols-5 items-start justify-items-center gap-8 text-center [@media(max-width:768px)]:grid-cols-2 [@media(max-width:768px)]:gap-x-5 [@media(max-width:768px)]:gap-y-8 [@media(max-width:768px)]:text-left">
           {footerGroups.map((group) => <FooterLinkGroup key={group.title} {...group} />)}
           <div className="flex flex-col items-center gap-4 text-center [@media(max-width:768px)]:w-full">
-            <h5 className="text-[var(--text-primary)]">Social</h5>
+            <h2 className="text-[var(--text-primary)]">Social</h2>
             {socialLinks.map((link) => (
               <a key={link.label} href={link.href} target="_blank" rel="noopener noreferrer" className="text-[var(--text-secondary)]">
                 {link.label}

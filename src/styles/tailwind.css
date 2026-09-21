@@ -6,3 +6,11 @@
   --color-brand-dark: #7b2164;
   --font-sans: Inter, sans-serif;
 }
+
+/* Keep existing utility names while meeting WCAG AA contrast on white surfaces. */
+.text-\[\#666\] { color: #4b5563; }
+.text-\[\#777\] { color: #5f6368; }
+.text-\[\#888\] { color: #5f6368; }
+.text-\[\#999\] { color: #6b7280; }
+.text-\[\#aaa\] { color: #6b7280; }
+.text-\[\#bbb\] { color: #6b7280; }

@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import { isSupabaseConfigured, supabase } from "../../lib/supabase";
+import { getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
 import type { AuthContextValue, AuthUser, RegisterInput } from "../../types/auth";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -44,33 +44,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore the Supabase-managed session on mount.
   useEffect(() => {
-    const client = supabase;
-    if (isSupabaseConfigured && client) {
-      let mounted = true;
-      const restoreSession = async () => {
-        const { data } = await client.auth.getSession();
-        if (!mounted) return;
-        const restoredUser = mapSupabaseUser(data.session?.user);
-        setUser(restoredUser);
-        setToken(data.session?.access_token || null);
+    let mounted = true;
+    let unsubscribe: () => void = () => undefined;
+    const restoreSession = async () => {
+      const client = await getSupabaseClient();
+      if (!mounted) return;
+      if (!isSupabaseConfigured || !client) {
         setAuthLoading(false);
-      };
+        return;
+      }
 
-      restoreSession();
+      const { data } = await client.auth.getSession();
+      if (!mounted) return;
+      const restoredUser = mapSupabaseUser(data.session?.user);
+      setUser(restoredUser);
+      setToken(data.session?.access_token || null);
+      setAuthLoading(false);
+
       const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
         if (!mounted) return;
         setUser(mapSupabaseUser(session?.user));
         setToken(session?.access_token || null);
         setAuthLoading(false);
       });
+      unsubscribe = () => listener.subscription.unsubscribe();
+    };
 
-      return () => {
-        mounted = false;
-        listener.subscription.unsubscribe();
-      };
-    }
-
-    setAuthLoading(false);
+    const restoreTimer = window.setTimeout(() => { void restoreSession(); }, 0);
+    return () => {
+      mounted = false;
+      window.clearTimeout(restoreTimer);
+      unsubscribe();
+    };
   }, []);
 
   const isLoggedIn = !!user && !!token;
@@ -78,11 +83,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- LOGIN ---
   const loginUser = async (username: string, password: string): Promise<AuthUser> => {
     try {
-      if (isSupabaseConfigured && supabase) {
+      const client = await getSupabaseClient();
+      if (isSupabaseConfigured && client) {
         if (!username.includes("@")) {
           throw new Error("Supabase hesabınıza e-posta adresinizle giriş yapın.");
         }
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await client.auth.signInWithPassword({
           email: username.trim().toLowerCase(),
           password,
         });
@@ -108,8 +114,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- REGISTER (simulated via /users/add) ---
   const registerUser = async ({ username, email, password, firstName, lastName }: RegisterInput): Promise<AuthUser> => {
     try {
-      if (isSupabaseConfigured && supabase) {
-        const { data, error } = await supabase.auth.signUp({
+      const client = await getSupabaseClient();
+      if (isSupabaseConfigured && client) {
+        const { data, error } = await client.auth.signUp({
           email: email.trim().toLowerCase(),
           password,
           options: {
@@ -143,8 +150,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!prev) return prev;
 
       const updated = { ...prev, ...newFields };
-      const client = supabase;
-      if (isSupabaseConfigured && client && typeof updated.id === "string") {
+      if (isSupabaseConfigured && typeof updated.id === "string") {
         const profileUpdate = {
           username: updated.username.trim(),
           first_name: updated.firstName.trim(),
@@ -154,23 +160,26 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           updated_at: new Date().toISOString(),
         };
 
-        void Promise.all([
-          client.from("profiles").update(profileUpdate).eq("id", updated.id),
-          newFields.email && newFields.email !== prev.email
-            ? client.auth.updateUser({ email: updated.email.trim().toLowerCase() })
-            : Promise.resolve({ error: null }),
-          client.auth.updateUser({
-            data: {
-              username: updated.username,
-              firstName: updated.firstName,
-              lastName: updated.lastName,
-              avatarUrl: updated.image,
-              phone: updated.phone,
-            },
-          }),
-        ]).then(([profileResult, emailResult, metadataResult]) => {
-          const error = profileResult.error || emailResult.error || metadataResult.error;
-          if (error) console.error("Failed to persist profile changes", error);
+        void getSupabaseClient().then((client) => {
+          if (!client) return;
+          return Promise.all([
+            client.from("profiles").update(profileUpdate).eq("id", updated.id),
+            newFields.email && newFields.email !== prev.email
+              ? client.auth.updateUser({ email: updated.email.trim().toLowerCase() })
+              : Promise.resolve({ error: null }),
+            client.auth.updateUser({
+              data: {
+                username: updated.username,
+                firstName: updated.firstName,
+                lastName: updated.lastName,
+                avatarUrl: updated.image,
+                phone: updated.phone,
+              },
+            }),
+          ]).then(([profileResult, emailResult, metadataResult]) => {
+            const error = profileResult.error || emailResult.error || metadataResult.error;
+            if (error && import.meta.env.DEV) console.error("Failed to persist profile changes", error);
+          });
         });
       }
 
@@ -180,9 +189,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // --- LOGOUT ---
   const logout = useCallback(() => {
-    if (isSupabaseConfigured && supabase) {
-      supabase.auth.signOut().catch((error) => console.error("Failed to sign out", error));
-    }
+    void getSupabaseClient().then((client) => {
+      if (client) client.auth.signOut().catch((error) => {
+        if (import.meta.env.DEV) console.error("Failed to sign out", error);
+      });
+    });
     setUser(null);
     setToken(null);
   }, []);

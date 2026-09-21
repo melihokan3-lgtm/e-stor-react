@@ -277,7 +277,7 @@ export default function LocationModal() {
             <p className="m-0 text-sm font-semibold text-[#333]">Kayıtlı adresler</p>
             {addresses.map((item) => (
               <button key={item.id} type="button" role="option" aria-selected={location === item.address} className={`flex min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2 text-left transition ${location === item.address ? "border-[#b6349a] bg-[#fff5fc]" : "border-[#eee7ee] bg-white hover:border-[#d4a2ca]"}`} onClick={() => selectLocation(item.address)}>
-                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#fff0fa]" aria-hidden="true"><img src="/img/icon/Location.svg" alt="" className="h-4 w-4" /></span>
+                <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#fff0fa]" aria-hidden="true"><img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4" /></span>
                 <span className="min-w-0"><strong className="block text-sm text-[#333]">{item.label}</strong><small className="block truncate text-xs text-[#888]">{item.address}</small></span>
                 {location === item.address && <span className="ml-auto text-sm font-bold text-[#b6349a]" aria-hidden="true">✓</span>}
               </button>

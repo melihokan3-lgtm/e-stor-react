@@ -10,11 +10,11 @@ import type { Product } from "../types/product";
 import { SeoMeta } from "../components/common";
 
 const promoBanners = [
-  { img: "/img/Frame 33.png", alt: "Special Deals", link: "/category?deals=true" },
-  { img: "/img/Frame 34.png", alt: "Festival Discount", link: "/category?price=0-50" },
-  { img: "/img/Frame 35.png", alt: "New Collection", link: "/category?new=true" },
-  { img: "/img/Rectangle 3.png", alt: "Super Sale", link: "/category" },
-  { img: "/img/Frame 366.png", alt: "Trending Drinks", link: "/category" },
+  { img: "/img/optimized/Frame 33.webp", alt: "Special Deals", link: "/category?deals=true" },
+  { img: "/img/optimized/Frame 34.webp", alt: "Festival Discount", link: "/category?price=0-50" },
+  { img: "/img/optimized/Frame 35.webp", alt: "New Collection", link: "/category?new=true" },
+  { img: "/img/optimized/Rectangle 3.webp", alt: "Super Sale", link: "/category" },
+  { img: "/img/optimized/Frame 366.webp", alt: "Trending Drinks", link: "/category" },
 ];
 
 export default function Category() {
@@ -196,7 +196,7 @@ export default function Category() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d73f98" strokeWidth="2.2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                 </svg>
-                <h3 className="font-bold text-[#0f172a]">Filters</h3>
+                <h2 className="font-bold text-[#0f172a]">Filters</h2>
                 {activeFiltersCount > 0 && (
                   <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#d73f98] px-1 text-xs font-bold text-white">{activeFiltersCount}</span>
                 )}
@@ -525,7 +525,7 @@ export default function Category() {
               {promoBanners.map((banner, i) => (
                 <SwiperSlide key={i} className="w-auto!">
                   <Link to={banner.link} className="inline-flex h-[220px] w-auto shrink-0 overflow-hidden rounded-[18px] bg-[#f1f5f9] shadow-[0_3px_12px_rgba(0,0,0,0.06)] transition hover:-translate-y-[3px] hover:shadow-[0_8px_22px_rgba(215,63,152,0.18)]">
-                    <img className="block h-full w-auto max-w-none rounded-[18px] object-contain" src={banner.img} alt={banner.alt} />
+                    <img className="block h-full w-auto max-w-none rounded-[18px] object-contain" src={banner.img} alt={banner.alt} width={banner.img.includes("Frame 33") ? 568 : banner.img.includes("Frame 34") ? 276 : banner.img.includes("Frame 35") ? 853 : banner.img.includes("Frame 366") ? 258 : 422} height={248} loading="lazy" decoding="async" />
                   </Link>
                 </SwiperSlide>
               ))}
@@ -572,7 +572,7 @@ export default function Category() {
           ) : (
             <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
               <div className="mb-4 text-5xl">🔍</div>
-              <h3 className="mb-2 text-lg font-extrabold text-[#0f172a]">No products found matching your criteria</h3>
+              <h2 className="mb-2 text-lg font-extrabold text-[#0f172a]">No products found matching your criteria</h2>
               <p className="mb-5 text-sm text-[#64748b]">Try clearing or modifying your filters.</p>
               <button type="button" className="rounded-[30px] bg-[#d73f98] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90" onClick={resetFilters}>
                 Clear Filters

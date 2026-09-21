@@ -5,8 +5,7 @@ import App from "./app/App";
 import AppProviders from "./app/providers";
 import "./style.css";
 import "./styles/tailwind.css";
-// Import Swiper styles bundle to match the old CDN swiper-bundle.min.css
-import "swiper/css/bundle";
+import "swiper/css";
 
 const rootElement = document.getElementById("root");
 
