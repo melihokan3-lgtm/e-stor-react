@@ -163,7 +163,10 @@ export default function Category() {
         
         {/* MOBILE FILTER TOGGLE BUTTON */}
         <div className="mb-4 hidden items-center justify-between gap-3 max-[1024px]:flex">
-          <button 
+          <button
+            type="button"
+            aria-expanded={mobileFilterOpen}
+            aria-controls="category-filters"
             className="flex items-center gap-2 rounded-lg border border-[#e2e8f0] bg-white px-4 py-2.5 text-sm font-semibold text-[#334155] shadow-sm"
             onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
           >
@@ -174,7 +177,7 @@ export default function Category() {
           </button>
           
           <div>
-            <select className="rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-sm" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <select aria-label="Ürünleri sırala" className="rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-sm" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <option value="recommended">Recommended</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -184,7 +187,7 @@ export default function Category() {
         </div>
 
         {/* LEFT SIDEBAR: TRENDYOL / HEPSIBURADA / AMAZON STYLE */}
-        <aside className={`${mobileFilterOpen ? "block" : "max-[1024px]:hidden"} w-[290px] shrink-0 max-[1024px]:static max-[1024px]:w-full`}>
+        <aside id="category-filters" className={`${mobileFilterOpen ? "block" : "max-[1024px]:hidden"} w-[290px] shrink-0 max-[1024px]:static max-[1024px]:w-full`}>
           <div className="rounded-2xl border border-[#e2e8f0] bg-white p-5 shadow-[0_2px_10px_rgba(15,23,42,0.04)]">
             
             {/* Sidebar Header */}
@@ -251,6 +254,7 @@ export default function Category() {
                 <div className="mb-3">
                   <input
                     type="text"
+                    aria-label="Kategori ara"
                     placeholder="Search category..."
                     className="w-full rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-xs text-[#0f172a] outline-none transition focus:border-[#d73f98] focus:bg-white"
                     value={categorySearch}
@@ -539,7 +543,8 @@ export default function Category() {
 
             <div className="flex items-center gap-2.5 max-[1024px]:hidden">
               <span className="text-[13.5px] font-semibold text-[#475569]">Sort by:</span>
-              <select 
+              <select
+                aria-label="Ürünleri sırala"
                 value={sortBy} 
                 onChange={(e) => setSortBy(e.target.value)}
                 className="cursor-pointer rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3.5 py-2 text-[13px] font-semibold text-[#0f172a] outline-none focus:border-[#d73f98]"
@@ -569,7 +574,7 @@ export default function Category() {
               <div className="mb-4 text-5xl">🔍</div>
               <h3 className="mb-2 text-lg font-extrabold text-[#0f172a]">No products found matching your criteria</h3>
               <p className="mb-5 text-sm text-[#64748b]">Try clearing or modifying your filters.</p>
-              <button className="rounded-[30px] bg-[#d73f98] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90" onClick={resetFilters}>
+              <button type="button" className="rounded-[30px] bg-[#d73f98] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90" onClick={resetFilters}>
                 Clear Filters
               </button>
             </div>

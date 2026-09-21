@@ -6,6 +6,8 @@ const FAKE_API_URL = "https://fakestoreapi.com/products";
 const NOKSHA_API_URL = "https://fakestoreapi.noksha.dev/api/products";
 const FAKE_PRODUCT_ID_OFFSET = 100000;
 const NOKSHA_PRODUCT_ID_OFFSET = 200000;
+let productsCache: Product[] | undefined;
+let productsPromise: Promise<Product[]> | undefined;
 
 interface NokshaProduct {
   _id?: number;
@@ -29,7 +31,7 @@ interface NokshaPage {
 
 const fetchWithTimeout = async (url: string): Promise<unknown> => {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 8000);
+  const timeoutId = setTimeout(() => controller.abort(), 5000);
   try {
     const response = await fetch(url, { signal: controller.signal });
     if (!response.ok) throw new Error(`Supplemental product API failed with status ${response.status}`);
@@ -66,7 +68,7 @@ const normalizeNokshaProduct = (raw: unknown): Product | null => {
 const requestNokshaProducts = async (): Promise<Product[]> => {
   const firstPage = (await fetchWithTimeout(`${NOKSHA_API_URL}?page=1`)) as NokshaPage;
   const firstProducts = Array.isArray(firstPage.data) ? firstPage.data : [];
-  const totalPages = Math.min(Math.max(Number(firstPage.totalPages) || 1, 1), 10);
+  const totalPages = Math.min(Math.max(Number(firstPage.totalPages) || 1, 1), 3);
   const remainingPages = await Promise.all(
     Array.from({ length: totalPages - 1 }, (_, index) => fetchWithTimeout(`${NOKSHA_API_URL}?page=${index + 2}`)),
   );
@@ -111,18 +113,37 @@ const requireSupabase = () => {
 };
 
 export const fetchProducts = async (): Promise<Product[]> => {
-  const client = requireSupabase();
-  const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
-  if (error) throw error;
+  if (productsCache) return productsCache;
+  if (!productsPromise) {
+    productsPromise = (async () => {
+      const client = requireSupabase();
+      const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
+      if (error) throw error;
 
-  const supabaseProducts = (data || []) as Product[];
-  const supplementalResults = await Promise.allSettled([requestFakeProducts(), requestNokshaProducts()]);
-  const supplementalProducts = supplementalResults.flatMap((result) => {
-    if (result.status === "fulfilled") return result.value;
-    console.warn("Supplemental products could not be loaded; using available sources only.", result.reason);
-    return [];
-  });
-  return [...supabaseProducts, ...supplementalProducts];
+      const supabaseProducts = (data || []) as Product[];
+      // Supplemental catalogs are useful for a fuller storefront, but they must
+      // never hold the primary Supabase catalog hostage on a slow network.
+      const supplementalResults = await Promise.race([
+        Promise.allSettled([requestFakeProducts(), requestNokshaProducts()]),
+        new Promise<PromiseSettledResult<Product[]>[]>((resolve) => setTimeout(() => resolve([]), 1500)),
+      ]);
+      const supplementalProducts = supplementalResults.flatMap((result) => {
+        if (result.status === "fulfilled") return result.value;
+        console.warn("Supplemental products could not be loaded; using available sources only.", result.reason);
+        return [];
+      });
+      return [...supabaseProducts, ...supplementalProducts];
+    })().then((products) => {
+      productsCache = products;
+      return products;
+    });
+  }
+  try {
+    return await productsPromise;
+  } catch (error) {
+    productsPromise = undefined;
+    throw error;
+  }
 };
 
 const fetchSupplementalProduct = async (url: string, remoteId: number, productId: number, categoryPrefix: string): Promise<Product | null> => {

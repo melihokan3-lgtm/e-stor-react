@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-progress
+Disallow: /profile
+Disallow: /search
+
+Sitemap: https://e-stor-react-nttt.vercel.app/sitemap.xml

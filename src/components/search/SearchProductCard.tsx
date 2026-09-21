@@ -13,14 +13,14 @@ export default function SearchProductCard({ product }: { product: Product }) {
   const oldPrice = (product.price * 1.2).toFixed(2);
 
   return (
-    <Link
-      to={`/${categorySlug}/${productId}`}
-      className="group flex h-full min-w-0 flex-col no-underline"
-    >
+    <article className="group flex h-full min-w-0 flex-col no-underline">
+      <Link to={`/${categorySlug}/${productId}`} className="flex min-h-0 flex-1 flex-col no-underline">
       <div className="mb-4 flex aspect-square w-full shrink-0 items-center justify-center overflow-hidden rounded-[20px] bg-[#fcf5fb] p-[30px]">
         <img
           src={imageSrc}
           alt={product.title}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full max-h-[200px] max-w-[200px] object-contain"
           onError={(event) => {
             event.currentTarget.onerror = null;
@@ -40,16 +40,15 @@ export default function SearchProductCard({ product }: { product: Product }) {
           <span className="text-base font-extrabold text-[#111]">${product.price || "99.99"}</span>
           <span className="text-xs text-[#999] line-through">${oldPrice || "99.99"}</span>
         </div>
-        <button 
-          className="mt-auto w-full cursor-pointer rounded-xl border-0 bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9d2d85] active:scale-[0.98]"
-          onClick={(e) => {
-            e.preventDefault();
-            addToCart(product);
-          }}
-        >
-          Add to Cart
-        </button>
       </div>
-    </Link>
+      </Link>
+      <button
+        type="button"
+        className="mt-3 w-full cursor-pointer rounded-xl border-0 bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9d2d85] active:scale-[0.98]"
+        onClick={() => addToCart(product)}
+      >
+        Add to Cart
+      </button>
+    </article>
   );
 }

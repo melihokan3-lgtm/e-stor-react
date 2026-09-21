@@ -24,11 +24,14 @@ export default function ProductCard({ product, className = defaultCardClassName 
   const brand = product.category || "Zelle";
 
   return (
-    <Link to={`/${categorySlug}/${productId}`} className={className}>
+    <article className={`${className} flex flex-col`}>
+      <Link to={`/${categorySlug}/${productId}`} className="flex min-h-0 flex-1 flex-col text-inherit">
       <div className="card-img-wrapper mb-[14px] flex aspect-square w-full items-center justify-center overflow-hidden rounded-[18px] bg-[#faf5f9] p-5">
         <img
           src={imageSrc}
           alt={product.title}
+          loading="lazy"
+          decoding="async"
           className="h-full w-full max-h-[200px] max-w-[200px] object-contain mix-blend-multiply"
           onError={(event) => {
             event.currentTarget.onerror = null;
@@ -47,16 +50,18 @@ export default function ProductCard({ product, className = defaultCardClassName 
           <span className="font-bold text-[#b6349a]">{stockLeft} Left</span>
           <span className="text-[#bbb]">13 Left</span>
         </div>
-        <button 
-          className="mt-3 w-full cursor-pointer rounded-[12px] bg-[#b6349a] px-4 py-[10px] text-[14px] font-semibold text-white transition-[background-color_0.2s,transform_0.1s] hover:bg-[#de57c4] active:scale-[0.98]"
+      </div>
+      </Link>
+      <button
+          type="button"
+          className="mt-3 w-full cursor-pointer rounded-[12px] bg-[#b6349a] px-4 py-[10px] text-[14px] font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-[#de57c4] active:scale-[0.98]"
           onClick={(e) => {
             e.preventDefault();
             addToCart(product);
           }}
         >
           Add to Cart
-        </button>
-      </div>
-    </Link>
+      </button>
+    </article>
   );
 }

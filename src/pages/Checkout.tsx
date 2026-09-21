@@ -357,7 +357,7 @@ export default function Checkout() {
                 {/* Fallback dummy images if cart is empty, so layout matches exact mockup */}
                 {cart.length === 0 && (
                   <>
-                    {Array.from({ length: 6 }).map((_, index) => <div key={index} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2"><img src={FALLBACK_IMG} alt="dummy" /></div>)}
+                    {Array.from({ length: 6 }).map((_, index) => <div key={index} className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#f7f7f7] p-2"><img src={FALLBACK_IMG} alt="" aria-hidden="true" /></div>)}
                     <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-[#fdf5fb] text-sm font-bold text-[#b6349a]">+12</div>
                   </>
                 )}
