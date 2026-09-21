@@ -243,19 +243,19 @@ export default function LocationModal() {
     <Modal
       open={isLocationModalOpen}
       onClose={closeLocationModal}
-      overlayClassName="fixed inset-0 z-[1000] grid place-items-center bg-[rgba(22,16,22,0.38)] p-5"
-      contentClassName="w-[min(100%,560px)] rounded-[20px] border border-[#f2e8f0] bg-white p-7 shadow-[0_22px_70px_rgba(42,22,40,0.18)]"
+      overlayClassName="fixed inset-0 z-[1000] grid place-items-center overflow-y-auto bg-[rgba(22,16,22,0.38)] p-5 max-[640px]:p-3"
+      contentClassName="max-h-[calc(100dvh-40px)] w-[min(100%,560px)] overflow-y-auto rounded-[20px] border border-[#f2e8f0] bg-white p-7 shadow-[0_22px_70px_rgba(42,22,40,0.18)] max-[640px]:max-h-[calc(100dvh-24px)] max-[640px]:rounded-[16px] max-[640px]:p-4"
       labelledBy="location-modal-title"
     >
         <div className="flex items-start justify-between gap-4">
           <div>
             <p className="mb-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#b6349a]">Delivery location</p>
-            <h2 id="location-modal-title" className="m-0 text-xl font-semibold text-[#222]">Choose your delivery point</h2>
+            <h2 id="location-modal-title" className="m-0 text-xl font-semibold text-[#222] max-[640px]:text-lg">Choose your delivery point</h2>
           </div>
           <Button type="button" tone="ghost" className="h-9 w-9 rounded-full text-xl text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" aria-label="Close location dialog" onClick={closeLocationModal}>×</Button>
         </div>
 
-        <div ref={mapElementRef} className="my-5 h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label="OpenStreetMap location picker" />
+        <div ref={mapElementRef} className="my-5 h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee] max-[640px]:my-4 max-[640px]:h-[220px] max-[480px]:h-[180px]" aria-label="OpenStreetMap location picker" />
         <p className="m-0 text-xs text-[#777]">
           {mapStatus === "loading" && "Harita yükleniyor..."}
           {mapStatus === "geocoding" && "Adres bulunuyor..."}
@@ -278,7 +278,7 @@ export default function LocationModal() {
             {addresses.map((item) => (
               <button key={item.id} type="button" role="option" aria-selected={location === item.address} className={`flex min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2 text-left transition ${location === item.address ? "border-[#b6349a] bg-[#fff5fc]" : "border-[#eee7ee] bg-white hover:border-[#d4a2ca]"}`} onClick={() => selectLocation(item.address)}>
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#fff0fa]" aria-hidden="true"><img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4" /></span>
-                <span className="min-w-0"><strong className="block text-sm text-[#333]">{item.label}</strong><small className="block truncate text-xs text-[#888]">{item.address}</small></span>
+                <span className="min-w-0 flex-1"><strong className="block text-sm text-[#333]">{item.label}</strong><small className="block break-words text-xs leading-4 text-[#888]">{item.address}</small></span>
                 {location === item.address && <span className="ml-auto text-sm font-bold text-[#b6349a]" aria-hidden="true">✓</span>}
               </button>
             ))}
