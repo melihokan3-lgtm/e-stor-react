@@ -2,10 +2,9 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
-import { fetchProducts } from "../services/api/productApi";
 import { ProductCard } from "../components/product";
 import type { FormEvent } from "react";
-import type { Product } from "../types/product";
+import useProducts from "../features/products/useProducts";
 import SeoMeta from "../components/common/SeoMeta";
 
 const promoBanners = [
@@ -88,8 +87,7 @@ function SortSelect({ value, onChange }: { value: string; onChange: (value: stri
 }
 
 export default function Category() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { products, loading, error } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
   const [categorySearch, setCategorySearch] = useState("");
   const [minPriceInput, setMinPriceInput] = useState("");
@@ -108,13 +106,6 @@ export default function Category() {
     ? "Tüm Ürünler"
     : catFilter.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
   const categoryCanonical = catFilter === "all" ? "/category" : `/category?cat=${encodeURIComponent(catFilter)}`;
-
-  useEffect(() => {
-    fetchProducts().then((data) => {
-      setProducts(data);
-      setLoading(false);
-    });
-  }, []);
 
   // Compute category list with counts
   const categoryStats = useMemo(() => {
@@ -628,6 +619,11 @@ export default function Category() {
             <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
               <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-[3.5px] border-[#f3f4f6] border-t-[#d73f98]"></div>
               <p>Loading products...</p>
+            </div>
+          ) : error ? (
+            <div className="rounded-2xl border border-[#fee2e2] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
+              <h2 className="mb-2 text-lg font-extrabold text-[#991b1b]">Products could not be loaded</h2>
+              <p className="text-sm text-[#64748b]">{error}</p>
             </div>
           ) : filtered.length > 0 ? (
             <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-5 max-[640px]:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] max-[640px]:gap-3" id="category-Conteiner">

@@ -145,8 +145,7 @@ export const fetchSupplementalProducts = async (): Promise<Product[]> => {
       requestNokshaProducts(),
     ]).then((results) => {
       const products = results
-        .flatMap((result) => (result.status === "fulfilled" ? result.value : []))
-        .slice(0, 24);
+        .flatMap((result) => (result.status === "fulfilled" ? result.value : []));
       supplementalProductsCache = products;
       return products;
     });
