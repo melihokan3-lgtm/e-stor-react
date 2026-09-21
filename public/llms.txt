@@ -1,0 +1,18 @@
+# E-Storee
+
+> E-Storee is a Turkish online grocery store for discovering market products and shopping online.
+
+## Public pages
+
+- [Home](https://e-stor-react-nttt.vercel.app/): featured campaigns, trending products, and weekly offers.
+- [Categories](https://e-stor-react-nttt.vercel.app/category): the public product catalog with category, price, rating, and sorting filters.
+- [Sitemap](https://e-stor-react-nttt.vercel.app/sitemap.xml): the canonical list of publicly indexable pages.
+- [Robots policy](https://e-stor-react-nttt.vercel.app/robots.txt): crawl rules for automated agents.
+
+## Product pages
+
+Product detail pages use the public route pattern `/{category}/{productId}` and expose product name, description, price, category, image, and structured product data when the product exists.
+
+## Agent guidance
+
+Use the home page and category catalog as the primary public entry points. Do not submit forms, place orders, access profile data, or expose private account information while crawling this site.
