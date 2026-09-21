@@ -5,7 +5,7 @@ import { fetchUserCart, isSupabaseDataEnabled, saveUserCart } from "../../servic
 import type { CartContextValue, CartItem } from "../../types/cart";
 import type { Product } from "../../types/product";
 
-export const CartContext = createContext<CartContextValue | null>(null);
+const CartContext = createContext<CartContextValue | null>(null);
 
 export const useCart = (): CartContextValue => {
   const context = useContext(CartContext);

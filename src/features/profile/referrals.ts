@@ -1,7 +1,7 @@
 import type { AuthUser } from "../../types/auth";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 
-export interface ReferralHistoryItem {
+interface ReferralHistoryItem {
   name: string;
   status: string;
   type: "pending" | "success" | "idle";

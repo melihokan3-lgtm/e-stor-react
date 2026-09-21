@@ -4,12 +4,12 @@ export interface StorageUser {
   username?: string;
 }
 
-export const getUserStorageId = (user: StorageUser | null | undefined): string => {
+const getUserStorageId = (user: StorageUser | null | undefined): string => {
   if (!user) return "guest";
   return String(user.id ?? user.email ?? user.username ?? "guest");
 };
 
-export const getUserStorageKey = (prefix: string, user: StorageUser | null | undefined): string =>
+const getUserStorageKey = (prefix: string, user: StorageUser | null | undefined): string =>
   `${prefix}_${encodeURIComponent(getUserStorageId(user))}`;
 
 export const readUserStorage = <T>(prefix: string, user: StorageUser | null | undefined, fallback: T): T => {

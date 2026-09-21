@@ -66,36 +66,16 @@ a {
 }
 
 :root {
-  --primary-color: #ff6000;
-  --primary-hover: #e65600;
-  --secondary-color: #b6349a;
   --bg-color: #ffffff;
-  --surface-color: #ffffff;
   --text-primary: #333333;
   --text-secondary: #6b7280;
-  --border-color: #e5e5e5;
   --border-light: #a6a9af3f;
-  --error-color: #d93025;
-  --success-color: #0f9d58;
 
   --font-family: "Inter", sans-serif;
 
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
-  --spacing-xl: 32px;
-
-  --border-radius-sm: 4px;
-  --border-radius: 8px;
   --border-radius-lg: 20px;
   --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.swiper-horizontal > .swiper-pagination-bullets,
-.swiper-pagination-horizontal.swiper-pagination-bullets {
-  display: none;
 }
 
 .swiper-wrapper {

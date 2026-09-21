@@ -160,14 +160,6 @@ export const fetchSupplementalProducts = async (): Promise<Product[]> => {
   }
 };
 
-export const fetchProductsWithSupplemental = async (): Promise<Product[]> => {
-  const [primaryProducts, supplementalProducts] = await Promise.all([
-    fetchProducts(),
-    fetchSupplementalProducts(),
-  ]);
-  return [...primaryProducts, ...supplementalProducts];
-};
-
 const fetchSupplementalProduct = async (url: string, remoteId: number, productId: number, categoryPrefix: string): Promise<Product | null> => {
   try {
     const raw = await fetchWithTimeout(`${url}/${remoteId}`);
