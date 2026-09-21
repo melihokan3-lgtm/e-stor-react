@@ -70,7 +70,7 @@ export default function Cart() {
   }
 
   return (
-    <main className="mx-auto flex w-full max-w-[1400px] justify-center px-[60px] py-10 max-[768px]:px-6">
+    <main className="mx-auto flex w-full max-w-[1400px] justify-center overflow-x-hidden px-[60px] py-10 max-[768px]:px-6 max-[480px]:px-4">
       <SeoMeta
         title="Sepetim | E-Storee"
         description="E-Storee alışveriş sepetinizdeki ürünleri kontrol edin ve siparişinizi tamamlayın."
@@ -218,8 +218,8 @@ export default function Cart() {
           </div>
 
           {/* RECOMMENDATIONS */}
-          <div className="mt-10">
-            <div className="mb-6 flex items-center justify-between">
+          <div className="mt-10 min-w-0 max-w-full">
+            <div className="mb-6 flex items-center justify-between gap-4 max-[480px]:flex-col max-[480px]:items-start">
               <h2 className="m-0 text-xl font-bold">Recommendations</h2>
               <div className="flex gap-3">
                 <button type="button" aria-label="Previous recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] prev-rec">‹</button>
@@ -237,7 +237,7 @@ export default function Cart() {
                 992: { slidesPerView: 3 },
                 1200: { slidesPerView: 4 },
               }}
-              className="w-full"
+              className="w-full min-w-0 max-w-full"
             >
               {recommendations.map((product) => (
                 <SwiperSlide key={`rec-${product.id}`}>
