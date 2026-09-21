@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProfileEmptyState, ProfileToast } from "../../components/profile";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 type CouponType = "discount" | "shipping" | "special";
 type CouponStatus = "active" | "expired" | "used";

@@ -1,7 +1,10 @@
 import { lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-const Home = lazy(() => import("../pages/Home"));
+// Home is the critical route. Start downloading it as soon as the router is evaluated,
+// while keeping it in its own chunk so the initial JavaScript stays small.
+const homePage = import("../pages/Home");
+const Home = lazy(() => homePage);
 const Category = lazy(() => import("../pages/Category"));
 const Search = lazy(() => import("../pages/Search"));
 const Cart = lazy(() => import("../pages/Cart"));

@@ -9,7 +9,7 @@ import "swiper/css/navigation";
 import { SearchProductCard } from "../components/search";
 import { useLocation } from "../features/addresses/LocationContext";
 import type { Product } from "../types/product";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();

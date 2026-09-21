@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
 import { clearLocalAccountData, DEFAULT_SETTINGS, loadAccountSettings, saveAccountSettings, type AccountSettingsData } from "../../features/profile/settings";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 type SettingsTab = "account" | "security" | "notifications" | "privacy" | "danger";
 const tabs: Array<[SettingsTab, string]> = [["account", "Account Details"], ["security", "Security & Password"], ["notifications", "Notifications"], ["privacy", "Privacy & Data"], ["danger", "Danger Zone"]];

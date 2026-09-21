@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import { loadProfileNotifications, saveProfileNotifications, type NotificationType, type ProfileNotification } from "../../features/profile/notifications";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 export default function NotificationSetting() {
   const { user } = useAuth();

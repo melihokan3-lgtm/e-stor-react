@@ -7,7 +7,7 @@ import { fetchProducts } from "../services/api/productApi";
 import { ProductCard } from "../components/product";
 import type { FormEvent } from "react";
 import type { Product } from "../types/product";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 const promoBanners = [
   { img: "/img/optimized/Frame 33.webp", alt: "Special Deals", link: "/category?deals=true" },

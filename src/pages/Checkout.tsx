@@ -9,7 +9,7 @@ import { PaymentSelectionModal } from "../components/checkout";
 import { loadSavedCards } from "../features/payments/savedCards";
 import type { PaymentCard } from "../types/payment";
 import type { CreateOrderInput } from "../types/order";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 type CouponIconType = "discount" | "shipping" | "special";
 type CouponDiscountType = "percent" | "fixed" | "shipping";

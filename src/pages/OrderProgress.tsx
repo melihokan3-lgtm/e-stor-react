@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useOrders } from "../features/orders/OrdersContext";
 import { useAuth } from "../features/auth/AuthContext";
 import { FALLBACK_IMG } from "../services/api/productApi";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 const formatAmount = (amount: number): string =>
   `${amount < 0 ? "-" : ""}$${Math.abs(amount).toFixed(2)}`;
