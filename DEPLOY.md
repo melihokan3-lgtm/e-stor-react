@@ -18,3 +18,11 @@
 `https://xblmgefooqnapaqanfkc.supabase.co/storage/v1/object/public/product-images/milk1.png`
 
 Frontend'e `service_role` veya `secret` key koyma.
+
+## Existing Supabase projects
+
+For an already-created Supabase project, run `supabase/security-hardening.sql`
+in SQL Editor once. New orders then use the `create_order` RPC, which calculates
+prices from `public.products`; direct browser inserts and total changes are
+blocked by database privileges. Products from the supplemental demo APIs must
+be seeded into `public.products` before they can be ordered.

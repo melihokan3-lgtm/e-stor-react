@@ -172,6 +172,7 @@ export default function Checkout() {
       deliveryAddress: location,
       paymentMethod: cardDisplayName,
       total: finalTotal,
+      tip: numericTip,
       coupon: appliedCoupon?.code ?? null,
       couponDiscount,
       status: "Processing",

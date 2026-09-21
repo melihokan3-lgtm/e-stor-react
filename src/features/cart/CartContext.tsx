@@ -7,6 +7,24 @@ import type { Product } from "../../types/product";
 
 const CartContext = createContext<CartContextValue | null>(null);
 
+const sanitizeCart = (value: unknown): CartItem[] => {
+  if (!Array.isArray(value)) return [];
+  return value.filter((item): item is CartItem => {
+    if (!item || typeof item !== "object") return false;
+    const candidate = item as Partial<CartItem>;
+    const product = candidate.data;
+    const unit = candidate.unit;
+    return Boolean(
+      product && typeof product === "object"
+      && Number.isInteger(product.id) && product.id > 0
+      && typeof product.title === "string" && product.title.length <= 300
+      && Number.isFinite(product.price) && product.price >= 0
+      && typeof product.category === "string"
+      && typeof unit === "number" && Number.isInteger(unit) && unit >= 1 && unit <= 100,
+    );
+  }).map((item) => ({ ...item, data: { ...item.data, title: item.data.title.trim(), category: item.data.category.trim() } }));
+};
+
 export const useCart = (): CartContextValue => {
   const context = useContext(CartContext);
   if (!context) throw new Error("useCart must be used inside CartProvider.");
@@ -26,7 +44,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     isHydrating.current = true;
     const hydrate = async () => {
       try {
-        setCart(isSupabaseDataEnabled(user) ? await fetchUserCart(user) : readUserStorage("cart", user, []));
+        setCart(sanitizeCart(isSupabaseDataEnabled(user) ? await fetchUserCart(user) : readUserStorage("cart", user, [])));
       } catch (error) {
         console.error("Failed to load cart", error);
         setCart([]);

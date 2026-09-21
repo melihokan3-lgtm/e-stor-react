@@ -301,9 +301,6 @@ export default function AuthModal() {
               )}
             </Button>
 
-            <p className="text-center text-xs text-[#999]">
-              Test: <strong>emilys</strong> / <strong>emilyspass</strong>
-            </p>
           </form>
         )}
 

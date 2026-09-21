@@ -6,6 +6,22 @@ import type { CreateOrderInput, Order, OrdersContextValue } from "../../types/or
 
 export const OrdersContext = createContext<OrdersContextValue | null>(null);
 
+const sanitizeOrders = (value: unknown): Order[] => {
+  if (!Array.isArray(value)) return [];
+  return value.filter((order): order is Order => {
+    if (!order || typeof order !== "object") return false;
+    const candidate = order as Partial<Order>;
+    const total = candidate.total;
+    return Boolean(
+      (typeof candidate.id === "string" || typeof candidate.id === "number")
+      && typeof candidate.status === "string"
+      && typeof total === "number" && Number.isFinite(total) && total >= 0
+      && typeof candidate.deliveryAddress === "string"
+      && Array.isArray(candidate.items),
+    );
+  });
+};
+
 export const useOrders = (): OrdersContextValue => {
   const context = useContext(OrdersContext);
   if (!context) throw new Error("useOrders must be used inside OrdersProvider.");
@@ -32,7 +48,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     setOrdersError("");
     const hydrate = async () => {
       try {
-        const loaded = isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []);
+        const loaded = sanitizeOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []));
         if (active) setOrders(loaded);
       } catch (error) {
         console.error("Failed to load orders", error);

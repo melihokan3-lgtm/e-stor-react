@@ -16,9 +16,9 @@ export const getCardThemeGradient = (themeId: string): string =>
 export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   {
     id: "card_demo_1",
-    cardHolder: "MELİH YILMAZ",
-    maskedNumber: "**** **** **** 4892",
-    last4: "4892",
+    cardHolder: "DEMO USER",
+    maskedNumber: "**** **** **** 4242",
+    last4: "4242",
     expiry: "09/29",
     cardType: "mastercard",
     theme: "purple",
@@ -27,9 +27,9 @@ export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   },
   {
     id: "card_demo_2",
-    cardHolder: "MELİH YILMAZ",
-    maskedNumber: "**** **** **** 8214",
-    last4: "8214",
+    cardHolder: "DEMO USER",
+    maskedNumber: "**** **** **** 5556",
+    last4: "5556",
     expiry: "11/28",
     cardType: "visa",
     theme: "midnight",

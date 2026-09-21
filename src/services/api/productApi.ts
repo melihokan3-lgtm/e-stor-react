@@ -206,7 +206,14 @@ export const fetchProductById = async (id: string | number): Promise<Product | n
 export const cleanImageUrl = (url: unknown): string => {
   if (typeof url !== "string") return "";
   const normalizedUrl = url.replace(/[\[\]"]/g, "").trim();
-  return normalizedUrl.replace(/^\/img\/(.+)\.png$/iu, "/img/optimized/$1.webp");
+  const localUrl = normalizedUrl.replace(/^\/img\/(.+)\.png$/iu, "/img/optimized/$1.webp");
+  if (localUrl.startsWith("/")) return localUrl;
+  try {
+    const parsedUrl = new URL(localUrl);
+    return parsedUrl.protocol === "https:" ? parsedUrl.toString() : "";
+  } catch {
+    return "";
+  }
 };
 
 export const FALLBACK_IMG =

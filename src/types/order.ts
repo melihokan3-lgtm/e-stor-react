@@ -17,6 +17,7 @@ export interface Order {
   date?: string;
   createdAt?: string;
   paymentMethod?: string;
+  tip?: number;
   coupon?: string | null;
   couponDiscount?: number;
 }

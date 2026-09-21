@@ -6,6 +6,7 @@ import pg from "pg";
 const { Pool } = pg;
 const app = express();
 const port = Number(process.env.PORT || 3001);
+const isProduction = process.env.NODE_ENV === "production";
 
 if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required for the API server");
@@ -16,6 +17,24 @@ const pool = new Pool({
   max: 10,
   idleTimeoutMillis: 30_000,
   connectionTimeoutMillis: 5_000,
+});
+
+const allowedOrigins = new Set(
+  (process.env.FRONTEND_ORIGINS || process.env.FRONTEND_ORIGIN || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
+
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  if (isProduction) res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+  next();
 });
 
 const seedProducts = [
@@ -53,8 +72,15 @@ async function ensureProductTable() {
   }
 }
 
-app.use(cors({ origin: process.env.FRONTEND_ORIGIN || "http://localhost:5173" }));
-app.use(express.json({ limit: "100kb" }));
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error("Origin is not allowed"));
+  },
+  methods: ["GET"],
+  optionsSuccessStatus: 204,
+}));
+app.use(express.json({ limit: "50kb", strict: true }));
 
 app.get("/api/health", async (_req, res) => {
   try {
@@ -96,6 +122,14 @@ app.get("/api/products/:id", async (req, res) => {
     console.error("Failed to fetch product", error);
     res.status(500).json({ message: "Product could not be loaded" });
   }
+});
+
+app.use((error, _req, res, _next) => {
+  if (error?.message === "Origin is not allowed") {
+    return res.status(403).json({ message: "Origin is not allowed" });
+  }
+  console.error("Unhandled API error", error);
+  return res.status(500).json({ message: "Internal server error" });
 });
 
 ensureProductTable()

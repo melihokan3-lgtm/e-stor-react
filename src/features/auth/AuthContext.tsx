@@ -83,13 +83,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- LOGIN ---
   const loginUser = async (username: string, password: string): Promise<AuthUser> => {
     try {
+      const normalizedUsername = username.trim().toLowerCase();
+      if (!normalizedUsername || password.length === 0 || password.length > 128) {
+        throw new Error("E-posta veya şifre hatalı.");
+      }
       const client = await getSupabaseClient();
       if (isSupabaseConfigured && client) {
-        if (!username.includes("@")) {
+        if (!normalizedUsername.includes("@")) {
           throw new Error("Supabase hesabınıza e-posta adresinizle giriş yapın.");
         }
         const { data, error } = await client.auth.signInWithPassword({
-          email: username.trim().toLowerCase(),
+          email: normalizedUsername,
           password,
         });
         if (error) throw new Error(getAuthErrorMessage(error, "Giriş yapılamadı."));
@@ -114,13 +118,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   // --- REGISTER (simulated via /users/add) ---
   const registerUser = async ({ username, email, password, firstName, lastName }: RegisterInput): Promise<AuthUser> => {
     try {
+      const normalizedEmail = email.trim().toLowerCase();
+      const normalizedUsername = username.trim().slice(0, 64);
+      const normalizedFirstName = firstName.trim().slice(0, 80);
+      const normalizedLastName = lastName.trim().slice(0, 80);
+      if (!normalizedEmail || !normalizedUsername || !normalizedFirstName || !normalizedLastName || password.length > 128) {
+        throw new Error("Kayıt bilgileri geçersiz.");
+      }
       const client = await getSupabaseClient();
       if (isSupabaseConfigured && client) {
         const { data, error } = await client.auth.signUp({
-          email: email.trim().toLowerCase(),
+          email: normalizedEmail,
           password,
           options: {
-            data: { username, firstName, lastName },
+            data: { username: normalizedUsername, firstName: normalizedFirstName, lastName: normalizedLastName },
           },
         });
         if (error) throw new Error(getAuthErrorMessage(error, "Kayıt işlemi başarısız oldu."));
