@@ -201,11 +201,22 @@ export default function Category() {
                   <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#d73f98] px-1 text-xs font-bold text-white">{activeFiltersCount}</span>
                 )}
               </div>
-              {activeFiltersCount > 0 && (
-                <button className="text-xs font-semibold text-[#d73f98] hover:underline" onClick={resetFilters}>
-                  Clear All
+              <div className="flex items-center gap-3">
+                {activeFiltersCount > 0 && (
+                  <button type="button" className="text-xs font-semibold text-[#d73f98] hover:underline" onClick={resetFilters}>
+                    Clear All
+                  </button>
+                )}
+                <button
+                  type="button"
+                  className="hidden items-center gap-1 rounded-lg border border-[#e2e8f0] px-2.5 py-1.5 text-xs font-semibold text-[#475569] hover:border-[#d73f98] hover:text-[#d73f98] max-[1024px]:inline-flex"
+                  onClick={() => setMobileFilterOpen(false)}
+                  aria-label="Filtreleri kapat"
+                >
+                  <span aria-hidden="true">×</span>
+                  Close
                 </button>
-              )}
+              </div>
             </div>
 
             {/* Active filter chips */}
