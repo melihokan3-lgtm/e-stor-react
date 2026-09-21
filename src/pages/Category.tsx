@@ -177,7 +177,7 @@ export default function Category() {
           </button>
           
           <div>
-            <select aria-label="Ürünleri sırala" className="rounded-lg border border-[#cbd5e1] bg-white px-3 py-2 text-sm" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+            <select aria-label="Ürünleri sırala" className="rounded-[10px] border border-[#e7dfe7] bg-white px-3 py-2 text-sm font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
               <option value="recommended">Recommended</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -558,7 +558,7 @@ export default function Category() {
                 aria-label="Ürünleri sırala"
                 value={sortBy} 
                 onChange={(e) => setSortBy(e.target.value)}
-                className="cursor-pointer rounded-lg border border-[#cbd5e1] bg-[#f8fafc] px-3.5 py-2 text-[13px] font-semibold text-[#0f172a] outline-none focus:border-[#d73f98]"
+                className="cursor-pointer rounded-[10px] border border-[#e7dfe7] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15"
               >
                 <option value="recommended">Recommended</option>
                 <option value="price-asc">Price: Low to High</option>
