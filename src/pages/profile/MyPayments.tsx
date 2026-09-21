@@ -9,7 +9,7 @@ import { CardThemeSelector } from "../../components/payments";
 import { ProfileEmptyState, ProfileToast } from "../../components/profile";
 import type { PaymentCard } from "../../types/payment";
 import { getCardThemeGradient } from "../../utils/cardUtils";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 const inputClass =
   "mt-1 box-border min-h-12 w-full appearance-none rounded-xl border border-[#e8e8e8] bg-[#fafafa] px-3.5 py-3 text-sm font-medium leading-5 text-[#222] outline-none transition placeholder:text-[#b8b8b8] focus:border-[#b6349a] focus:bg-white focus:ring-4 focus:ring-[#b6349a]/10";

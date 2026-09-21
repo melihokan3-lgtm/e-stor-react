@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ProfileDetailRow } from "../../components/profile";
 import { useAuth } from "../../features/auth/AuthContext";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 type EditableField = "name" | "username" | "email" | "phone";
 type ProfileForm = Record<"firstName" | "lastName" | "username" | "email" | "phone", string>;

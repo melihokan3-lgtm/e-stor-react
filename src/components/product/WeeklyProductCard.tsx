@@ -5,7 +5,7 @@ import type { Product } from "../../types/product";
 
 export default function WeeklyProductCard({ product }: { product: Product }) {
   const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";
-  const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
+  const imageSrc = cleanImageUrl(product.image) || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
   const oldPrice = (product.price * 1.2).toFixed(2);
   const stockLeft = (product.id % 15) + 1;
   const { addToCart } = useCart();

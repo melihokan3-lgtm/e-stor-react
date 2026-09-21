@@ -16,7 +16,7 @@ export default function ProductCard({ product, className = defaultCardClassName 
   const { addToCart } = useCart();
   
   // Fake Store API uses `image` instead of `images` array
-  const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
+  const imageSrc = cleanImageUrl(product.image) || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
   
   // Fake old price and stock for UI purposes to match design
   const oldPrice = (product.price * 1.2).toFixed(2);

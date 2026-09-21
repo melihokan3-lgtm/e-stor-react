@@ -1,6 +1,6 @@
 import { useLocation } from "../../features/addresses/LocationContext";
 import { AddressCard, ProfileEmptyState } from "../../components/profile";
-import { SeoMeta } from "../../components/common";
+import SeoMeta from "../../components/common/SeoMeta";
 
 export default function MyAddresses() {
   const { location, addresses, selectLocation, removeAddress, openLocationModal } = useLocation();

@@ -5,7 +5,7 @@ import { ProductSection } from "../components/product";
 import { HomeBannerCarousel, HomePromoSection } from "../components/home";
 import { getTrendingProducts } from "../features/products/trending";
 import type { Product } from "../types/product";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 export default function Home() {
   const { products, loading, error } = useProducts();

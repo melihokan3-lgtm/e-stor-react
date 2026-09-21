@@ -3,7 +3,7 @@ import useProducts from "../features/products/useProducts";
 import { SearchProductCard } from "../components/search";
 import LoadingState from "../components/common/LoadingState";
 import { EmptyState, ErrorState } from "../components/common/ui/FeedbackState";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 export default function Search() {
   const { products, loading, error } = useProducts();

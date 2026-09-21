@@ -1,5 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import {
+  lazy,
+  Suspense,
   useState,
   useEffect,
   useRef,
@@ -8,16 +10,17 @@ import {
 import { useCart } from "../../features/cart/CartContext";
 import { useAuth } from "../../features/auth/AuthContext";
 import { useLocation } from "../../features/addresses/LocationContext";
-import AuthModal from "../common/AuthModal";
-import LocationModal from "../common/LocationModal";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import useProducts from "../../features/products/useProducts";
+
+const AuthModal = lazy(() => import("../common/AuthModal"));
+const LocationModal = lazy(() => import("../common/LocationModal"));
 
 export default function Navbar() {
   const { products } = useProducts();
   const { totalItems } = useCart();
-  const { user, isLoggedIn, openAuthModal } = useAuth();
-  const { location, openLocationModal } = useLocation();
+  const { user, isLoggedIn, isAuthModalOpen, openAuthModal } = useAuth();
+  const { location, isLocationModalOpen, openLocationModal } = useLocation();
   const [searchTerm, setSearchTerm] = useState("");
   const [pastSearches, setPastSearches] = useState<string[]>([]);
   const [showPastSearches, setShowPastSearches] = useState(false);
@@ -460,8 +463,16 @@ export default function Navbar() {
       </nav>
 
       {/* Auth Modal — rendered globally */}
-      <AuthModal />
-      <LocationModal />
+      {isAuthModalOpen && (
+        <Suspense fallback={null}>
+          <AuthModal />
+        </Suspense>
+      )}
+      {isLocationModalOpen && (
+        <Suspense fallback={null}>
+          <LocationModal />
+        </Suspense>
+      )}
     </>
   );
 }

@@ -8,7 +8,7 @@ export default function SearchProductCard({ product }: { product: Product }) {
   const productId = product.id;
   const { addToCart } = useCart();
   
-  const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
+  const imageSrc = cleanImageUrl(product.image) || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
 
   const oldPrice = (product.price * 1.2).toFixed(2);
 

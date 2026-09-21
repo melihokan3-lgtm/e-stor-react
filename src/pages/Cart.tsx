@@ -4,12 +4,10 @@ import { useCart } from "../features/cart/CartContext";
 import { fetchProducts, cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
-import "swiper/css";
-import "swiper/css/navigation";
 import { SearchProductCard } from "../components/search";
 import { useLocation } from "../features/addresses/LocationContext";
 import type { Product } from "../types/product";
-import { SeoMeta } from "../components/common";
+import SeoMeta from "../components/common/SeoMeta";
 
 export default function Cart() {
   const { cart, removeFromCart, updateQuantity, totalPrice } = useCart();
@@ -141,7 +139,7 @@ export default function Cart() {
               const product = item.data;
               const categorySlug = product.category.toLowerCase().replace(/\s+/g, "-") || "category";
               const productId = product.id;
-              const imageSrc = product.image || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
+              const imageSrc = cleanImageUrl(product.image) || cleanImageUrl(product.images?.[0]) || FALLBACK_IMG;
               const oldPrice = (product.price * 1.2).toFixed(2);
               const itemTotal = (product.price * item.unit).toFixed(2);
 

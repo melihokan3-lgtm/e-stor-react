@@ -8,6 +8,8 @@ const FAKE_PRODUCT_ID_OFFSET = 100000;
 const NOKSHA_PRODUCT_ID_OFFSET = 200000;
 let productsCache: Product[] | undefined;
 let productsPromise: Promise<Product[]> | undefined;
+let supplementalProductsCache: Product[] | undefined;
+let supplementalProductsPromise: Promise<Product[]> | undefined;
 
 interface NokshaProduct {
   _id?: number;
@@ -121,18 +123,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
       const { data, error } = await client.from("products").select(PRODUCT_FIELDS).order("id", { ascending: false });
       if (error) throw error;
 
-      const supabaseProducts = (data || []) as Product[];
-      // Supplemental catalogs are useful for a fuller storefront, but they must
-      // never hold the primary Supabase catalog hostage on a slow network.
-      const supplementalResults = await Promise.race([
-        Promise.allSettled([requestFakeProducts(), requestNokshaProducts()]),
-        new Promise<PromiseSettledResult<Product[]>[]>((resolve) => setTimeout(() => resolve([]), 1500)),
-      ]);
-      const supplementalProducts = supplementalResults.flatMap((result) => {
-        if (result.status === "fulfilled") return result.value;
-        return [];
-      });
-      return [...supabaseProducts, ...supplementalProducts];
+      return (data || []) as Product[];
     })().then((products) => {
       productsCache = products;
       return products;
@@ -144,6 +135,37 @@ export const fetchProducts = async (): Promise<Product[]> => {
     productsPromise = undefined;
     throw error;
   }
+};
+
+export const fetchSupplementalProducts = async (): Promise<Product[]> => {
+  if (supplementalProductsCache) return supplementalProductsCache;
+  if (!supplementalProductsPromise) {
+    supplementalProductsPromise = Promise.allSettled([
+      requestFakeProducts(),
+      requestNokshaProducts(),
+    ]).then((results) => {
+      const products = results
+        .flatMap((result) => (result.status === "fulfilled" ? result.value : []))
+        .slice(0, 24);
+      supplementalProductsCache = products;
+      return products;
+    });
+  }
+
+  try {
+    return await supplementalProductsPromise;
+  } catch {
+    supplementalProductsPromise = undefined;
+    return [];
+  }
+};
+
+export const fetchProductsWithSupplemental = async (): Promise<Product[]> => {
+  const [primaryProducts, supplementalProducts] = await Promise.all([
+    fetchProducts(),
+    fetchSupplementalProducts(),
+  ]);
+  return [...primaryProducts, ...supplementalProducts];
 };
 
 const fetchSupplementalProduct = async (url: string, remoteId: number, productId: number, categoryPrefix: string): Promise<Product | null> => {
@@ -192,7 +214,8 @@ export const fetchProductById = async (id: string | number): Promise<Product | n
 
 export const cleanImageUrl = (url: unknown): string => {
   if (typeof url !== "string") return "";
-  return url.replace(/[\[\]"]/g, "").trim();
+  const normalizedUrl = url.replace(/[\[\]"]/g, "").trim();
+  return normalizedUrl.replace(/^\/img\/(.+)\.png$/iu, "/img/optimized/$1.webp");
 };
 
 export const FALLBACK_IMG =
