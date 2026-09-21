@@ -85,7 +85,7 @@ export default function Cart() {
 
           {/* LOCAL MARKET HEADER */}
           <div
-            className="mb-[30px] flex w-full items-center justify-between rounded-[20px] border border-[#eee] bg-white p-6 text-left transition hover:border-[#b6349a] hover:shadow-[0_8px_24px_rgba(182,52,154,0.1)] focus:outline-none focus-visible:border-[#b6349a] focus-visible:shadow-[0_8px_24px_rgba(182,52,154,0.1)] max-[640px]:items-start max-[640px]:gap-4"
+            className="mb-[30px] flex w-full items-center justify-between rounded-[20px] border border-[#eee] bg-white p-6 text-left transition hover:border-[#b6349a] hover:shadow-[0_8px_24px_rgba(182,52,154,0.1)] focus:outline-none focus-visible:border-[#b6349a] focus-visible:shadow-[0_8px_24px_rgba(182,52,154,0.1)] max-[640px]:flex-col max-[640px]:items-stretch max-[640px]:gap-4 max-[640px]:p-4"
             onClick={openLocationModal}
             role="button"
             tabIndex={0}
@@ -97,7 +97,7 @@ export default function Cart() {
             }}
             aria-label={`Teslimat adresini değiştir. Mevcut adres: ${location}`}
           >
-            <div className="flex min-w-0 items-center gap-4">
+            <div className="flex min-w-0 items-center gap-4 max-[640px]:w-full max-[640px]:gap-3">
               <div className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-full bg-[#fdf5fb]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="9" cy="21" r="1"></circle>
@@ -106,7 +106,7 @@ export default function Cart() {
                 </svg>
               </div>
               <div className="flex min-w-0 flex-col gap-1">
-                <p className="flex items-center gap-1.5 truncate text-sm font-medium text-[#b6349a]">
+                <p className="flex min-w-0 flex-1 items-start gap-1.5 break-words text-sm font-medium leading-5 text-[#b6349a]">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
@@ -117,7 +117,7 @@ export default function Cart() {
             </div>
             <button
               type="button"
-              className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-[30px] border border-[#ddd] bg-white px-5 py-2.5 text-sm font-semibold text-[#111] transition hover:border-[#b6349a]"
+              className="flex shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[30px] border border-[#ddd] bg-white px-5 py-2.5 text-sm font-semibold text-[#111] transition hover:border-[#b6349a] max-[640px]:w-full max-[640px]:px-4 max-[640px]:text-xs"
               onClick={(event) => {
                 event.stopPropagation();
                 openLocationModal();

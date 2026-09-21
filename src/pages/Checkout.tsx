@@ -218,7 +218,7 @@ export default function Checkout() {
         <div className="flex min-w-0 flex-col gap-4">
 
           {/* HEADER ROW */}
-          <div className="mb-1 flex items-center justify-between gap-5 max-[640px]:items-start max-[640px]:gap-2">
+          <div className="mb-1 flex items-center justify-between gap-5 max-[640px]:flex-col max-[640px]:items-stretch max-[640px]:gap-3">
             <div className="flex items-center gap-3">
               <div className="flex items-center">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -228,7 +228,7 @@ export default function Checkout() {
               </div>
               <h2 className="text-2xl font-bold text-[#111]">Ödeme ve Teslimat</h2>
             </div>
-            <div className="flex max-w-[55%] items-center gap-2 truncate text-sm text-[#555] max-[640px]:text-xs">
+            <div className="flex max-w-[55%] min-w-0 items-start gap-2 break-words text-sm leading-5 text-[#555] max-[640px]:max-w-full max-[640px]:text-xs">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -266,13 +266,13 @@ export default function Checkout() {
                 </svg>
               </div>
             </div>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 flex min-w-0 items-start gap-2 max-[640px]:gap-1.5">
               <span className="text-xs font-semibold text-[#777]">Deliver to</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
-              <span className="truncate text-sm font-semibold text-[#b6349a]">{location}</span>
+              <span className="min-w-0 break-words text-sm font-semibold leading-5 text-[#b6349a]">{location}</span>
             </div>
           </div>
 
