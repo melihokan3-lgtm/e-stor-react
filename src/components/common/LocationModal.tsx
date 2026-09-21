@@ -243,8 +243,8 @@ export default function LocationModal() {
     <Modal
       open={isLocationModalOpen}
       onClose={closeLocationModal}
-      overlayClassName="fixed inset-0 z-[1000] grid place-items-center bg-[rgba(22,16,22,0.38)] p-5"
-      contentClassName="w-[min(100%,560px)] rounded-[20px] border border-[#f2e8f0] bg-white p-7 shadow-[0_22px_70px_rgba(42,22,40,0.18)]"
+      overlayClassName="fixed inset-0 z-[1000] grid place-items-center overflow-y-auto bg-[rgba(22,16,22,0.38)] p-5"
+      contentClassName="max-h-[calc(100dvh-40px)] w-[min(100%,560px)] overflow-y-auto overscroll-contain rounded-[20px] border border-[#f2e8f0] bg-white p-7 shadow-[0_22px_70px_rgba(42,22,40,0.18)] [touch-action:pan-y]"
       labelledBy="location-modal-title"
     >
         <div className="flex items-start justify-between gap-4">
