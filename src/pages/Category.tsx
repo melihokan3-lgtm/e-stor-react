@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
@@ -16,6 +16,77 @@ const promoBanners = [
   { img: "/img/optimized/Rectangle 3.webp", alt: "Super Sale", link: "/category" },
   { img: "/img/optimized/Frame 366.webp", alt: "Trending Drinks", link: "/category" },
 ];
+
+const sortOptions = [
+  { value: "recommended", label: "Recommended" },
+  { value: "price-asc", label: "Price: Low to High" },
+  { value: "price-desc", label: "Price: High to Low" },
+  { value: "name-asc", label: "Product Name (A-Z)" },
+];
+
+function SortSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const selectedOption = sortOptions.find((option) => option.value === value) ?? sortOptions[0];
+
+  useEffect(() => {
+    if (!open) return undefined;
+
+    const handlePointerDown = (event: PointerEvent): void => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
+  return (
+    <div ref={containerRef} className="relative min-w-[170px] max-[480px]:min-w-0 max-[480px]:flex-1">
+      <button
+        type="button"
+        aria-label="Ürünleri sırala"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 rounded-[10px] border border-[#e7dfe7] bg-white px-3.5 py-2 text-left text-[13px] font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition hover:border-[#b6349a] focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15"
+        onClick={() => setOpen((isOpen) => !isOpen)}
+      >
+        <span className="truncate">{selectedOption.label}</span>
+        <svg className={`size-4 shrink-0 text-[#b6349a] transition-transform ${open ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute right-0 top-full z-50 mt-2 w-full min-w-[210px] overflow-hidden rounded-[12px] border border-[#f0e1ed] bg-white p-1.5 shadow-[0_12px_28px_rgba(62,24,54,0.14)]" role="listbox" aria-label="Sıralama seçenekleri">
+          {sortOptions.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              role="option"
+              aria-selected={option.value === value}
+              className={`flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-left text-[13px] transition ${option.value === value ? "bg-[#fff0fa] font-bold text-[#b6349a]" : "font-medium text-[#444] hover:bg-[#fff7fc] hover:text-[#b6349a]"}`}
+              onClick={() => {
+                onChange(option.value);
+                setOpen(false);
+              }}
+            >
+              {option.label}
+              {option.value === value && <span aria-hidden="true">✓</span>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Category() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -177,12 +248,7 @@ export default function Category() {
           </button>
           
           <div>
-            <select aria-label="Ürünleri sırala" className="rounded-[10px] border border-[#e7dfe7] bg-white px-3 py-2 text-sm font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15" value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
-              <option value="recommended">Recommended</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-              <option value="name-asc">Product Name (A-Z)</option>
-            </select>
+            <SortSelect value={sortBy} onChange={setSortBy} />
           </div>
         </div>
 
@@ -554,17 +620,7 @@ export default function Category() {
 
             <div className="flex items-center gap-2.5 max-[1024px]:hidden">
               <span className="text-[13.5px] font-semibold text-[#475569]">Sort by:</span>
-              <select
-                aria-label="Ürünleri sırala"
-                value={sortBy} 
-                onChange={(e) => setSortBy(e.target.value)}
-                className="cursor-pointer rounded-[10px] border border-[#e7dfe7] bg-white px-3.5 py-2 text-[13px] font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15"
-              >
-                <option value="recommended">Recommended</option>
-                <option value="price-asc">Price: Low to High</option>
-                <option value="price-desc">Price: High to Low</option>
-                <option value="name-asc">Product Name (A-Z)</option>
-              </select>
+              <SortSelect value={sortBy} onChange={setSortBy} />
             </div>
           </div>
 
