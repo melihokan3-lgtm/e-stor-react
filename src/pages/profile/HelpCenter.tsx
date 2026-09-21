@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProfileEmptyState } from "../../components/profile";
-import SeoMeta from "../../components/common/SeoMeta";
+import { SeoMeta } from "../../components/common";
 
 const FAQ_ITEMS = [
   {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { loadReferralData, type ReferralData } from "../../features/profile/referrals";
-import SeoMeta from "../../components/common/SeoMeta";
+import { SeoMeta } from "../../components/common";
 
 export default function ReferFriends() {
   const { user } = useAuth();

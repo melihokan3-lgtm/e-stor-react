@@ -10,7 +10,7 @@ import {
 import { useCart } from "../features/cart/CartContext";
 import { ProductCard } from "../components/product";
 import type { Product } from "../types/product";
-import SeoMeta from "../components/common/SeoMeta";
+import { SeoMeta } from "../components/common";
 
 const PUBLIC_SITE_URL = "https://e-stor-react-nttt.vercel.app";
 

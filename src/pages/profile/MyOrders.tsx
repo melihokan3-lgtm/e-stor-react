@@ -3,7 +3,7 @@ import { useOrders } from "../../features/orders/OrdersContext";
 import { isPendingOrder } from "../../features/orders/orderStatus";
 import { EditOrderAddressModal, OrderCard, ProfileEmptyState, ProfileFilterTabs, ProfileToast } from "../../components/profile";
 import type { Order } from "../../types/order";
-import SeoMeta from "../../components/common/SeoMeta";
+import { SeoMeta } from "../../components/common";
 
 export default function MyOrders() {
   const { orders, ordersLoading, ordersError, updateOrderAddress } = useOrders();
