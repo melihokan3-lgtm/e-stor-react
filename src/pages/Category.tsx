@@ -104,6 +104,8 @@ function SortSelect({ value, onChange }: { value: string; onChange: (value: stri
 export default function Category() {
   const { products, loading, error } = useProducts();
   const [searchParams, setSearchParams] = useSearchParams();
+  // Keep filtering responsive even while the router is updating the URL.
+  const [activeFilterParams, setActiveFilterParams] = useState(() => new URLSearchParams(searchParams));
   const [categorySearch, setCategorySearch] = useState("");
   const [minPriceInput, setMinPriceInput] = useState("");
   const [maxPriceInput, setMaxPriceInput] = useState("");
@@ -111,12 +113,16 @@ export default function Category() {
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   // URL search params
-  const catFilter = searchParams.get("cat") || "all";
-  const priceFilter = searchParams.get("price") || "all";
-  const dealsFilter = searchParams.get("deals") === "true";
-  const newFilter = searchParams.get("new") === "true";
-  const fastShippingFilter = searchParams.get("fast_shipping") === "true";
-  const minRatingFilter = Number(searchParams.get("rating")) || 0;
+  useEffect(() => {
+    setActiveFilterParams(new URLSearchParams(searchParams));
+  }, [searchParams]);
+
+  const catFilter = activeFilterParams.get("cat") || "all";
+  const priceFilter = activeFilterParams.get("price") || "all";
+  const dealsFilter = activeFilterParams.get("deals") === "true";
+  const newFilter = activeFilterParams.get("new") === "true";
+  const fastShippingFilter = activeFilterParams.get("fast_shipping") === "true";
+  const minRatingFilter = Number(activeFilterParams.get("rating")) || 0;
   const categoryLabel = catFilter === "all"
     ? "Tüm Ürünler"
     : catFilter.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
@@ -135,10 +141,11 @@ export default function Category() {
   }, [products]);
 
   const updateFilter = (key: string, value: string | boolean | number) => {
-    setSearchParams((currentParams) => {
+    setActiveFilterParams((currentParams) => {
       const newParams = new URLSearchParams(currentParams);
       if (value === "all" || value === false || value === "" || value === 0) newParams.delete(key);
       else newParams.set(key, String(value));
+      setSearchParams(newParams);
       return newParams;
     });
   };
