@@ -30,6 +30,8 @@ interface NominatimResult {
   display_name?: string;
 }
 
+type MapStatus = "idle" | "loading" | "locating" | "geocoding" | "ready" | "error";
+
 declare global {
   interface Window {
     L?: LeafletApi;
@@ -131,12 +133,47 @@ const formatAddress = (address: AddressData = {}, displayName = ""): string => {
 };
 
 const reverseGeocode = async (lat: number, lng: number, zoom: number): Promise<NominatimResult> => {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}&zoom=${zoom}&addressdetails=1&accept-language=tr`,
-    { headers: { Accept: "application/json" } },
-  );
+  const requestUrl = new URL("https://nominatim.openstreetmap.org/reverse");
+  requestUrl.search = new URLSearchParams({
+    format: "jsonv2",
+    lat: String(lat),
+    lon: String(lng),
+    zoom: String(zoom),
+    addressdetails: "1",
+    "accept-language": "tr",
+  }).toString();
+  const response = await fetch(requestUrl, { headers: { Accept: "application/json" } });
   if (!response.ok) throw new Error("Adres servisi yanıt vermedi.");
   return (await response.json()) as NominatimResult;
+};
+
+const getAddressForCoordinates = async (lat: number, lng: number): Promise<string> => {
+  const detailData = await reverseGeocode(lat, lng, 18);
+  let addressData = detailData;
+
+  // Sokak sonucu ilçe alanını içermiyorsa ilçe seviyesinden tamamla.
+  if (!getDistrict(detailData.address)) {
+    const districtData = await reverseGeocode(lat, lng, 10);
+    addressData = {
+      ...detailData,
+      address: { ...districtData.address, ...detailData.address },
+    };
+  }
+
+  return formatAddress(addressData.address, addressData.display_name);
+};
+
+const getGeolocationErrorMessage = (error: GeolocationPositionError): string => {
+  if (error.code === error.PERMISSION_DENIED) {
+    return "Konum izni verilmedi. Tarayıcı ayarlarından konum iznini açıp tekrar deneyin.";
+  }
+  if (error.code === error.POSITION_UNAVAILABLE) {
+    return "Konumunuz belirlenemedi. GPS veya ağ bağlantınızı kontrol edip tekrar deneyin.";
+  }
+  if (error.code === error.TIMEOUT) {
+    return "Konum isteği zaman aşımına uğradı. Lütfen tekrar deneyin.";
+  }
+  return "Konumunuz alınamadı. Lütfen tekrar deneyin.";
 };
 
 export default function LocationModal() {
@@ -146,8 +183,53 @@ export default function LocationModal() {
   const markerRef = useRef<LeafletMarker | null>(null);
   const [label, setLabel] = useState("Home");
   const [address, setAddress] = useState(location);
-  const [mapStatus, setMapStatus] = useState<"idle" | "loading" | "geocoding" | "ready" | "error">("idle");
+  const [mapStatus, setMapStatus] = useState<MapStatus>("idle");
   const [mapError, setMapError] = useState("");
+
+  const updateLocationFromCoordinates = async (lat: number, lng: number): Promise<void> => {
+    if (!Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+      setMapStatus("ready");
+      setMapError("Geçersiz bir konum alındı. Lütfen tekrar deneyin.");
+      return;
+    }
+
+    markerRef.current?.setLatLng([lat, lng]);
+    mapRef.current?.setView([lat, lng], 16);
+    setMapStatus("geocoding");
+    setMapError("");
+
+    try {
+      setAddress(await getAddressForCoordinates(lat, lng));
+      setMapStatus("ready");
+    } catch (error) {
+      setMapStatus("ready");
+      setMapError(error instanceof Error ? error.message : "Adres bulunamadı. Lütfen tekrar deneyin.");
+    }
+  };
+
+  const handleUseCurrentLocation = (): void => {
+    if (!navigator.geolocation) {
+      setMapError("Bu tarayıcı konum özelliğini desteklemiyor.");
+      return;
+    }
+    if (!mapRef.current) {
+      setMapError("Harita henüz hazır değil. Lütfen birkaç saniye sonra tekrar deneyin.");
+      return;
+    }
+
+    setMapStatus("locating");
+    setMapError("");
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        void updateLocationFromCoordinates(coords.latitude, coords.longitude);
+      },
+      (error) => {
+        setMapStatus("ready");
+        setMapError(getGeolocationErrorMessage(error));
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
+    );
+  };
 
   useEffect(() => {
     if (isLocationModalOpen) setAddress(location);
@@ -178,28 +260,7 @@ export default function LocationModal() {
         map.on("click", async (event) => {
           const { lat, lng } = event.latlng;
           marker.setLatLng([lat, lng]);
-          setMapStatus("geocoding");
-          setMapError("");
-
-          try {
-            const detailData = await reverseGeocode(lat, lng, 18);
-            let addressData = detailData;
-
-            // Sokak sonucu ilçe alanını içermiyorsa ilçe seviyesinden tamamla.
-            if (!getDistrict(detailData.address)) {
-              const districtData = await reverseGeocode(lat, lng, 10);
-              addressData = {
-                ...detailData,
-                address: { ...districtData.address, ...detailData.address },
-              };
-            }
-
-            setAddress(formatAddress(addressData.address, addressData.display_name));
-            setMapStatus("ready");
-          } catch (error) {
-            setMapStatus("ready");
-            setMapError(error instanceof Error ? error.message : "Adres bulunamadı. Lütfen tekrar deneyin.");
-          }
+          void updateLocationFromCoordinates(lat, lng);
         });
 
         setTimeout(() => map.invalidateSize(), 0);
@@ -255,9 +316,24 @@ export default function LocationModal() {
           <Button type="button" tone="ghost" className="h-9 w-9 rounded-full text-xl text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" aria-label="Close location dialog" onClick={closeLocationModal}>×</Button>
         </div>
 
-        <div ref={mapElementRef} className="my-5 h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label="OpenStreetMap location picker" />
+        <div className="my-5">
+          <Button
+            type="button"
+            tone="ghost"
+            className="mb-3 w-full rounded-[10px] border border-[#b6349a] px-4 py-2.5 text-sm font-semibold text-[#b6349a] hover:bg-[#fff5fc] disabled:cursor-not-allowed disabled:opacity-60"
+            onClick={handleUseCurrentLocation}
+            disabled={mapStatus === "loading" || mapStatus === "locating" || mapStatus === "geocoding" || mapStatus === "error"}
+            aria-busy={mapStatus === "locating" || mapStatus === "geocoding"}
+          >
+            <img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={17} height={17} className="h-[17px] w-[17px]" />
+            {mapStatus === "locating" ? "Konumunuz bulunuyor..." : mapStatus === "geocoding" ? "Adresiniz hazırlanıyor..." : "Mevcut konumumu kullan"}
+          </Button>
+          <p className="mb-3 text-xs leading-5 text-[#777]">Konum izni yalnızca adresinizi bulmak için istenir. Adres eşleştirme sırasında koordinatlar OpenStreetMap adres servisine gönderilir; siz kaydetmediğiniz sürece kayıtlı adreslerinize eklenmez.</p>
+          <div ref={mapElementRef} className="h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label="OpenStreetMap location picker" />
+        </div>
         <p className="m-0 text-xs text-[#777]">
           {mapStatus === "loading" && "Harita yükleniyor..."}
+          {mapStatus === "locating" && "Tarayıcıdan mevcut konumunuz isteniyor..."}
           {mapStatus === "geocoding" && "Adres bulunuyor..."}
           {mapStatus === "ready" && "Haritada bir noktaya tıklayarak adresi seç."}
           {mapStatus === "error" && "Harita yüklenemedi."}
