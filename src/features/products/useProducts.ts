@@ -8,6 +8,15 @@ import type { Product } from "../../types/product";
 let productsPromise: Promise<Product[]> | undefined;
 let productsCache: Product[] | undefined;
 
+const uniqueProducts = (products: Product[]): Product[] => {
+  const seen = new Set<number>();
+  return products.filter((product) => {
+    if (seen.has(product.id)) return false;
+    seen.add(product.id);
+    return true;
+  });
+};
+
 const scheduleIdleWork = (callback: () => void): (() => void) => {
   if (typeof window === "undefined") return () => undefined;
   const idleWindow = window as Window & {
@@ -26,8 +35,8 @@ const loadProducts = (): Promise<Product[]> => {
   if (productsCache) return Promise.resolve(productsCache);
   if (!productsPromise) {
     productsPromise = fetchProducts().then((products) => {
-      productsCache = products;
-      return products;
+      productsCache = uniqueProducts(products);
+      return productsCache;
     });
   }
   return productsPromise;
@@ -45,13 +54,13 @@ export default function useProducts(): { products: Product[]; loading: boolean; 
     loadProducts()
       .then((data) => {
         if (!active) return;
-        setProducts(data);
+        setProducts(uniqueProducts(data));
         setError("");
 
         cancelIdleWork = scheduleIdleWork(() => {
           void fetchSupplementalProducts().then((supplementalProducts) => {
             if (active && supplementalProducts.length > 0) {
-              setProducts([...data, ...supplementalProducts]);
+              setProducts(uniqueProducts([...data, ...supplementalProducts]));
             }
           });
         });

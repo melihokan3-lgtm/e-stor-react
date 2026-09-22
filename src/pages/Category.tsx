@@ -141,13 +141,11 @@ export default function Category() {
   }, [products]);
 
   const updateFilter = (key: string, value: string | boolean | number) => {
-    setActiveFilterParams((currentParams) => {
-      const newParams = new URLSearchParams(currentParams);
-      if (value === "all" || value === false || value === "" || value === 0) newParams.delete(key);
-      else newParams.set(key, String(value));
-      setSearchParams(newParams);
-      return newParams;
-    });
+    const newParams = new URLSearchParams(activeFilterParams);
+    if (value === "all" || value === false || value === "" || value === 0) newParams.delete(key);
+    else newParams.set(key, String(value));
+    setActiveFilterParams(newParams);
+    setSearchParams(newParams);
   };
 
   const handleCustomPriceSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -164,7 +162,9 @@ export default function Category() {
   const resetFilters = () => {
     setMinPriceInput("");
     setMaxPriceInput("");
-    setSearchParams(new URLSearchParams(catFilter && catFilter !== "all" ? `cat=${catFilter}` : ""));
+    const newParams = new URLSearchParams(catFilter && catFilter !== "all" ? `cat=${catFilter}` : "");
+    setActiveFilterParams(newParams);
+    setSearchParams(newParams);
   };
 
   // Filter products
@@ -333,9 +333,9 @@ export default function Category() {
                   <span className="text-xs text-[#94a3b8]">({products.length})</span>
                 </label>
 
-                {filteredCategoryList.map((cat, i) => (
-                  <label 
-                    key={i} 
+                {filteredCategoryList.map((cat) => (
+                  <label
+                    key={cat.name}
                     className={`flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm transition hover:bg-[#f8fafc] ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "bg-[#fff5fc] text-[#d73f98]" : "text-[#475569]"}`}
                   >
                     <input
@@ -551,9 +551,9 @@ export default function Category() {
             >
               All ({products.length})
             </Link>
-            {categoryStats.map((cat, i) => (
+            {categoryStats.map((cat) => (
               <Link
-                key={i}
+                key={cat.name}
                 to={`/category?cat=${encodeURIComponent(cat.name)}`}
                 className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
               >
