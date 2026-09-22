@@ -1,0 +1,35 @@
+{
+  "entries": [
+    {
+      "identifier": "urn:air:e-stor-react-nttt.vercel.app:website:estoree",
+      "displayName": "E-Storee Online Market",
+      "type": "text/html",
+      "url": "https://e-stor-react-nttt.vercel.app/",
+      "description": "E-Storee is a public Turkish online grocery catalog for discovering market products, categories, prices and shopping information.",
+      "representativeQueries": [
+        "Find products in the E-Storee online grocery catalog",
+        "Show Turkish market products and their categories",
+        "Help me discover products and prices on E-Storee"
+      ],
+      "capabilities": [
+        "ProductDiscovery",
+        "CategorySearch",
+        "PublicCatalog"
+      ],
+      "tags": [
+        "ecommerce",
+        "grocery",
+        "online-market",
+        "product-catalog",
+        "turkish"
+      ],
+      "version": "1.0.0",
+      "updatedAt": "2026-09-22T00:00:00Z",
+      "metadata": {
+        "language": "tr",
+        "access": "public",
+        "ordersSupported": false
+      }
+    }
+  ]
+}

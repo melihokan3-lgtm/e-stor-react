@@ -5,4 +5,5 @@ Disallow: /order-progress
 Disallow: /profile
 Disallow: /search
 
+Agentmap: https://e-stor-react-nttt.vercel.app/.well-known/ard.json
 Sitemap: https://e-stor-react-nttt.vercel.app/sitemap.xml
