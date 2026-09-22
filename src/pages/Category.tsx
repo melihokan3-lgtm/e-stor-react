@@ -22,6 +22,21 @@ const sortOptions = [
   { value: "name-asc", label: "Product Name (A-Z)" },
 ];
 
+const normalizeCategory = (value: string | undefined): string =>
+  (value || "").trim().toLocaleLowerCase("tr-TR").replace(/[·/]/g, " ").replace(/\s+/g, " ");
+
+const categoryMatches = (productCategory: string | undefined, selectedCategory: string): boolean => {
+  const product = normalizeCategory(productCategory);
+  const selected = normalizeCategory(selectedCategory);
+  if (!selected || selected === "all") return true;
+  if (product === selected) return true;
+  const productSlug = product.replace(/\s+/g, "-");
+  const selectedSlug = selected.replace(/\s+/g, "-");
+  if (productSlug === selectedSlug) return true;
+  // Also support display categories such as "Featured · Eggs" when the URL contains "Eggs".
+  return product.split(" ").at(-1) === selected || product.endsWith(` ${selected}`);
+};
+
 function SortSelect({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -120,13 +135,12 @@ export default function Category() {
   }, [products]);
 
   const updateFilter = (key: string, value: string | boolean | number) => {
-    const newParams = new URLSearchParams(searchParams);
-    if (value === "all" || value === false || value === "" || value === 0) {
-      newParams.delete(key);
-    } else {
-      newParams.set(key, String(value));
-    }
-    setSearchParams(newParams);
+    setSearchParams((currentParams) => {
+      const newParams = new URLSearchParams(currentParams);
+      if (value === "all" || value === false || value === "" || value === 0) newParams.delete(key);
+      else newParams.set(key, String(value));
+      return newParams;
+    });
   };
 
   const handleCustomPriceSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -147,57 +161,25 @@ export default function Category() {
   };
 
   // Filter products
-  let filtered = [...products];
-
-  // Category
-  if (catFilter && catFilter !== "all") {
-    filtered = filtered.filter((p) => {
-      const name = p.category;
-      const slug = name?.toLowerCase().replace(/\s+/g, "-");
-      return (
-        slug?.toLowerCase() === catFilter.toLowerCase() ||
-        name?.toLowerCase() === catFilter.toLowerCase()
-      );
+  const filtered = useMemo(() => {
+    let result = products.filter((product) => categoryMatches(product.category, catFilter));
+    if (priceFilter && priceFilter !== "all") {
+      const [min, max] = priceFilter.split("-").map(Number);
+      result = result.filter((product) => product.price >= min && product.price <= (max || Infinity));
+    }
+    if (dealsFilter) result = result.filter((product) => product.price < 50);
+    if (newFilter) result = result.filter((product) => product.id % 2 === 0);
+    if (fastShippingFilter) result = result.filter((product) => product.id % 3 !== 0);
+    if (minRatingFilter > 0) {
+      result = result.filter((product) => (product.rating?.rate || (product.id % 5) + 1) >= minRatingFilter);
+    }
+    return [...result].sort((a, b) => {
+      if (sortBy === "price-asc") return a.price - b.price;
+      if (sortBy === "price-desc") return b.price - a.price;
+      if (sortBy === "name-asc") return (a.title || "").localeCompare(b.title || "");
+      return 0;
     });
-  }
-
-  // Price
-  if (priceFilter && priceFilter !== "all") {
-    const [min, max] = priceFilter.split("-").map(Number);
-    filtered = filtered.filter((p) => p.price >= min && p.price <= (max || Infinity));
-  }
-
-  // Deals
-  if (dealsFilter) {
-    filtered = filtered.filter((p) => p.price < 50);
-  }
-
-  // New arrivals
-  if (newFilter) {
-    filtered = filtered.filter((p) => p.id % 2 === 0);
-  }
-
-  // Fast shipping
-  if (fastShippingFilter) {
-    filtered = filtered.filter((p) => p.id % 3 !== 0);
-  }
-
-  // Rating
-  if (minRatingFilter > 0) {
-    filtered = filtered.filter((p) => {
-      const rate = p.rating?.rate || (p.id % 5) + 1;
-      return rate >= minRatingFilter;
-    });
-  }
-
-  // Sorting
-  if (sortBy === "price-asc") {
-    filtered.sort((a, b) => a.price - b.price);
-  } else if (sortBy === "price-desc") {
-    filtered.sort((a, b) => b.price - a.price);
-  } else if (sortBy === "name-asc") {
-    filtered.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
-  }
+  }, [products, catFilter, priceFilter, dealsFilter, newFilter, fastShippingFilter, minRatingFilter, sortBy]);
 
   // Count active filters (excluding default category)
   const activeFiltersCount = [
