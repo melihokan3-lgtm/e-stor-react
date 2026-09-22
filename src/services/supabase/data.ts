@@ -86,11 +86,6 @@ export const saveUserOrder = async (user: AuthUser | null, order: CreateOrderInp
     || item.qty > 100,
   );
   if (hasInvalidItem) throw new Error("Geçersiz sipariş ürünü.");
-  const hasExternalProduct = order.items.some((item) => item.id >= 100000);
-  if (hasExternalProduct) {
-    throw new Error("Bu ürün dış katalogdan geldiği için siparişe eklenemiyor. Lütfen Supabase kataloğundaki ürünü seçin.");
-  }
-
   const { data, error } = await (await getClient()).rpc("create_order", {
     p_delivery_address: order.deliveryAddress.trim(),
     p_items: order.items.map((item) => ({ id: item.id, qty: item.qty })),
