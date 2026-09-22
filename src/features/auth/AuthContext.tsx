@@ -66,6 +66,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(mapSupabaseUser(session?.user));
         setToken(session?.access_token || null);
         setAuthLoading(false);
+        if (session) setIsAuthModalOpen(false);
       });
       unsubscribe = () => listener.subscription.unsubscribe();
     };
@@ -112,6 +113,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         throw new Error("Giriş servisine ulaşılamadı. Lütfen tekrar deneyin.");
       }
       throw error;
+    }
+  };
+
+  const signInWithGoogle = async (): Promise<void> => {
+    const client = await getSupabaseClient();
+    if (!isSupabaseConfigured || !client) {
+      throw new Error("Google ile giriş için Supabase bağlantısını yapılandırın.");
+    }
+
+    const { error } = await client.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: window.location.origin,
+        queryParams: {
+          access_type: "offline",
+          prompt: "select_account",
+        },
+      },
+    });
+
+    if (error) {
+      const message = error.message.toLowerCase();
+      if (message.includes("provider is not enabled") || message.includes("unsupported provider")) {
+        throw new Error("Google sağlayıcısı Supabase Auth ayarlarında etkin değil.");
+      }
+      throw new Error(getAuthErrorMessage(error, "Google ile giriş başlatılamadı."));
     }
   };
 
@@ -221,6 +248,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoggedIn,
         authLoading,
         loginUser,
+        signInWithGoogle,
         registerUser,
         updateUser,
         logout,

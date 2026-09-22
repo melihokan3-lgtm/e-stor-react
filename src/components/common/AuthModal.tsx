@@ -6,7 +6,7 @@ const authFieldClass = "flex min-h-12 items-center gap-2 rounded-xl border borde
 const authInputClass = "min-w-0 w-full flex-1 border-0 bg-transparent px-1 py-0.5 text-sm text-[#222] outline-none placeholder:text-[#b8b8b8]";
 
 export default function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, loginUser, registerUser } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, loginUser, signInWithGoogle, registerUser } = useAuth();
 
   const [mode, setMode] = useState<"login" | "register">("login");
   const [loading, setLoading] = useState(false);
@@ -72,6 +72,18 @@ export default function AuthModal() {
     } catch (err) {
       setError(err instanceof Error ? err.message : "Kullanıcı adı veya şifre hatalı.");
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (): Promise<void> => {
+    setError("");
+    setSuccess("");
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Google ile giriş başlatılamadı.");
       setLoading(false);
     }
   };
@@ -232,6 +244,28 @@ export default function AuthModal() {
         {/* LOGIN FORM */}
         {mode === "login" && (
           <form className="grid gap-4" onSubmit={handleLogin}>
+            <Button
+              type="button"
+              tone="ghost"
+              className="w-full rounded-lg border border-[#e8e8e8] bg-white px-4 py-3 text-sm font-semibold text-[#333] hover:border-[#b6349a] hover:bg-[#fff8fd]"
+              onClick={handleGoogleLogin}
+              disabled={loading}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="#4285F4" d="M21.35 12.23c0-.72-.06-1.42-.18-2.09H12v3.96h5.24a4.48 4.48 0 0 1-1.94 2.94v2.45h3.14c1.84-1.69 2.91-4.18 2.91-7.26Z" />
+                <path fill="#34A853" d="M12 21.8c2.63 0 4.84-.87 6.45-2.36l-3.14-2.45c-.87.58-1.98.92-3.31.92-2.55 0-4.71-1.72-5.49-4.03H3.27v2.53A9.74 9.74 0 0 0 12 21.8Z" />
+                <path fill="#FBBC05" d="M6.51 13.88A5.85 5.85 0 0 1 6.2 12c0-.65.11-1.28.31-1.88V7.59H3.27A9.74 9.74 0 0 0 2.25 12c0 1.58.38 3.08 1.02 4.41l3.24-2.53Z" />
+                <path fill="#EA4335" d="M12 6.09c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.84 3.16 14.63 2.2 12 2.2a9.74 9.74 0 0 0-8.73 5.39l3.24 2.53C7.29 7.81 9.45 6.09 12 6.09Z" />
+              </svg>
+              {loading ? "Google yönlendirmesi hazırlanıyor..." : "Google ile devam et"}
+            </Button>
+
+            <div className="flex items-center gap-3 text-xs text-[#aaa]" aria-hidden="true">
+              <span className="h-px flex-1 bg-[#eee]" />
+              <span>veya</span>
+              <span className="h-px flex-1 bg-[#eee]" />
+            </div>
+
             <div className="grid gap-1.5">
               <label className="text-sm font-semibold text-[#555]">E-posta</label>
               <div className={authFieldClass}>

@@ -22,6 +22,7 @@ export interface AuthContextValue {
   isLoggedIn: boolean;
   authLoading: boolean;
   loginUser: (username: string, password: string) => Promise<AuthUser>;
+  signInWithGoogle: () => Promise<void>;
   registerUser: (input: RegisterInput) => Promise<AuthUser>;
   updateUser: (fields: Partial<AuthUser>) => void;
   logout: () => void;
