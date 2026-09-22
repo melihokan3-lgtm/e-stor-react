@@ -74,8 +74,11 @@ const uniqueParts = (parts: string[]): string[] => [...new Set(parts.filter(Bool
 
 const normalizeLocationText = (value = ""): string => value
   .toLocaleLowerCase("tr-TR")
-  .replace(/\s+belediyesi$/u, "")
+  .replace(/\s+(?:belediyesi|ilçesi)$/u, "")
+  .replace(/\s+/gu, " ")
   .trim();
+
+const isNeighbourhoodValue = (value: string): boolean => /(?:mahalle(?:si)?|mah\.?|köy(?:ü)?|mezra)/iu.test(value);
 
 const getDistrict = (address: AddressData = {}): string => {
   const city = normalizeLocationText(firstValue(
@@ -84,21 +87,36 @@ const getDistrict = (address: AddressData = {}): string => {
     address.state,
     address.region,
   ));
+  const neighbourhood = normalizeLocationText(firstValue(
+    address.neighbourhood,
+    address.quarter,
+    address.suburb,
+    address.hamlet,
+    address.village,
+  ));
+
+  // Türkiye'de Nominatim çoğunlukla city_district alanına mahalleyi,
+  // town/county alanına ise gerçek ilçeyi yazar. İlçe alanlarını öncele.
   const candidates = [
-    address.city_district,
+    address.town,
+    address.county,
     address.district,
     address.state_district,
-    address.county,
-    address.town,
-    address.locality,
     address.municipality,
+    address.city_district,
   ];
 
   const candidate = candidates.find(
-    (value) => value && normalizeLocationText(value) !== city,
+    (value) => {
+      if (!value) return false;
+      const normalizedValue = normalizeLocationText(value);
+      return normalizedValue !== city
+        && normalizedValue !== neighbourhood
+        && !isNeighbourhoodValue(value);
+    },
   );
 
-  return candidate ? candidate.replace(/\s+belediyesi$/iu, "").trim() : "";
+  return candidate ? candidate.replace(/\s+(?:belediyesi|ilçesi)$/iu, "").trim() : "";
 };
 
 const formatAddress = (address: AddressData = {}, displayName = ""): string => {
@@ -112,11 +130,13 @@ const formatAddress = (address: AddressData = {}, displayName = ""): string => {
     address.cycleway,
     address.path,
   );
+  const houseNumber = firstValue(address.house_number, address.building, address.unit);
   const neighbourhood = firstValue(
     address.neighbourhood,
     address.quarter,
     address.suburb,
     address.hamlet,
+    address.village,
   );
   const district = getDistrict(address);
   const city = firstValue(
@@ -125,11 +145,14 @@ const formatAddress = (address: AddressData = {}, displayName = ""): string => {
     address.state,
     address.region,
   );
+  const postcode = firstValue(address.postcode);
+  const streetLine = street && houseNumber ? `${street} No: ${houseNumber}` : firstValue(street, houseNumber);
 
-  const parts = uniqueParts([street, neighbourhood, district, city]);
+  const parts = uniqueParts([streetLine, neighbourhood, district, city, postcode]);
   if (parts.length > 0) return parts.join(", ");
 
-  return displayName || "Seçilen konum";
+  const displayParts = uniqueParts(displayName.split(","));
+  return displayParts.join(", ") || "Seçilen konum";
 };
 
 const reverseGeocode = async (lat: number, lng: number, zoom: number): Promise<NominatimResult> => {
@@ -185,6 +208,7 @@ export default function LocationModal() {
   const [address, setAddress] = useState(location);
   const [mapStatus, setMapStatus] = useState<MapStatus>("idle");
   const [mapError, setMapError] = useState("");
+  const geocodeRequestIdRef = useRef(0);
 
   const updateLocationFromCoordinates = async (lat: number, lng: number): Promise<void> => {
     if (!Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
@@ -193,15 +217,19 @@ export default function LocationModal() {
       return;
     }
 
+    const requestId = ++geocodeRequestIdRef.current;
     markerRef.current?.setLatLng([lat, lng]);
     mapRef.current?.setView([lat, lng], 16);
     setMapStatus("geocoding");
     setMapError("");
 
     try {
-      setAddress(await getAddressForCoordinates(lat, lng));
+      const nextAddress = await getAddressForCoordinates(lat, lng);
+      if (requestId !== geocodeRequestIdRef.current) return;
+      setAddress(nextAddress);
       setMapStatus("ready");
     } catch (error) {
+      if (requestId !== geocodeRequestIdRef.current) return;
       setMapStatus("ready");
       setMapError(error instanceof Error ? error.message : "Adres bulunamadı. Lütfen tekrar deneyin.");
     }
@@ -259,7 +287,6 @@ export default function LocationModal() {
 
         map.on("click", async (event) => {
           const { lat, lng } = event.latlng;
-          marker.setLatLng([lat, lng]);
           void updateLocationFromCoordinates(lat, lng);
         });
 
@@ -274,6 +301,7 @@ export default function LocationModal() {
 
     return () => {
       cancelled = true;
+      geocodeRequestIdRef.current += 1;
       if (mapRef.current) mapRef.current.remove();
       mapRef.current = null;
       markerRef.current = null;
