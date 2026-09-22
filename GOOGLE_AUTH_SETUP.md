@@ -11,7 +11,7 @@ Uygulamadaki Google butonu Supabase Auth OAuth akışını kullanır. Google cli
 5. Authorized redirect URI olarak Supabase callback adresini ekleyin:
 
 ```text
-https://<SUPABASE_PROJECT_REF>.supabase.co/auth/v1/callback
+https://xblmgefooqnapaqanfkc.supabase.co/auth/v1/callback
 ```
 
 Google Cloud'dan aldığınız Client ID ve Client Secret'ı kopyalayın.
