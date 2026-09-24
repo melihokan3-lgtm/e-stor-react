@@ -1,4 +1,4 @@
-import { translate } from "../../features/i18n/LanguageContext";
+import { translate, translateCategory } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import ProductCard from "../product/ProductCard";
 import type { Product } from "../../types/product";
@@ -36,7 +36,7 @@ export default function HomePromoSection({ products, categories, variant }: Home
             </>
           ) : (
             <div className="flex flex-wrap gap-[10px]">
-              {categories.map((category) => <Link key={category} to={`/category?cat=${encodeURIComponent(category)}`} className="rounded-[30px] border border-[#e0e0e0] bg-white px-4 py-[7px] text-[13px] font-medium text-[#444] transition-colors duration-200 hover:border-[#b6349a] hover:text-[#b6349a]">{translate(category)}</Link>)}
+              {categories.map((category) => <Link key={category} to={`/category?cat=${encodeURIComponent(category)}`} className="rounded-[30px] border border-[#e0e0e0] bg-white px-4 py-[7px] text-[13px] font-medium text-[#444] transition-colors duration-200 hover:border-[#b6349a] hover:text-[#b6349a]">{translateCategory(category)}</Link>)}
             </div>
           )}
         </div>

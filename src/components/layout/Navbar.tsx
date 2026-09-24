@@ -12,7 +12,7 @@ import { useAuth } from "../../features/auth/AuthContext";
 import { useLocation } from "../../features/addresses/LocationContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import useProducts from "../../features/products/useProducts";
-import { useLanguage, translate } from "../../features/i18n/LanguageContext";
+import { useLanguage, translate, translateCategory } from "../../features/i18n/LanguageContext";
 
 const AuthModal = lazy(() => import("../common/AuthModal"));
 const LocationModal = lazy(() => import("../common/LocationModal"));
@@ -194,7 +194,7 @@ export default function Navbar() {
                   className="rounded-xl px-3 py-3 text-sm font-medium text-[#444] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
                   role="menuitem"
                 >
-                  {translate(category.label)}
+                  {translateCategory(category.label)}
                 </Link>
               ))}
               <Link
@@ -303,7 +303,7 @@ export default function Navbar() {
                     onClick={() => setMenuOpen(false)}
                     className="rounded-lg bg-[#faf9fa] px-3 py-2.5 text-xs font-medium text-[#444] transition hover:bg-[#fff0fa] hover:text-[#b6349a]"
                   >
-                    {translate(category.label)}
+                    {translateCategory(category.label)}
                   </Link>
                 ))}
               </div>

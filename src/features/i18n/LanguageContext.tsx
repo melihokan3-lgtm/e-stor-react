@@ -792,3 +792,27 @@ export function translate(source: string, language?: Language): string {
   const trailing = source.match(/\s*$/)?.[0] ?? "";
   return `${leading}${translated}${trailing}`;
 }
+
+const apiCategoryTranslations: Record<string, { tr: string; en: string }> = {
+  electronics: { tr: "Elektronik", en: "Electronics" },
+  jewelery: { tr: "Takı", en: "Jewelry" },
+  jewelry: { tr: "Takı", en: "Jewelry" },
+  "men's clothing": { tr: "Erkek giyim", en: "Men's clothing" },
+  "women's clothing": { tr: "Kadın giyim", en: "Women's clothing" },
+  kids: { tr: "Çocuk", en: "Kids" },
+  men: { tr: "Erkek", en: "Men" },
+  women: { tr: "Kadın", en: "Women" },
+  general: { tr: "Genel", en: "General" },
+  featured: { tr: "Öne çıkan", en: "Featured" },
+  collection: { tr: "Koleksiyon", en: "Collection" },
+};
+
+export function translateCategory(source: string, language?: Language): string {
+  const current = language ?? activeLanguage;
+  const translatePart = (part: string) => {
+    const trimmed = part.trim();
+    const known = apiCategoryTranslations[trimmed.toLocaleLowerCase("en-US")];
+    return known ? known[current] : translate(trimmed, current);
+  };
+  return source.trim().split(/\s+·\s+/u).map(translatePart).join(" · ");
+}

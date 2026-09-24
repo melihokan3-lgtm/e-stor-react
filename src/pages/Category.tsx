@@ -1,4 +1,4 @@
-import { translate } from "../features/i18n/LanguageContext";
+import { translate, translateCategory } from "../features/i18n/LanguageContext";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -198,14 +198,14 @@ export default function Category() {
   ].filter(Boolean).length;
 
   const filteredCategoryList = categoryStats.filter((c) =>
-    translate(c.name).toLowerCase().includes(categorySearch.toLowerCase())
+    translateCategory(c.name).toLowerCase().includes(categorySearch.toLowerCase())
   );
 
   return (
     <main className="min-h-screen bg-[#fafafa] px-6 py-8 max-[640px]:px-3 max-[640px]:py-4">
       <SeoMeta
-        title={`${translate(categoryLabel)} | E-Storee`}
-        description={`${categoryLabel} ürünlerini E-Storee'de keşfedin. Güncel fiyatları karşılaştırın ve online sipariş verin.`}
+        title={`${translateCategory(categoryLabel)} | E-Storee`}
+        description={`${translateCategory(categoryLabel)} ürünlerini E-Storee'de keşfedin. Güncel fiyatları karşılaştırın ve online sipariş verin.`}
         canonicalPath={categoryCanonical}
       />
       <div className="mx-auto flex max-w-[1600px] gap-6 max-[1024px]:flex-col">
@@ -340,7 +340,7 @@ export default function Category() {
                       onChange={() => updateFilter("cat", cat.name)}
                     />
                     <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
-                    <span className="flex-1">{translate(cat.name)}</span>
+                    <span className="flex-1">{translateCategory(cat.name)}</span>
                     <span className="text-xs text-[#94a3b8]">({cat.count})</span>
                   </label>
                 ))}
@@ -551,7 +551,7 @@ export default function Category() {
                 to={`/category?cat=${encodeURIComponent(cat.name)}`}
                 className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
               >
-                {translate(cat.name)} ({cat.count})
+                {translateCategory(cat.name)} ({cat.count})
               </Link>
             ))}
           </div>
@@ -585,7 +585,7 @@ export default function Category() {
           {/* Results Toolbar / Sort */}
           <div className="mb-6 flex items-center justify-between rounded-[14px] border border-[#e2e8f0] bg-white px-5 py-3.5 shadow-[0_1px_4px_rgba(15,23,42,0.03)]">
             <div className="flex items-baseline gap-2.5">
-              <h1 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{translate(categoryLabel)}</h1>
+              <h1 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{translateCategory(categoryLabel)}</h1>
               <span className="text-[13.5px] text-[#64748b]">
                 (<strong className="text-[#0f172a]">{filtered.length}</strong> {translate(" products found)\r\n              ")}</span>
             </div>

@@ -1,4 +1,4 @@
-import { translate } from "../../features/i18n/LanguageContext";
+import { translate, translateCategory } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import { cleanImageUrl, FALLBACK_IMG } from "../../services/api/productApi";
 import { useCart } from "../../features/cart/CartContext";
@@ -22,7 +22,7 @@ export default function ProductCard({ product, className = defaultCardClassName 
   // Fake old price and stock for UI purposes to match design
   const oldPrice = (product.price * 1.2).toFixed(2);
   const stockLeft = (product.id % 15) + 1; // Fake stock just for visual
-  const brand = translate(product.category || "Zelle");
+  const brand = translateCategory(product.category || "Zelle");
 
   return (
     <article className={`${className} flex flex-col`}>
