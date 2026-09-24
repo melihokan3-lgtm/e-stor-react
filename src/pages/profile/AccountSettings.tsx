@@ -1,8 +1,8 @@
 import { useEffect, useState, type ChangeEvent } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
 import { getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
-import { clearLocalAccountData, DEFAULT_SETTINGS, loadAccountSettings, saveAccountSettings, type AccountSettingsData } from "../../features/profile/settings";
+import { DEFAULT_SETTINGS, loadAccountSettings, saveAccountSettings, type AccountSettingsData } from "../../features/profile/settings";
+import DeleteAccountSection from "../../features/profile/DeleteAccountSection";
 import SeoMeta from "../../components/common/SeoMeta";
 
 type SettingsTab = "account" | "security" | "notifications" | "privacy" | "danger";
@@ -11,8 +11,7 @@ const inputClass = "w-full rounded-xl border border-[#e5e5e5] bg-white px-3 py-3
 const sectionClass = "rounded-2xl border border-[#eee] bg-white p-6";
 
 export default function AccountSettings() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<SettingsTab>("account");
   const [settings, setSettings] = useState<AccountSettingsData>(DEFAULT_SETTINGS);
   const [newPassword, setNewPassword] = useState("");
@@ -22,7 +21,6 @@ export default function AccountSettings() {
   useEffect(() => setSettings(loadAccountSettings(user)), [user]);
   const saveSettings = (next: AccountSettingsData) => { setSettings(next); saveAccountSettings(user, next); };
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => { const target = event.currentTarget; const value = target instanceof HTMLInputElement && target.type === "checkbox" ? target.checked : target.value; saveSettings({ ...settings, [target.name]: value }); };
-  const handleDeleteAccount = async () => { if (!window.confirm("Yerel demo verilerinizi temizleyip çıkış yapmak istediğinize emin misiniz? Supabase hesabınız silinmez.")) return; clearLocalAccountData(user); await logout(); navigate("/", { replace: true }); };
   const handlePasswordUpdate = async (): Promise<void> => {
     setPasswordStatus("");
     const client = await getSupabaseClient();
@@ -69,6 +67,6 @@ export default function AccountSettings() {
     </section>}
     {activeTab === "notifications" && <section className={sectionClass}><h3 className="text-xl font-bold text-[#111]">Notification Preferences</h3><p className="mt-1 text-sm text-[#777]">Choose how you want to be notified.</p><div className="mt-6 space-y-4"><label className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] p-4 text-sm font-semibold text-[#333]">Order Status Updates<select name="notifOrder" value={settings.notifOrder} onChange={handleInputChange} className="rounded-lg border border-[#ddd] px-3 py-2 text-sm font-normal"><option value="email">Email Only</option><option value="sms">SMS Only</option><option value="both">Both</option><option value="none">None</option></select></label><label className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] p-4 text-sm font-semibold text-[#333]">Campaigns & Offers<input type="checkbox" name="notifCampaigns" checked={settings.notifCampaigns} onChange={handleInputChange} className="h-5 w-5 accent-[#b6349a]" /></label><label className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] p-4 text-sm font-semibold text-[#333]">Stock & Price Alerts<input type="checkbox" name="notifPriceAlerts" checked={settings.notifPriceAlerts} onChange={handleInputChange} className="h-5 w-5 accent-[#b6349a]" /></label></div></section>}
     {activeTab === "privacy" && <section className={sectionClass}><h3 className="text-xl font-bold text-[#111]">Privacy & Data</h3><p className="mt-1 text-sm text-[#777]">Manage your data permissions.</p><div className="mt-6 space-y-4"><label className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] p-4 text-sm font-semibold text-[#333]">Cookie Consent<input type="checkbox" name="cookieConsent" checked={settings.cookieConsent} onChange={handleInputChange} className="h-5 w-5 accent-[#b6349a]" /></label><label className="flex items-center justify-between gap-4 rounded-xl bg-[#fafafa] p-4 text-sm font-semibold text-[#333]">Personalized Ads<input type="checkbox" name="personalizedAds" checked={settings.personalizedAds} onChange={handleInputChange} className="h-5 w-5 accent-[#b6349a]" /></label></div><button type="button" className="mt-5 rounded-lg border border-[#ddd] px-4 py-2.5 text-sm font-semibold text-[#555]">Download My Data (JSON)</button></section>}
-    {activeTab === "danger" && <section className="rounded-2xl border border-red-200 bg-red-50 p-6"><h3 className="text-xl font-bold text-red-800">Danger Zone</h3><p className="mt-2 text-sm leading-6 text-red-700">This demo action clears local browser copies and signs you out. Your Supabase account and server data are not deleted.</p><button type="button" onClick={handleDeleteAccount} className="mt-5 rounded-lg border border-red-300 px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-100">Clear Local Data</button></section>}
+    {activeTab === "danger" && <DeleteAccountSection />}
   </div>;
 }

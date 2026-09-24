@@ -116,9 +116,13 @@ test("local data cleanup removes only the selected user's feature keys", () => {
   loadReferralData(secondUser);
   saveAccountSettings(firstUser, loadAccountSettings(firstUser));
   saveAccountSettings(secondUser, loadAccountSettings(secondUser));
+  for (const key of ["pastSearches", "userLocation"]) {
+    storage.set(`${key}_user-a`, "test-a");
+    storage.set(`${key}_user-b`, "test-b");
+  }
 
   clearLocalAccountData(firstUser);
-  for (const key of ["savedCards", "notifications", "referralData", "settings"]) {
+  for (const key of ["savedCards", "notifications", "referralData", "settings", "pastSearches", "userLocation"]) {
     assert.equal(storage.has(`${key}_user-a`), false);
     assert.equal(storage.has(`${key}_user-b`), true);
   }

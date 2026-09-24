@@ -45,7 +45,7 @@ export function saveAccountSettings(user: AuthUser | null, settings: AccountSett
 
 export function clearLocalAccountData(user: AuthUser | null): void {
   if (!user) return;
-  for (const key of ["cart", "orders", "addresses", "settings", "savedCards", "notifications", "referralData"]) {
+  for (const key of ["cart", "orders", "addresses", "settings", "savedCards", "notifications", "referralData", "pastSearches", "userLocation"]) {
     removeUserStorage(key, user);
   }
 }
