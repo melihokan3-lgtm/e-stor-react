@@ -68,7 +68,8 @@ test("confirmation dialog explains irreversible deletion and starts safely disab
   }));
   assert.match(html, /aria-modal="true"/);
   assert.match(html, /Hesabınızı silmek istediğinize emin misiniz/);
-  assert.match(html, /SİL/);
+  assert.match(html, /ONAY/);
+  assert.match(html, /fixed inset-0 m-auto/);
   assert.match(html, /type="submit" disabled=""/);
   assert.match(html, /Vazgeç/);
 });

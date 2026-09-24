@@ -16,7 +16,7 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [confirmation, setConfirmation] = useState("");
-  const confirmed = confirmation.trim().toLocaleUpperCase("tr-TR") === "SİL";
+  const confirmed = confirmation.trim().toLocaleUpperCase("tr-TR") === "ONAY";
 
   useEffect(() => {
     if (!open) {
@@ -51,7 +51,7 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
       aria-modal="true"
       aria-labelledby="delete-account-title"
       aria-describedby="delete-account-description"
-      className="w-[min(92vw,480px)] rounded-2xl border border-red-100 bg-white p-0 shadow-2xl backdrop:bg-[#161016]/60"
+      className="fixed inset-0 m-auto max-h-[calc(100dvh-2rem)] w-[min(92vw,480px)] overflow-y-auto rounded-2xl border border-red-100 bg-white p-0 shadow-2xl backdrop:bg-[#161016]/60"
     >
       <form onSubmit={handleSubmit} className="space-y-5 p-6 sm:p-8">
         <div>
@@ -62,7 +62,7 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
         </div>
 
         <label htmlFor="delete-account-confirmation" className="block text-sm font-semibold text-[#444]">
-          Onaylamak için <span className="font-bold text-red-700">SİL</span> yazın
+          Onaylamak için <span className="font-bold text-red-700">ONAY</span> yazın
         </label>
         <input
           ref={inputRef}
