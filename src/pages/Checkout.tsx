@@ -148,7 +148,7 @@ export default function Checkout() {
     <main className="mx-auto max-w-[1400px] bg-[#fafafa] px-[60px] py-10 max-[768px]:px-6 max-[768px]:py-6">
       <SeoMeta
         title="Ödeme | E-Storee"
-        description="E-Storee siparişinizi güvenli ödeme adımlarıyla tamamlayın. Teslimat adresinizi ve ödeme yönteminizi seçin."
+        description="E-Storee demo kart seçimi ve sipariş özeti. Gerçek ödeme alınmaz."
         canonicalPath="/checkout"
         robots="noindex,nofollow"
       />

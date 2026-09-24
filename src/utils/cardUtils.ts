@@ -46,7 +46,7 @@ export const detectCardType = (number = ""): PaymentCard["cardType"] => {
   return "visa"; // default fallback
 };
 
-// Helper: mask 16-digit card number (PCI-DSS simulation)
+// Mask a test-card number for the demo UI. This is not a payment integration.
 export const maskCardNumber = (number = ""): string => {
   const clean = number.replace(/\D/g, "");
   const last4 = clean.slice(-4) || "0000";

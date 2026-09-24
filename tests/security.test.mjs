@@ -5,6 +5,13 @@ import { test } from "node:test";
 
 const read = (path) => readFileSync(path, "utf8");
 
+test("help page makes no live payment-provider or PCI certification claim", () => {
+  const help = read("src/pages/profile/HelpCenter.tsx");
+  assert.doesNotMatch(help, /PCI-DSS Level 1|bankaların 3D Secure güvenli doğrulama altyapısı/i);
+  assert.match(help, /ödeme sağlayıcısı veya 3D Secure entegrasyonu yoktur/);
+  assert.match(help, /gerçek ödeme alınmaz/);
+});
+
 test("demo card selection is visible but unpaid orders stay disabled", () => {
   const checkout = read("src/pages/Checkout.tsx");
   const payments = read("src/pages/profile/MyPayments.tsx");

@@ -19,10 +19,10 @@ const FAQ_ITEMS = [
   },
   {
     id: 3,
-    question: "Kredi kartı bilgilerim güvende mi?",
+    question: "Kart seçimiyle gerçek ödeme yapılıyor mu?",
     category: "Ödeme & Güvenlik",
     answer:
-      "Kesinlikle güvendedir. Sitemizde uluslararası PCI-DSS Level 1 güvenlik standartları ve 256-bit SSL şifreleme protokolleri kullanılmaktadır. Kredi kartı numaranız ve CVV güvenlik kodunuz sunucularımızda asla düz metin olarak kaydedilmez ve çalışanlarımız dahil hiç kimse tarafından görüntülenemez. Ödemeleriniz doğrudan bankaların 3D Secure güvenli doğrulama altyapısı üzerinden gerçekleştirilir.",
+      "Hayır. Bu site staj amaçlı bir demodur; ödeme sağlayıcısı veya 3D Secure entegrasyonu yoktur ve gerçek ödeme alınmaz. Kart seçimi yalnızca arayüz örneğidir. Sadece gösterilen test kartlarını kullanın; gerçek kart bilgisi girmeyin. Demo kartın maskelenmiş numarası tarayıcınızda tutulabilir, CVV kaydedilmez.",
   },
   {
     id: 4,
