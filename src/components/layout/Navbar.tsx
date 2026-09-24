@@ -145,7 +145,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-start md:px-5">
+      <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-start md:gap-2 md:px-5 lg:gap-[15px]">
         <div className="order-1 flex w-auto items-center gap-4 md:w-auto">
           <Link to="/">
             <img src="/img/icon/logo2.svg" alt={translate("E-Storee")} width={136} height={32} />
@@ -160,7 +160,7 @@ export default function Navbar() {
           <button
             type="button"
             onClick={() => setCategoriesOpen((open) => !open)}
-            className="flex items-center gap-2 rounded-[22px] px-3 py-2 text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
+            className="flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-[22px] px-3 py-2 text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc] hover:text-[#b6349a] lg:w-[132px] lg:justify-start"
             aria-expanded={categoriesOpen}
             aria-haspopup="menu"
           >
@@ -176,7 +176,7 @@ export default function Navbar() {
             >
               <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-            <span>{translate("Categories")}</span>
+            <span className="hidden lg:inline">{translate("Categories")}</span>
           </button>
           {categoriesOpen && (
             <div
@@ -207,7 +207,7 @@ export default function Navbar() {
         <div className="order-2 md:order-3" ref={menuRef}>
           <button
             type="button"
-            className="flex cursor-pointer flex-col gap-1.5 p-2 md:hidden"
+            className="flex h-10 w-10 shrink-0 cursor-pointer flex-col items-center justify-center gap-1.5 p-2 md:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
@@ -349,7 +349,7 @@ export default function Navbar() {
         </div>
 
         <div
-          className="relative order-4 flex w-full items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:absolute md:left-1/2 md:top-1/2 md:order-2 md:ml-0 md:w-[40%] md:-translate-x-1/2 md:-translate-y-1/2"
+          className="relative order-4 flex w-full min-w-0 items-center gap-2.5 rounded-[30px] bg-white px-4 py-2 shadow-[var(--shadow-md)] md:order-2 md:ml-2 md:mr-2 md:w-auto md:flex-1 md:translate-x-0 md:translate-y-0"
           ref={searchContainerRef}
         >
           <img src="/img/icon/Frame 28.svg" alt="" aria-hidden="true" width={24} height={24} />
@@ -366,7 +366,7 @@ export default function Navbar() {
           />
           <button
             type="button"
-            className="rounded-[20px] bg-[#d73f98] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:opacity-90"
+            className="w-[78px] shrink-0 rounded-[20px] bg-[#d73f98] px-2 py-1.5 text-[13px] font-semibold text-white transition hover:opacity-90"
             onClick={() => handleSearch()}
           >
             {translate("\r\n            Search\r\n          ")}</button>
@@ -408,22 +408,22 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="order-3 ml-2 hidden items-center gap-4 md:ml-auto md:mr-0 md:flex">
+        <div className="order-3 ml-2 hidden shrink-0 items-center gap-2 md:ml-auto md:mr-0 md:flex lg:gap-3 xl:gap-4">
           <LanguageSwitcher />
           <button
             type="button"
-            className="flex cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a]"
+            className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a] lg:w-[112px] lg:justify-start"
             onClick={openLocationModal}
             aria-label={`Change delivery location. Current location: ${location}`}
             title={location}
           >
             <img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={24} height={24} />
-            <p>{displayLocation}</p>
+            <p className="m-0 hidden min-w-0 flex-1 truncate lg:block">{displayLocation}</p>
           </button>
 
           <Link
             to="/cart"
-            className="flex items-center justify-center gap-2 rounded-[30px] border border-[#eee] bg-white px-5 py-2.5 text-center font-medium transition hover:border-[#d73f98] hover:bg-[#fffafe]"
+            className="flex w-[100px] shrink-0 items-center justify-center gap-2 rounded-[30px] border border-[#eee] bg-white px-2 py-2.5 text-center font-medium transition hover:border-[#d73f98] hover:bg-[#fffafe]"
           >
             <div className="relative flex items-center">
               <img src="/img/icon/Buy.svg" alt="" aria-hidden="true" width={20} height={20} className="h-5 w-5" />
@@ -439,7 +439,7 @@ export default function Navbar() {
           {isLoggedIn && user ? (
             <Link
               to="/profile/details"
-              className="flex items-center gap-2 text-sm font-medium text-[#333]"
+              className="flex w-[100px] shrink-0 items-center gap-2 overflow-hidden text-sm font-medium text-[#333] lg:w-[128px]"
             >
               <img
                 src={avatarSrc}
@@ -448,13 +448,13 @@ export default function Navbar() {
                 height={32}
                 className="h-8 w-8 rounded-full object-cover"
               />
-              <span className="hidden md:inline">
+              <span className="hidden min-w-0 truncate md:inline">
                 {language === "tr" ? "Merhaba, " : "Hello, "}{user.firstName}
               </span>
             </Link>
           ) : (
             <button
-              className="flex items-center gap-2 rounded-[22px] border border-[#d73f98] bg-white px-5 py-2 text-sm font-medium text-[#333] transition hover:bg-[#fff5fc]"
+              className="flex w-[112px] shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-[22px] border border-[#d73f98] bg-white px-2 py-2 text-sm font-medium text-[#333] transition hover:bg-[#fff5fc]"
               onClick={handleLoginClick}
             >
               <img src="/img/icon/2 User.svg" alt="" aria-hidden="true" width={24} height={24} />
