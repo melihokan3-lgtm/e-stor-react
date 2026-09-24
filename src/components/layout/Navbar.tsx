@@ -13,12 +13,13 @@ import { useLocation } from "../../features/addresses/LocationContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import useProducts from "../../features/products/useProducts";
 import { useLanguage, translate, translateCategory } from "../../features/i18n/LanguageContext";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const AuthModal = lazy(() => import("../common/AuthModal"));
 const LocationModal = lazy(() => import("../common/LocationModal"));
 
 export default function Navbar() {
-  const { language, setLanguage } = useLanguage();
+  const { language } = useLanguage();
   const { products } = useProducts();
   const { totalItems } = useCart();
   const { user, isLoggedIn, isAuthModalOpen, openAuthModal } = useAuth();
@@ -149,11 +150,7 @@ export default function Navbar() {
           <Link to="/">
             <img src="/img/icon/logo2.svg" alt={translate("E-Storee")} width={136} height={32} />
           </Link>
-          <label className="sr-only" htmlFor="site-language-mobile">{translate("Site language")}</label>
-          <select id="site-language-mobile" aria-label={translate("Site language")} value={language} onChange={(event) => setLanguage(event.target.value as "tr" | "en")} className="rounded-full border border-[#eee] bg-white px-2 py-1.5 text-xs font-semibold text-[#333] focus-visible:outline-2 focus-visible:outline-[#b6349a] md:hidden">
-            <option value="tr">{translate("TR")}</option>
-            <option value="en">{translate("EN")}</option>
-          </select>
+          <div className="md:hidden"><LanguageSwitcher /></div>
         </div>
 
         <div
@@ -412,11 +409,7 @@ export default function Navbar() {
         </div>
 
         <div className="order-3 ml-2 hidden items-center gap-4 md:ml-auto md:mr-0 md:flex">
-          <label className="sr-only" htmlFor="site-language">{translate("Site language")}</label>
-          <select id="site-language" aria-label={translate("Site language")} value={language} onChange={(event) => setLanguage(event.target.value as "tr" | "en")} className="rounded-full border border-[#eee] bg-white px-2.5 py-2 text-sm font-semibold text-[#333] focus-visible:outline-2 focus-visible:outline-[#b6349a]">
-            <option value="tr">{translate("TR")}</option>
-            <option value="en">{translate("EN")}</option>
-          </select>
+          <LanguageSwitcher />
           <button
             type="button"
             className="flex cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a]"
