@@ -5,12 +5,18 @@ import { test } from "node:test";
 
 const read = (path) => readFileSync(path, "utf8");
 
-test("checkout cannot collect card data or create an unpaid order", () => {
+test("demo card selection is visible but unpaid orders stay disabled", () => {
   const checkout = read("src/pages/Checkout.tsx");
   const payments = read("src/pages/profile/MyPayments.tsx");
+  const cardForm = read("src/features/payments/useCardForm.ts");
+  const cardModal = read("src/components/checkout/PaymentSelectionModal.tsx");
   const data = read("src/services/supabase/data.ts");
   const orders = read("src/features/orders/OrdersContext.tsx");
-  assert.doesNotMatch(checkout + payments, /cardNumber|cvv|PaymentSelectionModal|handlePlaceOrder/);
+  assert.match(checkout, /PaymentSelectionModal/);
+  assert.match(payments + cardModal, /Gerçek kart bilgisi girmeyin/);
+  assert.match(cardForm, /maskedNumber: maskCardNumber\(rawNumber\)/);
+  assert.match(cardForm, /isDemoCardNumber\(rawNumber\)/);
+  assert.doesNotMatch(checkout, /handlePlaceOrder/);
   assert.doesNotMatch(data, /\.rpc\("create_order"/);
   assert.match(orders, /Doğrulanmış ödeme altyapısı/);
   assert.match(read("supabase/disable-unverified-checkout.sql"), /revoke execute on function public\.create_order/);

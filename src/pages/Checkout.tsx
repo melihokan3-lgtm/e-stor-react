@@ -1,7 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../features/cart/CartContext";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { useLocation } from "../features/addresses/LocationContext";
+import { useAuth } from "../features/auth/AuthContext";
+import { PaymentSelectionModal } from "../components/checkout";
+import { loadSavedCards } from "../features/payments/savedCards";
+import type { PaymentCard } from "../types/payment";
 import SeoMeta from "../components/common/SeoMeta";
 
 type CouponIconType = "discount" | "shipping" | "special";
@@ -75,9 +79,17 @@ const COUPON_ICONS: Record<CouponIconType, string> = {
 export default function Checkout() {
   const { cart, totalPrice } = useCart();
   const { location, openLocationModal } = useLocation();
+  const { user } = useAuth();
 
   const [activeTip, setActiveTip] = useState<number | "Other" | null>(null);
   const [customTip, setCustomTip] = useState('');
+  const [selectedCard, setSelectedCard] = useState<PaymentCard | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
+  useEffect(() => {
+    const saved = loadSavedCards(user);
+    setSelectedCard(saved.find((card) => card.isDefault) ?? saved[0] ?? null);
+  }, [user]);
 
   // Coupon state
   const [isCouponPanelOpen, setIsCouponPanelOpen] = useState(false);
@@ -101,6 +113,9 @@ export default function Checkout() {
   }
 
   const finalTotal = Math.max(0, itemsTotal + deliveryFee + numericTip - couponDiscount);
+  const cardDisplayName = selectedCard
+    ? `${selectedCard.cardType === "visa" ? "Visa" : "Mastercard"} •••• ${selectedCard.last4}`
+    : "Demo kart seçilmedi";
 
   const handleApplyCoupon = (coupon: Coupon) => {
     if (itemsTotal < coupon.minOrder) {
@@ -203,7 +218,19 @@ export default function Checkout() {
           </div>
 
           {/* INFO CARD 2: Payment Method */}
-          <div className="rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
+          <div
+            className="cursor-pointer rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition hover:border-[#b6349a] focus:outline-none focus-visible:border-[#b6349a] focus-visible:ring-2 focus-visible:ring-[#b6349a]/20"
+            role="button"
+            tabIndex={0}
+            onClick={() => setIsPaymentModalOpen(true)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setIsPaymentModalOpen(true);
+              }
+            }}
+            aria-label={`Demo kart seç veya ekle. Seçili kart: ${cardDisplayName}`}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-[#111]">Payment Method</h3>
@@ -225,8 +252,9 @@ export default function Checkout() {
                 <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                 <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
-              <span className="text-sm font-semibold text-[#b6349a]">Ödeme sistemi henüz bağlı değil</span>
+              <span className="text-sm font-semibold text-[#b6349a]">{cardDisplayName}</span>
             </div>
+            <p className="mt-2 text-xs text-amber-800">Demo kart arayüzü; gerçek ödeme alınmaz.</p>
           </div>
 
           {/* INFO CARD 3: Review Order */}
@@ -458,17 +486,21 @@ export default function Checkout() {
               <span className="text-xl font-extrabold text-[#b6349a]">${finalTotal.toFixed(2)}</span>
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-[#999]">
-              By placing this order, you are agreeing to <a className="text-[#b6349a] underline" href="#">Terms and Conditions</a>.
-            </p>
-
-            <p role="status" className="mt-5 text-sm text-amber-800">Güvenli ödeme altyapısı kurulana kadar kart bilgisi alınmaz ve sipariş oluşturulmaz. Sepetiniz korunur.</p>
+            <p role="status" className="mt-5 text-sm text-amber-800">Kart seçimi yalnızca demodur. Gerçek ödeme ve sipariş oluşturma kapalıdır; sepetiniz korunur.</p>
             <button className="mt-4 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white opacity-50" disabled>Ödeme yakında</button>
 
           </div>
         </div>
 
       </div>
+
+      <PaymentSelectionModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        selectedCardId={selectedCard?.id}
+        onSelectCard={setSelectedCard}
+        user={user}
+      />
 
       {/* COUPON TOAST */}
       {couponToast && <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">{couponToast}</div>}

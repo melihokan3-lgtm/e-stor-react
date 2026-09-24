@@ -6,6 +6,10 @@ import { MemoryRouter } from "react-router-dom";
 import { createServer } from "vite";
 
 let vite;
+let loadSavedCards;
+let saveSavedCards;
+let isDemoCardNumber;
+let PaymentSelectionModal;
 let OrderCard;
 let AddressCard;
 let ProfileDetailRow;
@@ -29,6 +33,9 @@ before(async () => {
     removeItem: (key) => { storage.delete(key); },
   };
   vite = await createServer({ server: { middlewareMode: true }, appType: "custom", logLevel: "silent" });
+  ({ loadSavedCards, saveSavedCards } = await vite.ssrLoadModule("/src/features/payments/savedCards.ts"));
+  ({ isDemoCardNumber } = await vite.ssrLoadModule("/src/features/payments/useCardForm.ts"));
+  ({ default: PaymentSelectionModal } = await vite.ssrLoadModule("/src/components/checkout/PaymentSelectionModal.tsx"));
   ({ default: OrderCard } = await vite.ssrLoadModule("/src/components/profile/OrderCard.tsx"));
   ({ default: AddressCard } = await vite.ssrLoadModule("/src/components/profile/AddressCard.tsx"));
   ({ default: ProfileDetailRow } = await vite.ssrLoadModule("/src/components/profile/ProfileDetailRow.tsx"));
@@ -50,6 +57,37 @@ after(async () => {
 const firstUser = { id: "user-a", email: "a@example.test" };
 const secondUser = { id: "user-b", email: "b@example.test" };
 
+test("saved cards stay isolated and an explicitly empty list stays empty", () => {
+  storage.clear();
+  assert.equal(loadSavedCards(firstUser).length, 2);
+  saveSavedCards(firstUser, []);
+  assert.deepEqual(loadSavedCards(firstUser), []);
+  assert.equal(loadSavedCards(secondUser).length, 2);
+  assert.deepEqual(loadSavedCards(firstUser), []);
+  assert.notEqual(storage.get("savedCards_user-a"), storage.get("savedCards_user-b"));
+});
+
+test("guest demo cards are not written to persistent storage", () => {
+  storage.clear();
+  assert.equal(loadSavedCards(null).length, 2);
+  assert.equal(storage.size, 0);
+});
+
+test("demo card form rejects non-test card numbers", () => {
+  assert.equal(isDemoCardNumber("4242 4242 4242 4242"), true);
+  assert.equal(isDemoCardNumber("5555 5555 5555 4444"), true);
+  assert.equal(isDemoCardNumber("4111 1111 1111 1111"), false);
+});
+
+test("demo card selector renders again on checkout", () => {
+  const html = renderToString(createElement(PaymentSelectionModal, {
+    isOpen: true, onClose: () => {}, onSelectCard: () => {}, user: firstUser,
+  }));
+  assert.match(html, /Demo Kart Seçin/);
+  assert.match(html, /Gerçek kart bilgisi girmeyin/);
+  assert.match(html, /Yeni Kart Ekle/);
+});
+
 test("profile preferences and notifications stay user-scoped", () => {
   storage.clear();
   const firstSettings = loadAccountSettings(firstUser);
@@ -70,8 +108,8 @@ test("profile preferences and notifications stay user-scoped", () => {
 
 test("local data cleanup removes only the selected user's feature keys", () => {
   storage.clear();
-  storage.set("savedCards_user-a", "legacy demo card");
-  storage.set("savedCards_user-b", "legacy demo card");
+  loadSavedCards(firstUser);
+  loadSavedCards(secondUser);
   loadProfileNotifications(firstUser);
   loadProfileNotifications(secondUser);
   loadReferralData(firstUser);

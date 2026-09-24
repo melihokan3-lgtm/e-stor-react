@@ -7,17 +7,6 @@ import "./style.css";
 import "./styles/tailwind.css";
 import "swiper/css";
 
-// Remove obsolete demo payment-card metadata left by older releases.
-// Real card details must only ever be handled by a hosted payment provider.
-try {
-  for (let index = localStorage.length - 1; index >= 0; index -= 1) {
-    const key = localStorage.key(index);
-    if (key?.startsWith("savedCards_")) localStorage.removeItem(key);
-  }
-} catch {
-  // Storage may be unavailable in privacy-restricted browsers.
-}
-
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
