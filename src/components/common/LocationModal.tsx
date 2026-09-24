@@ -280,7 +280,7 @@ export default function LocationModal() {
         if (cancelled || !mapElementRef.current) return;
 
         const map = L.map(mapElementRef.current).setView(BURSA_CENTER, 12);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
           maxZoom: 19,
         }).addTo(map);
