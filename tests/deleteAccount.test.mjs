@@ -95,6 +95,7 @@ test("account settings offer server-backed deletion with confirmation and noinde
   const section = readFileSync("src/features/profile/DeleteAccountSection.tsx", "utf8");
   const service = readFileSync("src/features/profile/deleteAccount.ts", "utf8");
   const edge = readFileSync("supabase/functions/delete-account/index.ts", "utf8");
+  const config = readFileSync("supabase/config.toml", "utf8");
   assert.match(settings, /robots="noindex,nofollow"/);
   assert.match(settings, /<DeleteAccountSection/);
   assert.match(section, /Hesabınızı silmek istediğinize emin misiniz/);
@@ -102,5 +103,6 @@ test("account settings offer server-backed deletion with confirmation and noinde
   assert.match(section, /await deleteAccount\(\)/);
   assert.match(service, /functions\.invoke.*"delete-account"/);
   assert.match(edge, /auth: "user"/);
+  assert.match(config, /\[functions\.delete-account\]\s*verify_jwt = true/);
   assert.doesNotMatch(section, /window\.confirm/);
 });

@@ -1,0 +1,4 @@
+project_id = "e-stor-react"
+
+[functions.delete-account]
+verify_jwt = true

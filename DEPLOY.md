@@ -34,11 +34,11 @@ Function. Deploy it to the same Supabase project used by `VITE_SUPABASE_URL`:
 
 ```sh
 npx supabase login
-npx supabase link --project-ref xblmgefooqnapaqanfkc
-npx supabase functions deploy delete-account
+npx supabase functions deploy delete-account --project-ref xblmgefooqnapaqanfkc --use-api
 ```
 
-Keep JWT verification enabled (do not pass `--no-verify-jwt`). The function
+Keep JWT verification enabled as declared in `supabase/config.toml` (do not
+pass `--no-verify-jwt`). The function
 validates the signed-in user and uses the server-side admin client; no admin
 key belongs in the Vite frontend or GitHub repository.
 

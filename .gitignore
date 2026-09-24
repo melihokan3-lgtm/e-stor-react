@@ -18,6 +18,7 @@ server/.env.*
 dist
 dist-ssr
 *.local
+supabase/.temp/
 
 # Editor directories and files
 .vscode/*
