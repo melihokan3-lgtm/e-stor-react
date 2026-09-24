@@ -22,7 +22,7 @@ const FAQ_ITEMS = [
     question: "Kart seçimiyle gerçek ödeme yapılıyor mu?",
     category: "Ödeme & Güvenlik",
     answer:
-      "Hayır. Bu site staj amaçlı bir demodur; ödeme sağlayıcısı veya 3D Secure entegrasyonu yoktur ve gerçek ödeme alınmaz. Kart seçimi yalnızca arayüz örneğidir. Sadece gösterilen test kartlarını kullanın; gerçek kart bilgisi girmeyin. Demo kartın maskelenmiş numarası tarayıcınızda tutulabilir, CVV kaydedilmez.",
+      "Hayır. Bu site staj amaçlı bir test projesidir; ödeme sağlayıcısı veya 3D Secure entegrasyonu yoktur ve gerçek ödeme alınmaz. Kart seçimi yalnızca arayüz örneğidir. Sadece gösterilen test kartlarını kullanın; gerçek kart bilgisi girmeyin. Test kartının maskelenmiş numarası tarayıcınızda tutulabilir, CVV kaydedilmez.",
   },
   {
     id: 4,

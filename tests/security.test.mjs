@@ -43,7 +43,7 @@ test("demo checkout stays local and cannot create unpaid Supabase orders", () =>
   assert.match(payments + cardModal, /Gerçek kart bilgisi girmeyin/);
   assert.match(cardForm, /maskedNumber: maskCardNumber\(rawNumber\)/);
   assert.match(cardForm, /isDemoCardNumber\(rawNumber\)/);
-  assert.match(checkout, /Demo ödemeyi tamamla/);
+  assert.match(checkout, /Test işlemini tamamla/);
   assert.match(checkout, /Gerçek para çekilmez/);
   assert.doesNotMatch(data, /\.rpc\("create_order"/);
   assert.match(orders, /demoOrders/);

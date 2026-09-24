@@ -91,9 +91,9 @@ export default function PaymentSelectionModal({
         {/* Header */}
         <div className="mb-5 flex items-start justify-between gap-4 border-b border-[#eee] pb-4">
           <div>
-            <h3 className="text-lg font-bold text-[#222] sm:text-xl">Demo Kart Seçin</h3>
+            <h3 className="text-lg font-bold text-[#222] sm:text-xl">Test Kartı Seçin</h3>
             <p className="mt-1 text-sm text-[#777]">
-              Arayüzü denemek için kayıtlı demo kartı seçin veya test kartı ekleyin.
+              Yalnızca test kartı seçin veya ekleyin; gerçek kart bilgisi girmeyin.
             </p>
           </div>
           <button className="grid h-9 w-9 place-items-center rounded-full text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" onClick={onClose} aria-label="Kapat">
@@ -277,7 +277,7 @@ export default function PaymentSelectionModal({
                   </svg>
                   <input
                     type="text"
-                    aria-label="Demo kart üzerindeki isim"
+                    aria-label="Test kartı üzerindeki isim"
                     placeholder="AD SOYAD"
                     value={formData.cardHolder}
                     onChange={handleNameChange}
@@ -297,7 +297,7 @@ export default function PaymentSelectionModal({
                   </svg>
                   <input
                     type="text"
-                    aria-label="Demo test kartı numarası"
+                    aria-label="Test kartı numarası"
                     inputMode="numeric"
                     autoComplete="off"
                     placeholder="4242 4242 4242 4242"
@@ -322,7 +322,7 @@ export default function PaymentSelectionModal({
                     </svg>
                     <input
                       type="text"
-                      aria-label="Demo kart son kullanma tarihi"
+                      aria-label="Test kartı son kullanma tarihi"
                       placeholder="AA/YY"
                       value={formData.expiry}
                       onChange={handleExpiryChange}
@@ -345,7 +345,7 @@ export default function PaymentSelectionModal({
                     </svg>
                     <input
                       type="password"
-                      aria-label="Demo kart güvenlik kodu"
+                      aria-label="Test kartı güvenlik kodu"
                       autoComplete="off"
                       placeholder="•••"
                       value={formData.cvv}

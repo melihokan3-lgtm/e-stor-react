@@ -16,7 +16,7 @@ export const getCardThemeGradient = (themeId: string): string =>
 export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   {
     id: "card_demo_1",
-    cardHolder: "DEMO USER",
+    cardHolder: "TEST KULLANICI",
     maskedNumber: "**** **** **** 4242",
     last4: "4242",
     expiry: "09/29",
@@ -27,7 +27,7 @@ export const DEFAULT_DEMO_CARDS: PaymentCard[] = [
   },
   {
     id: "card_demo_2",
-    cardHolder: "DEMO USER",
+    cardHolder: "TEST KULLANICI",
     maskedNumber: "**** **** **** 5556",
     last4: "5556",
     expiry: "11/28",

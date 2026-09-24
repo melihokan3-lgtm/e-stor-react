@@ -52,7 +52,7 @@ export default function MyOrders() {
               { id: "all", label: `Tüm Siparişlerim (${orders.length})` },
               { id: "pending", label: `Devam Eden / Teslim Edilmeyenler (${pendingOrders.length})` },
               { id: "delivered", label: `Teslim Edilenler (${deliveredOrders.length})` },
-              { id: "demo", label: `Demo (${demoOrders.length})` },
+              { id: "demo", label: `Test İşlemleri (${demoOrders.length})` },
             ]}
             selected={filterTab}
             onSelect={setFilterTab}
@@ -98,7 +98,7 @@ export default function MyOrders() {
 
           {(filterTab === 'all' || filterTab === 'demo') && demoOrders.length > 0 && (
             <div className="orders-section">
-              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">Demo işlemler — ödeme ve kargo yok</h3>
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">Test işlemleri — ödeme ve kargo yok</h3>
               {renderOrderList(demoOrders)}
             </div>
           )}

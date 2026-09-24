@@ -61,17 +61,17 @@ export default function OrderProgress() {
   const placedAt = order.createdAt
     ? new Date(order.createdAt).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
     : order.date || "";
-  const status = order.status || "Processing";
+  const status = order.isDemo ? "Test işlemi" : order.status || "Processing";
 
   return (
     <main className="min-h-screen bg-[#fafafa] px-5 py-10">
-      <SeoMeta title={order.isDemo ? "Demo Ödeme Onayı | E-Storee" : "Sipariş Takibi | E-Storee"} description={order.isDemo ? "Demo ödeme onayı ve ürün özeti. Gerçek ödeme alınmaz." : "E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin."} canonicalPath="/order-progress" robots="noindex,nofollow" />
-      <h1 className="sr-only">{order.isDemo ? "Demo Ödeme Onayı" : "Sipariş Takibi"}</h1>
+      <SeoMeta title={order.isDemo ? "Test İşlemi Onayı | E-Storee" : "Sipariş Takibi | E-Storee"} description={order.isDemo ? "Test işlemi onayı ve ürün özeti. Gerçek ödeme alınmaz." : "E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin."} canonicalPath="/order-progress" robots="noindex,nofollow" />
+      <h1 className="sr-only">{order.isDemo ? "Test İşlemi Onayı" : "Sipariş Takibi"}</h1>
       <div className="mx-auto w-full max-w-[1200px]">
 
         {order.isDemo && (
           <div role="status" className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950">
-            <h2 className="text-xl font-bold">Demo ödeme tamamlandı</h2>
+            <h2 className="text-xl font-bold">Test işlemi tamamlandı</h2>
             <p className="mt-1 text-sm leading-6">Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.</p>
           </div>
         )}
@@ -88,7 +88,7 @@ export default function OrderProgress() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
-            {order.isDemo ? "Demo kayıtlarım" : "Help"}
+            {order.isDemo ? "Test kayıtlarım" : "Help"}
           </Link>
         </div>
 
@@ -101,7 +101,7 @@ export default function OrderProgress() {
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <h2>{order.isDemo ? "Ödeme Onayı ve Özet" : `Order ${status === "Processing" ? "In Progress" : status}`}</h2>
-                  <p>{order.isDemo ? "Demo işlem tarihi" : "Order placed on"} {placedAt}</p>
+                  <p>{order.isDemo ? "Test işlem tarihi" : "Order placed on"} {placedAt}</p>
                 </div>
                 <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{status}</div>
               </div>
@@ -112,7 +112,7 @@ export default function OrderProgress() {
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
                 </div>
-                <h3>{order.isDemo ? "Demo işlem onaylandı" : "Order is Placed"}</h3>
+                <h3>{order.isDemo ? "Test işlemi onaylandı" : "Order is Placed"}</h3>
               </div>
 
               {!order.isDemo && <div className="relative mt-8">
@@ -246,7 +246,7 @@ export default function OrderProgress() {
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                   </svg>
-                  {order.id}
+                  {order.isDemo ? String(order.id).replace(/^(?:demo_|test_)/, "T-") : order.id}
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4 mt-4">
@@ -265,14 +265,14 @@ export default function OrderProgress() {
 
             {/* Pay With */}
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-              <h3 className="mb-4 text-base font-semibold text-[#222]">{order.isDemo ? "Demo Kart (tahsilat yok)" : "Pay With"}</h3>
+              <h3 className="mb-4 text-base font-semibold text-[#222]">{order.isDemo ? "Test Kartı (tahsilat yok)" : "Pay With"}</h3>
               <div className="flex items-center gap-3 text-sm">
                 <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="32" height="20" rx="4" fill="#111"/>
                   <circle cx="12" cy="10" r="6" fill="#EB001B"/>
                   <circle cx="20" cy="10" r="6" fill="#F79E1B" fillOpacity="0.8"/>
                 </svg>
-                <span className="text-[#b6349a]">{order.paymentMethod || "Payment method unavailable"}</span>
+                <span className="text-[#b6349a]">{order.isDemo ? (order.paymentMethod || "Test kartı").replace(/^Demo kart/u, "Test kartı") : order.paymentMethod || "Payment method unavailable"}</span>
               </div>
             </div>
 

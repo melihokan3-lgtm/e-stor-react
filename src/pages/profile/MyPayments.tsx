@@ -45,7 +45,7 @@ export default function MyPayments() {
     saveSavedCards(user, next);
     resetForm();
     setIsModalOpen(false);
-    toast("Kart görünümü kaydedildi (demo). Gerçek ödeme alınmaz.");
+    toast("Test kartı görünümü kaydedildi. Gerçek ödeme alınmaz.");
   };
   const setDefault = (id: PaymentCard["id"]) => {
     const next = cards.map((card) => ({ ...card, isDefault: card.id === id }));
@@ -78,7 +78,7 @@ export default function MyPayments() {
             Ödeme Yöntemlerim
           </h1>
           <p className="mt-2 text-sm text-[#777]">
-            Demo kart görünümlerinizi yönetin. Gerçek kart bilgisi girmeyin; test kartı: 4242 4242 4242 4242. Bu ekranda ödeme yapılmaz.
+            Test kartı görünümlerinizi yönetin. Gerçek kart bilgisi girmeyin; test kartı: 4242 4242 4242 4242. Bu ekranda ödeme yapılmaz.
           </p>
         </div>
         <button
@@ -166,7 +166,7 @@ export default function MyPayments() {
       <div className="mt-6 flex gap-3 rounded-2xl border border-green-100 bg-green-50 p-4 text-sm text-green-800">
         <span>🔒</span>
         <p className="m-0">
-          <strong>Demo Kart Görünümü</strong>
+          <strong>Test Kartı Görünümü</strong>
           <br />
           Yalnızca maskelenmiş kart numarası tarayıcıda saklanır. Gerçek kart
           bilgisi girmeyin.
@@ -284,7 +284,7 @@ export default function MyPayments() {
                   type="submit"
                   className="rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white"
                 >
-                  Demo Kartı Kaydet
+                  Test Kartını Kaydet
                 </button>
               </div>
             </form>

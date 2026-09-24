@@ -23,7 +23,13 @@ export function loadSavedCards(user: AuthUser | null): PaymentCard[] {
   if (!user) return DEFAULT_DEMO_CARDS;
 
   const saved = readUserStorage<PaymentCard[] | null>(STORAGE_KEY, user, null);
-  if (Array.isArray(saved) && saved.every(isPaymentCard)) return saved;
+  if (Array.isArray(saved) && saved.every(isPaymentCard)) {
+    return saved.map((card) =>
+      card.id.startsWith("card_demo_") && card.cardHolder === "DEMO USER"
+        ? { ...card, cardHolder: "TEST KULLANICI" }
+        : card,
+    );
+  }
 
   writeUserStorage(STORAGE_KEY, user, DEFAULT_DEMO_CARDS);
   return DEFAULT_DEMO_CARDS;

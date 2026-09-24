@@ -85,12 +85,13 @@ test("does not reveal a previous account's orders while loading", () => {
 test("demo checkout result never claims a real payment or shipment", () => {
   const demo = { ...orders[0], id: "demo_123", status: "Demo", isDemo: true };
   const html = renderPage("/order-progress?orderId=demo_123", true, false, [demo], "Gerçek siparişler yüklenemedi.");
-  assert.match(html, /Demo ödeme tamamlandı/);
+  assert.match(html, /Test işlemi tamamlandı/);
   assert.match(html, /Gerçek para çekilmedi/);
   assert.match(html, /ürün gönderilmeyecek/);
   assert.match(html, /Organic Milk/);
   assert.match(html, /Order Summary/);
-  assert.match(html, /Demo Kart \(tahsilat yok\)/);
+  assert.match(html, /Test Kartı \(tahsilat yok\)/);
   assert.match(html, /Seçilen Adres \(gönderim yok\)/);
   assert.doesNotMatch(html, /Order is Placed/);
+  assert.doesNotMatch(html, /demo/i);
 });

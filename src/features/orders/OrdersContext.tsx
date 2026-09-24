@@ -46,7 +46,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     setOrdersError("");
     const hydrate = async () => {
       const demoOrders = sanitizeOrders(readUserStorage<Order[]>("demoOrders", user, []))
-        .filter((order) => String(order.id).startsWith("demo_"))
+        .filter((order) => /^(?:demo_|test_)/.test(String(order.id)))
         .map((order) => ({ ...order, status: "Demo", isDemo: true }));
       try {
         const realOrders = sanitizeOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []));
@@ -56,7 +56,7 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
         console.error("Failed to load orders", error);
         if (active) {
           setOrders(demoOrders);
-          setOrdersError("Gerçek siparişler yüklenemedi. Demo kayıtlar bu tarayıcıda gösteriliyor.");
+          setOrdersError("Gerçek siparişler yüklenemedi. Test kayıtları bu tarayıcıda gösteriliyor.");
         }
       } finally {
         if (active) {
@@ -77,20 +77,20 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
 
   const addOrder = async (order: CreateOrderInput): Promise<Order> => {
     if (!user?.id || ordersOwnerId !== currentOwnerId || ordersLoading) {
-      throw new Error("Demo sipariş için giriş yapıp hesabınızın yüklenmesini bekleyin.");
+      throw new Error("Test işlemi için giriş yapıp hesabınızın yüklenmesini bekleyin.");
     }
     if (!Array.isArray(order.items) || order.items.length === 0 || !Number.isFinite(order.total) || order.total < 0) {
-      throw new Error("Demo sipariş bilgileri geçersiz.");
+      throw new Error("Test işlemi bilgileri geçersiz.");
     }
     const demoOrder: Order = {
       ...order,
-      id: `demo_${crypto.randomUUID()}`,
+      id: `test_${crypto.randomUUID()}`,
       status: "Demo",
       isDemo: true,
       createdAt: new Date().toISOString(),
     };
     const demoOrders = sanitizeOrders(readUserStorage<Order[]>("demoOrders", user, []))
-      .filter((item) => String(item.id).startsWith("demo_"));
+      .filter((item) => /^(?:demo_|test_)/.test(String(item.id)));
     writeUserStorage("demoOrders", user, [demoOrder, ...demoOrders]);
     setOrders((previous) => [demoOrder, ...previous]);
     return demoOrder;

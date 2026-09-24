@@ -83,9 +83,10 @@ test("demo card selector renders again on checkout", () => {
   const html = renderToString(createElement(PaymentSelectionModal, {
     isOpen: true, onClose: () => {}, onSelectCard: () => {}, user: firstUser,
   }));
-  assert.match(html, /Demo Kart Seçin/);
+  assert.match(html, /Test Kartı Seçin/);
   assert.match(html, /Gerçek kart bilgisi girmeyin/);
   assert.match(html, /Yeni Kart Ekle/);
+  assert.doesNotMatch(html, /demo/i);
 });
 
 test("profile preferences and notifications stay user-scoped", () => {

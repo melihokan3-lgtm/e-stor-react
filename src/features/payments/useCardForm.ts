@@ -68,7 +68,7 @@ export function useCardForm() {
     if (rawNumber.length !== 16) {
       nextErrors.cardNumber = "Kart numarası 16 haneli olmalıdır.";
     } else if (!isDemoCardNumber(rawNumber)) {
-      nextErrors.cardNumber = "Yalnızca demo test kartı kullanın: 4242 4242 4242 4242.";
+      nextErrors.cardNumber = "Yalnızca test kartı kullanın: 4242 4242 4242 4242.";
     }
     if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(formData.expiry)) {
       nextErrors.expiry = "Geçerli bir son kullanma tarihi girin (AA/YY).";

@@ -57,7 +57,7 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
         <div>
           <h2 id="delete-account-title" className="text-xl font-bold text-[#222]">Hesabınızı silmek istediğinize emin misiniz?</h2>
           <p id="delete-account-description" className="mt-2 text-sm leading-6 text-[#666]">
-            Bu işlem kalıcıdır. Giriş hesabınız ile profil, adres, sepet ve sipariş kayıtlarınız silinir. Bu tarayıcıdaki size ait demo verileri de temizlenir.
+            Bu işlem kalıcıdır. Giriş hesabınız ile profil, adres, sepet ve sipariş kayıtlarınız silinir. Bu tarayıcıdaki size ait test verileri de temizlenir.
           </p>
         </div>
 
