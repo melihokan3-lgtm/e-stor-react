@@ -70,31 +70,8 @@ export const fetchUserOrders = async (user: AuthUser | null): Promise<Order[]> =
 
 export const saveUserOrder = async (user: AuthUser | null, order: CreateOrderInput): Promise<Order> => {
   requireUserId(user);
-  if (!order.deliveryAddress?.trim() || order.deliveryAddress.trim().length > 500) throw new Error("Geçerli bir teslimat adresi gerekli.");
-  if (!Array.isArray(order.items) || order.items.length === 0 || order.items.length > 100) {
-    throw new Error("Geçersiz sipariş ürünleri.");
-  }
-  const tip = Number(order.tip || 0);
-  if (!Number.isFinite(tip) || tip < 0 || tip > 100) throw new Error("Geçersiz bahşiş tutarı.");
-  const hasInvalidItem = order.items.some((item) =>
-    !Number.isInteger(item.id)
-    || item.id < 1
-    || !Number.isFinite(item.price)
-    || item.price < 0
-    || !Number.isInteger(item.qty)
-    || item.qty < 1
-    || item.qty > 100,
-  );
-  if (hasInvalidItem) throw new Error("Geçersiz sipariş ürünü.");
-  const { data, error } = await (await getClient()).rpc("create_order", {
-    p_delivery_address: order.deliveryAddress.trim(),
-    p_items: order.items.map((item) => ({ id: item.id, qty: item.qty })),
-    p_tip: tip,
-    p_coupon_code: order.coupon?.trim().toUpperCase() || null,
-  });
-  if (error) throw error;
-  if (!data || typeof data !== "object") throw new Error("Sipariş oluşturulamadı.");
-  return mapOrder(data as SupabaseOrderRow);
+  void order;
+  throw new Error("Doğrulanmış ödeme altyapısı kurulana kadar sipariş oluşturulamaz.");
 };
 
 export const updateUserOrderAddress = async (user: AuthUser | null, orderId: string | number, address: string): Promise<void> => {

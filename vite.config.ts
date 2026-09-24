@@ -1,5 +1,5 @@
 import { resolve } from "node:path";
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 
 function homeLcpPreload(): Plugin {
@@ -20,27 +20,35 @@ function homeLcpPreload(): Plugin {
   };
 }
 
-function nonBlockingStylesheet(): Plugin {
+function rejectClientSecrets(mode: string): Plugin {
   return {
-    name: "non-blocking-stylesheet",
-    apply: "build",
-    transformIndexHtml: {
-      order: "post",
-      handler(html) {
-        const nonBlockingLink =
-          '<link rel="preload" as="style" crossorigin href="$1" onload="this.onload=null;this.rel=\'stylesheet\'"><noscript><link rel="stylesheet" crossorigin href="$1"></noscript>';
-
-        return html.replace(
-          /<link rel="stylesheet" crossorigin href="([^"]+\.css)">/g,
-          nonBlockingLink,
-        );
-      },
+    name: "reject-client-secrets",
+    configResolved() {
+      const clientEnv = loadEnv(mode, process.cwd(), "VITE_");
+      const unsafeNames = Object.keys(clientEnv).filter((name) =>
+        /(?:SECRET|SERVICE_ROLE|PRIVATE|PASSWORD|DATABASE_URL|CLIENT_SECRET)/i.test(name),
+      );
+      if (unsafeNames.length) {
+        throw new Error(`Gizli değişkenlere VITE_ öneki verilemez: ${unsafeNames.join(", ")}`);
+      }
+      const key = clientEnv.VITE_SUPABASE_PUBLISHABLE_KEY?.trim();
+      if (!key) return;
+      if (key.startsWith("sb_publishable_")) return;
+      if (key.startsWith("eyJ")) {
+        try {
+          const payload = JSON.parse(Buffer.from(key.split(".")[1], "base64url").toString("utf8"));
+          if (payload.role === "anon") return;
+        } catch {
+          // Reject malformed JWTs without logging their contents.
+        }
+      }
+      throw new Error("VITE_SUPABASE_PUBLISHABLE_KEY yalnızca Supabase publishable/anon anahtarı olabilir.");
     },
   };
 }
 
-export default defineConfig({
-  plugins: [tailwindcss(), homeLcpPreload(), nonBlockingStylesheet()],
+export default defineConfig(({ mode }) => ({
+  plugins: [rejectClientSecrets(mode), tailwindcss(), homeLcpPreload()],
   build: {
     rollupOptions: {
       input: {
@@ -49,4 +57,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

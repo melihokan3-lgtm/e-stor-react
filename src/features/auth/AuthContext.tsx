@@ -38,7 +38,7 @@ const getAuthErrorMessage = (error: { message?: string } | null | undefined, fal
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [hasSession, setHasSession] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(true); // initial load
 
@@ -58,13 +58,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (!mounted) return;
       const restoredUser = mapSupabaseUser(data.session?.user);
       setUser(restoredUser);
-      setToken(data.session?.access_token || null);
+      setHasSession(Boolean(data.session));
       setAuthLoading(false);
 
       const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
         if (!mounted) return;
         setUser(mapSupabaseUser(session?.user));
-        setToken(session?.access_token || null);
+        setHasSession(Boolean(session));
         setAuthLoading(false);
         if (session) setIsAuthModalOpen(false);
       });
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const isLoggedIn = !!user && !!token;
+  const isLoggedIn = !!user && hasSession;
 
   // --- LOGIN ---
   const loginUser = async (username: string, password: string): Promise<AuthUser> => {
@@ -101,7 +101,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const userData = mapSupabaseUser(data.user);
         if (!userData || !data.session) throw new Error("Kullanıcı oturumu alınamadı.");
         setUser(userData);
-        setToken(data.session.access_token);
+        setHasSession(true);
         setIsAuthModalOpen(false);
         return userData;
       }
@@ -168,7 +168,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           throw new Error("Kayıt tamamlandı. E-posta adresinizi doğrulayıp giriş yapın.");
         }
         setUser(userData);
-        setToken(data.session.access_token);
+        setHasSession(true);
         setIsAuthModalOpen(false);
         return userData;
       }
@@ -233,7 +233,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
     });
     setUser(null);
-    setToken(null);
+    setHasSession(false);
   }, []);
 
   // --- MODAL CONTROL ---
@@ -244,7 +244,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     <AuthContext.Provider
       value={{
         user,
-        token,
         isLoggedIn,
         authLoading,
         loginUser,

@@ -18,7 +18,6 @@ export interface RegisterInput {
 
 export interface AuthContextValue {
   user: AuthUser | null;
-  token: string | null;
   isLoggedIn: boolean;
   authLoading: boolean;
   loginUser: (username: string, password: string) => Promise<AuthUser>;

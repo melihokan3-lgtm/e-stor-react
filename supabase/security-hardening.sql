@@ -87,4 +87,5 @@ end;
 $$;
 
 revoke all on function public.create_order(text, jsonb, numeric, text) from public, anon;
-grant execute on function public.create_order(text, jsonb, numeric, text) to authenticated;
+-- Keep checkout closed until a trusted payment webhook confirms the charge.
+revoke execute on function public.create_order(text, jsonb, numeric, text) from authenticated;

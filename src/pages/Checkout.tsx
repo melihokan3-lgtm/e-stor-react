@@ -1,14 +1,7 @@
-import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useCart } from "../features/cart/CartContext";
-import { useOrders } from "../features/orders/OrdersContext";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
-import { useAuth } from "../features/auth/AuthContext";
 import { useLocation } from "../features/addresses/LocationContext";
-import { PaymentSelectionModal } from "../components/checkout";
-import { loadSavedCards } from "../features/payments/savedCards";
-import type { PaymentCard } from "../types/payment";
-import type { CreateOrderInput } from "../types/order";
 import SeoMeta from "../components/common/SeoMeta";
 
 type CouponIconType = "discount" | "shipping" | "special";
@@ -80,32 +73,16 @@ const COUPON_ICONS: Record<CouponIconType, string> = {
 };
 
 export default function Checkout() {
-  const { cart, totalPrice, clearCart } = useCart();
-  const { addOrder, ordersLoading } = useOrders();
-  const { user, isLoggedIn, openAuthModal } = useAuth();
+  const { cart, totalPrice } = useCart();
   const { location, openLocationModal } = useLocation();
-  const navigate = useNavigate();
 
   const [activeTip, setActiveTip] = useState<number | "Other" | null>(null);
   const [customTip, setCustomTip] = useState('');
-
-  // Payment method selection & modal state
-  const [selectedCard, setSelectedCard] = useState<PaymentCard | null>(null);
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   // Coupon state
   const [isCouponPanelOpen, setIsCouponPanelOpen] = useState(false);
   const [appliedCoupon, setAppliedCoupon] = useState<Coupon | null>(null);
   const [couponToast, setCouponToast] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const submittingRef = useRef(false);
-  const [submitError, setSubmitError] = useState("");
-
-  // Sync selected card on mount & user change
-  useEffect(() => {
-    const saved = loadSavedCards(user);
-    setSelectedCard(saved.find((card) => card.isDefault) ?? saved[0] ?? null);
-  }, [user]);
 
   const deliveryFee = 4.78;
   const itemsTotal = totalPrice;
@@ -124,10 +101,6 @@ export default function Checkout() {
   }
 
   const finalTotal = Math.max(0, itemsTotal + deliveryFee + numericTip - couponDiscount);
-
-  const cardDisplayName = selectedCard
-    ? `${selectedCard.cardType === "visa" ? "Visa" : "Mastercard"} **** ${selectedCard.last4 || selectedCard.maskedNumber?.slice(-4) || "3434"}`
-    : "Kart seçilmedi";
 
   const handleApplyCoupon = (coupon: Coupon) => {
     if (itemsTotal < coupon.minOrder) {
@@ -154,54 +127,6 @@ export default function Checkout() {
       month: "short",
       year: "numeric",
     });
-  };
-
-  const handlePlaceOrder = async (): Promise<void> => {
-    if (submittingRef.current || ordersLoading) return;
-    if (cart.length === 0) {
-      setSubmitError("Your cart is empty!");
-      return;
-    }
-    if (!isLoggedIn) {
-      openAuthModal();
-      return;
-    }
-
-    const newOrder: CreateOrderInput = {
-      date: new Date().toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" }),
-      deliveryAddress: location,
-      paymentMethod: cardDisplayName,
-      total: finalTotal,
-      tip: numericTip,
-      coupon: appliedCoupon?.code ?? null,
-      couponDiscount,
-      status: "Processing",
-      items: cart.map((item) => ({
-        id: item.data.id,
-        title: item.data.title,
-        img: cleanImageUrl(item.data.image) || FALLBACK_IMG,
-        price: item.data.price,
-        qty: item.unit,
-        category: item.data.category,
-      })),
-    };
-
-    setSubmitError("");
-    submittingRef.current = true;
-    setIsSubmitting(true);
-    try {
-      const savedOrder = await addOrder(newOrder);
-      clearCart();
-      navigate(`/order-progress?orderId=${encodeURIComponent(String(savedOrder.id))}`);
-    } catch (error) {
-      console.error("Failed to place order", error);
-      setSubmitError(error instanceof Error && error.message.startsWith("Bu hesap Supabase kullanıcısı değil")
-        ? error.message
-        : "Sipariş kaydedilemedi. Sepetiniz korunuyor; lütfen tekrar deneyin.");
-    } finally {
-      submittingRef.current = false;
-      setIsSubmitting(false);
-    }
   };
 
   return (
@@ -278,19 +203,7 @@ export default function Checkout() {
           </div>
 
           {/* INFO CARD 2: Payment Method */}
-          <div
-            className="cursor-pointer rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] transition hover:border-[#b6349a] hover:shadow-[0_8px_24px_rgba(182,52,154,0.08)] focus:outline-none focus-visible:border-[#b6349a] focus-visible:ring-2 focus-visible:ring-[#b6349a]/20"
-            role="button"
-            tabIndex={0}
-            onClick={() => setIsPaymentModalOpen(true)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setIsPaymentModalOpen(true);
-              }
-            }}
-            aria-label={`Ödeme yöntemini seç veya yeni kart ekle. Seçili kart: ${cardDisplayName}`}
-          >
+          <div className="rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h3 className="text-base font-bold text-[#111]">Payment Method</h3>
@@ -312,7 +225,7 @@ export default function Checkout() {
                 <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                 <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
-              <span className="text-sm font-semibold text-[#b6349a]">{cardDisplayName}</span>
+              <span className="text-sm font-semibold text-[#b6349a]">Ödeme sistemi henüz bağlı değil</span>
             </div>
           </div>
 
@@ -549,28 +462,13 @@ export default function Checkout() {
               By placing this order, you are agreeing to <a className="text-[#b6349a] underline" href="#">Terms and Conditions</a>.
             </p>
 
-            <button
-              className="mt-5 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#de57c4] disabled:cursor-not-allowed disabled:opacity-50"
-              onClick={() => { void handlePlaceOrder(); }}
-              disabled={isSubmitting || ordersLoading}
-            >
-              {isSubmitting ? "Placing Order..." : "Place Order"}
-            </button>
-            {submitError && <p role="alert" className="mt-3 text-sm text-red-700">{submitError}</p>}
+            <p role="status" className="mt-5 text-sm text-amber-800">Güvenli ödeme altyapısı kurulana kadar kart bilgisi alınmaz ve sipariş oluşturulmaz. Sepetiniz korunur.</p>
+            <button className="mt-4 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white opacity-50" disabled>Ödeme yakında</button>
 
           </div>
         </div>
 
       </div>
-
-      {/* PAYMENT METHOD SELECTION & ADD MODAL */}
-      <PaymentSelectionModal
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        selectedCardId={selectedCard?.id}
-        onSelectCard={(card: PaymentCard) => setSelectedCard(card)}
-        user={user}
-      />
 
       {/* COUPON TOAST */}
       {couponToast && <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-[#111] px-4 py-3 text-sm font-semibold text-white shadow-lg">{couponToast}</div>}

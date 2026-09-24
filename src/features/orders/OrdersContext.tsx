@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { AuthContext } from "../auth/AuthContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
-import { fetchUserOrders, isSupabaseDataEnabled, saveUserOrder, updateUserOrderAddress } from "../../services/supabase/data";
+import { fetchUserOrders, isSupabaseDataEnabled, updateUserOrderAddress } from "../../services/supabase/data";
 import type { CreateOrderInput, Order, OrdersContextValue } from "../../types/order";
 
 export const OrdersContext = createContext<OrdersContextValue | null>(null);
@@ -36,8 +36,6 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
   const [ordersLoading, setOrdersLoading] = useState(true);
   const [ordersError, setOrdersError] = useState("");
   const userStorageId = user?.id ?? user?.email ?? user?.username ?? "guest";
-  const activeStorageId = useRef(String(userStorageId));
-  activeStorageId.current = String(userStorageId);
   const currentOwnerId = String(userStorageId);
   const visibleOrders = ordersOwnerId === currentOwnerId ? orders : [];
   const visibleLoading = ordersLoading || ordersOwnerId !== currentOwnerId;
@@ -73,20 +71,8 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     }
   }, [orders, ordersOwnerId, ordersLoading, ordersError, user, userStorageId]);
 
-  const addOrder = async (order: CreateOrderInput): Promise<Order> => {
-    if (visibleLoading) throw new Error("Siparişler hâlâ yükleniyor.");
-    const nextOrder: Order = {
-      ...order,
-      id: order.id ?? `${Date.now()}`,
-      userId: user?.id ?? user?.email ?? user?.username,
-      createdAt: new Date().toISOString(),
-    };
-    const persisted = isSupabaseDataEnabled(user) ? await saveUserOrder(user, nextOrder) : nextOrder;
-    if (activeStorageId.current !== currentOwnerId) throw new Error("Aktif kullanıcı değişti.");
-    const savedOrder = { ...nextOrder, ...persisted };
-    setOrdersError("");
-    setOrders((prev) => [savedOrder, ...prev]);
-    return savedOrder;
+  const addOrder = async (_order: CreateOrderInput): Promise<Order> => {
+    throw new Error("Doğrulanmış ödeme altyapısı kurulana kadar sipariş oluşturulamaz.");
   };
 
   const updateOrderAddress = (orderId: Order["id"], newAddress: string): void => {
