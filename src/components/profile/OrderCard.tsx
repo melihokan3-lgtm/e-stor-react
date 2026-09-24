@@ -14,6 +14,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
 
   return (
     <div className="rounded-2xl border border-[#eee] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
+      {order.isDemo && <p className="mb-4 rounded-xl bg-amber-50 px-3 py-2 text-sm font-medium text-amber-900">Demo sipariş — gerçek ödeme alınmadı, ürün gönderilmeyecek.</p>}
       <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#f2f2f2] pb-4">
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-[#111]">Order {order.id}</span>
@@ -50,6 +51,8 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
               </svg>
               Adresi Değiştir
             </button>
+          ) : order.isDemo ? (
+            <span className="text-xs font-semibold text-amber-800">Demo — gönderim yok</span>
           ) : (
             <span className="inline-flex items-center gap-1.5 text-xs text-[#6b7280]" title="Sipariş kargoya verildiği veya teslim edildiği için adres değiştirilemez">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

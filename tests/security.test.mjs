@@ -32,7 +32,7 @@ test("Google sign-in uses PKCE, per-tab storage and a fixed-origin redirect", ()
   assert.doesNotMatch(read("src/pages/profile/AccountSettings.tsx"), /name="twoFactorAuth"/);
 });
 
-test("demo card selection is visible but unpaid orders stay disabled", () => {
+test("demo checkout stays local and cannot create unpaid Supabase orders", () => {
   const checkout = read("src/pages/Checkout.tsx");
   const payments = read("src/pages/profile/MyPayments.tsx");
   const cardForm = read("src/features/payments/useCardForm.ts");
@@ -43,9 +43,12 @@ test("demo card selection is visible but unpaid orders stay disabled", () => {
   assert.match(payments + cardModal, /Gerçek kart bilgisi girmeyin/);
   assert.match(cardForm, /maskedNumber: maskCardNumber\(rawNumber\)/);
   assert.match(cardForm, /isDemoCardNumber\(rawNumber\)/);
-  assert.doesNotMatch(checkout, /handlePlaceOrder/);
+  assert.match(checkout, /Demo ödemeyi tamamla/);
+  assert.match(checkout, /Gerçek para çekilmez/);
   assert.doesNotMatch(data, /\.rpc\("create_order"/);
-  assert.match(orders, /Doğrulanmış ödeme altyapısı/);
+  assert.match(orders, /demoOrders/);
+  assert.match(orders, /status: "Demo"/);
+  assert.doesNotMatch(orders, /\.from\("orders"\)\.insert/);
   assert.match(read("supabase/disable-unverified-checkout.sql"), /revoke execute on function public\.create_order/);
 });
 

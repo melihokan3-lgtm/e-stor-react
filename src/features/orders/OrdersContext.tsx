@@ -45,14 +45,18 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
     setOrdersLoading(true);
     setOrdersError("");
     const hydrate = async () => {
+      const demoOrders = sanitizeOrders(readUserStorage<Order[]>("demoOrders", user, []))
+        .filter((order) => String(order.id).startsWith("demo_"))
+        .map((order) => ({ ...order, status: "Demo", isDemo: true }));
       try {
-        const loaded = sanitizeOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []));
+        const realOrders = sanitizeOrders(isSupabaseDataEnabled(user) ? await fetchUserOrders(user) : readUserStorage<Order[]>("orders", user, []));
+        const loaded = [...demoOrders, ...realOrders];
         if (active) setOrders(loaded);
       } catch (error) {
         console.error("Failed to load orders", error);
         if (active) {
-          setOrders([]);
-          setOrdersError("Siparişler yüklenemedi. Lütfen sayfayı yenileyin.");
+          setOrders(demoOrders);
+          setOrdersError("Gerçek siparişler yüklenemedi. Demo kayıtlar bu tarayıcıda gösteriliyor.");
         }
       } finally {
         if (active) {
@@ -67,16 +71,34 @@ export function OrdersProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (ordersOwnerId === currentOwnerId && !ordersLoading && !ordersError && !isSupabaseDataEnabled(user)) {
-      writeUserStorage("orders", user, orders);
+      writeUserStorage("orders", user, orders.filter((order) => !order.isDemo));
     }
   }, [orders, ordersOwnerId, ordersLoading, ordersError, user, userStorageId]);
 
-  const addOrder = async (_order: CreateOrderInput): Promise<Order> => {
-    throw new Error("Doğrulanmış ödeme altyapısı kurulana kadar sipariş oluşturulamaz.");
+  const addOrder = async (order: CreateOrderInput): Promise<Order> => {
+    if (!user?.id || ordersOwnerId !== currentOwnerId || ordersLoading) {
+      throw new Error("Demo sipariş için giriş yapıp hesabınızın yüklenmesini bekleyin.");
+    }
+    if (!Array.isArray(order.items) || order.items.length === 0 || !Number.isFinite(order.total) || order.total < 0) {
+      throw new Error("Demo sipariş bilgileri geçersiz.");
+    }
+    const demoOrder: Order = {
+      ...order,
+      id: `demo_${crypto.randomUUID()}`,
+      status: "Demo",
+      isDemo: true,
+      createdAt: new Date().toISOString(),
+    };
+    const demoOrders = sanitizeOrders(readUserStorage<Order[]>("demoOrders", user, []))
+      .filter((item) => String(item.id).startsWith("demo_"));
+    writeUserStorage("demoOrders", user, [demoOrder, ...demoOrders]);
+    setOrders((previous) => [demoOrder, ...previous]);
+    return demoOrder;
   };
 
   const updateOrderAddress = (orderId: Order["id"], newAddress: string): void => {
     if (ordersOwnerId !== currentOwnerId) return;
+    if (orders.some((order) => String(order.id) === String(orderId) && order.isDemo)) return;
     setOrders((prev) => {
       const updated = prev.map((order) => {
         if (String(order.id) === String(orderId)) {

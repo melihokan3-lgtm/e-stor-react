@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
 import { cleanImageUrl, FALLBACK_IMG } from "../services/api/productApi";
 import { useLocation } from "../features/addresses/LocationContext";
 import { useAuth } from "../features/auth/AuthContext";
+import { useOrders } from "../features/orders/OrdersContext";
 import { PaymentSelectionModal } from "../components/checkout";
 import { loadSavedCards } from "../features/payments/savedCards";
 import type { PaymentCard } from "../types/payment";
@@ -77,14 +79,18 @@ const COUPON_ICONS: Record<CouponIconType, string> = {
 };
 
 export default function Checkout() {
-  const { cart, totalPrice } = useCart();
+  const { cart, totalPrice, clearCart } = useCart();
+  const { addOrder } = useOrders();
+  const navigate = useNavigate();
   const { location, openLocationModal } = useLocation();
-  const { user } = useAuth();
+  const { user, isLoggedIn, openAuthModal } = useAuth();
 
   const [activeTip, setActiveTip] = useState<number | "Other" | null>(null);
   const [customTip, setCustomTip] = useState('');
   const [selectedCard, setSelectedCard] = useState<PaymentCard | null>(null);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [placingDemoOrder, setPlacingDemoOrder] = useState(false);
+  const [checkoutError, setCheckoutError] = useState("");
 
   useEffect(() => {
     const saved = loadSavedCards(user);
@@ -116,6 +122,50 @@ export default function Checkout() {
   const cardDisplayName = selectedCard
     ? `${selectedCard.cardType === "visa" ? "Visa" : "Mastercard"} •••• ${selectedCard.last4}`
     : "Demo kart seçilmedi";
+
+  const handleDemoCheckout = async () => {
+    setCheckoutError("");
+    if (!isLoggedIn || !user) {
+      openAuthModal();
+      setCheckoutError("Demo siparişi tamamlamak için giriş yapın.");
+      return;
+    }
+    if (cart.length === 0) {
+      setCheckoutError("Önce sepetinize ürün ekleyin.");
+      return;
+    }
+    if (!selectedCard) {
+      setIsPaymentModalOpen(true);
+      setCheckoutError("Devam etmek için bir demo kart seçin.");
+      return;
+    }
+    setPlacingDemoOrder(true);
+    try {
+      const order = await addOrder({
+        status: "Demo",
+        total: finalTotal,
+        deliveryAddress: location,
+        items: cart.map(({ data, unit }) => ({
+          id: data.id,
+          title: data.title,
+          img: cleanImageUrl(data.image) || FALLBACK_IMG,
+          price: data.price,
+          qty: unit,
+          category: data.category,
+        })),
+        paymentMethod: `Demo kart •••• ${selectedCard.last4}`,
+        tip: numericTip,
+        coupon: appliedCoupon?.code ?? null,
+        couponDiscount,
+      });
+      clearCart();
+      navigate(`/order-progress?orderId=${encodeURIComponent(String(order.id))}`);
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : "Demo ödeme tamamlanamadı. Sepetiniz korundu.");
+    } finally {
+      setPlacingDemoOrder(false);
+    }
+  };
 
   const handleApplyCoupon = (coupon: Coupon) => {
     if (itemsTotal < coupon.minOrder) {
@@ -486,8 +536,9 @@ export default function Checkout() {
               <span className="text-xl font-extrabold text-[#b6349a]">${finalTotal.toFixed(2)}</span>
             </div>
 
-            <p role="status" className="mt-5 text-sm text-amber-800">Kart seçimi yalnızca demodur. Gerçek ödeme ve sipariş oluşturma kapalıdır; sepetiniz korunur.</p>
-            <button className="mt-4 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white opacity-50" disabled>Ödeme yakında</button>
+            <p className="mt-5 text-sm text-amber-800">Bu yalnızca demo ödemedir. Gerçek para çekilmez; sipariş Supabase'e gönderilmez ve ürün gönderilmez.</p>
+            {checkoutError && <p role="alert" className="mt-3 text-sm font-medium text-red-700">{checkoutError}</p>}
+            <button type="button" onClick={() => void handleDemoCheckout()} disabled={placingDemoOrder} className="mt-4 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#98277f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b6349a] disabled:cursor-wait disabled:opacity-50">{placingDemoOrder ? "Demo sipariş hazırlanıyor..." : "Demo ödemeyi tamamla"}</button>
 
           </div>
         </div>

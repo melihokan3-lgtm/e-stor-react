@@ -36,7 +36,7 @@ export default function OrderProgress() {
   if (ordersLoading) {
     return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">Sipariş Takibi</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">Loading order...</div></main>;
   }
-  if (ordersError) {
+  if (ordersError && !order?.isDemo) {
     return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">Sipariş Takibi</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]" role="alert">{ordersError}</div></main>;
   }
   if (!order) {
@@ -47,6 +47,21 @@ export default function OrderProgress() {
         <div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
           <p>Order not found.</p>
           <Link to="/profile/orders" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]">My Orders</Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (order.isDemo) {
+    return (
+      <main className="min-h-screen bg-[#fafafa] px-5 py-10">
+        <SeoMeta title="Demo Sipariş | E-Storee" description="Demo ödeme sonucu" canonicalPath="/order-progress" robots="noindex,nofollow" />
+        <div className="mx-auto w-full max-w-[800px] rounded-2xl border border-amber-200 bg-white p-6 shadow-sm">
+          <h1 className="text-2xl font-bold text-[#111]">Demo ödeme tamamlandı</h1>
+          <p className="mt-3 text-sm leading-6 text-[#555]">Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.</p>
+          <p className="mt-3 text-sm font-semibold text-[#333]">Demo kayıt: {order.id}</p>
+          <p className="mt-1 text-sm text-[#555]">Gösterilen toplam: ${order.total.toFixed(2)}</p>
+          <Link to="/profile/orders" className="mt-5 inline-flex rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#98277f]">Demo kayıtlarımı gör</Link>
         </div>
       </main>
     );

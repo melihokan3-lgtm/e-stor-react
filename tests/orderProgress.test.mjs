@@ -38,7 +38,7 @@ const orders = [
   },
 ];
 
-const renderPage = (url, isLoggedIn = true, ordersLoading = false) =>
+const renderPage = (url, isLoggedIn = true, ordersLoading = false, displayedOrders = orders, ordersError = "") =>
   renderToString(
     createElement(
       MemoryRouter,
@@ -48,7 +48,7 @@ const renderPage = (url, isLoggedIn = true, ordersLoading = false) =>
         { value: { isLoggedIn, openAuthModal: () => {} } },
         createElement(
           OrdersContext.Provider,
-          { value: { orders, ordersLoading, ordersError: "", addOrder: async () => orders[0], updateOrderAddress: () => {} } },
+          { value: { orders: displayedOrders, ordersLoading, ordersError, addOrder: async () => orders[0], updateOrderAddress: () => {} } },
           createElement(OrderProgress),
         ),
       ),
@@ -80,4 +80,13 @@ test("does not reveal a previous account's orders while loading", () => {
   const html = renderPage("/order-progress?orderId=order-123", true, true);
   assert.match(html, /Loading order/);
   assert.doesNotMatch(html, /Organic Milk|Nilüfer, Bursa/);
+});
+
+test("demo checkout result never claims a real payment or shipment", () => {
+  const demo = { ...orders[0], id: "demo_123", status: "Demo", isDemo: true };
+  const html = renderPage("/order-progress?orderId=demo_123", true, false, [demo], "Gerçek siparişler yüklenemedi.");
+  assert.match(html, /Demo ödeme tamamlandı/);
+  assert.match(html, /Gerçek para çekilmedi/);
+  assert.match(html, /ürün gönderilmeyecek/);
+  assert.doesNotMatch(html, /Order is Placed/);
 });

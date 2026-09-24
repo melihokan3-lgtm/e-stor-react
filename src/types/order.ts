@@ -20,6 +20,7 @@ export interface Order {
   tip?: number;
   coupon?: string | null;
   couponDiscount?: number;
+  isDemo?: boolean;
 }
 
 export interface CreateOrderInput extends Omit<Order, "id" | "userId"> {

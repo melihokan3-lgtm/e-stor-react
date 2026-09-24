@@ -6,6 +6,7 @@ const LOCKED_ADDRESS_STATUSES = new Set([
 const PENDING_STATUSES = new Set(["pending", "processing", "order placed", "hazırlanıyor"]);
 
 export function canEditOrderAddress(status: string): boolean {
+  if (status.toLowerCase().trim() === "demo") return false;
   return !LOCKED_ADDRESS_STATUSES.has(status.toLowerCase().trim());
 }
 

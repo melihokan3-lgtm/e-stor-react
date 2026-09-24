@@ -10,15 +10,16 @@ export default function MyOrders() {
   const [editingOrder, setEditingOrder] = useState<Order | null>(null);
   const [toastMessage, setToastMessage] = useState("");
 
-  const [filterTab, setFilterTab] = useState<"all" | "pending" | "delivered">("all");
+  const [filterTab, setFilterTab] = useState<"all" | "pending" | "delivered" | "demo">("all");
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(""), 3500);
   };
 
-  const pendingOrders = orders.filter((order) => isPendingOrder(order.status));
-  const deliveredOrders = orders.filter((order) => !isPendingOrder(order.status));
+  const demoOrders = orders.filter((order) => order.isDemo);
+  const pendingOrders = orders.filter((order) => !order.isDemo && isPendingOrder(order.status));
+  const deliveredOrders = orders.filter((order) => !order.isDemo && !isPendingOrder(order.status));
 
   const handleSaveNewAddress = (orderId: Order["id"], newAddress: string) => {
     if (!orderId) return;
@@ -51,6 +52,7 @@ export default function MyOrders() {
               { id: "all", label: `Tüm Siparişlerim (${orders.length})` },
               { id: "pending", label: `Devam Eden / Teslim Edilmeyenler (${pendingOrders.length})` },
               { id: "delivered", label: `Teslim Edilenler (${deliveredOrders.length})` },
+              { id: "demo", label: `Demo (${demoOrders.length})` },
             ]}
             selected={filterTab}
             onSelect={setFilterTab}
@@ -58,9 +60,10 @@ export default function MyOrders() {
         )}
       </div>
 
+      {ordersError && orders.length > 0 && <p role="status" className="mb-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">{ordersError}</p>}
       {ordersLoading ? (
         <div className="rounded-2xl border border-[#eee] p-8 text-center text-sm text-[#777]">Siparişler yükleniyor...</div>
-      ) : ordersError ? (
+      ) : ordersError && orders.length === 0 ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{ordersError}</div>
       ) : orders.length === 0 ? (
         <ProfileEmptyState>
@@ -90,6 +93,13 @@ export default function MyOrders() {
                 Teslim Edilenler / Kargodakiler
               </h3>
               {renderOrderList(deliveredOrders)}
+            </div>
+          )}
+
+          {(filterTab === 'all' || filterTab === 'demo') && demoOrders.length > 0 && (
+            <div className="orders-section">
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">Demo işlemler — ödeme ve kargo yok</h3>
+              {renderOrderList(demoOrders)}
             </div>
           )}
 
