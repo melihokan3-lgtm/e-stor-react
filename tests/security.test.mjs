@@ -12,6 +12,26 @@ test("help page makes no live payment-provider or PCI certification claim", () =
   assert.match(help, /gerçek ödeme alınmaz/);
 });
 
+test("Google sign-in uses PKCE, per-tab storage and a fixed-origin redirect", () => {
+  const client = read("src/lib/supabase.ts");
+  const auth = read("src/features/auth/AuthContext.tsx");
+  const headers = JSON.parse(read("vercel.json")).headers;
+  assert.match(client, /flowType: "pkce"/);
+  assert.match(client, /storage: sessionStorage/);
+  assert.match(client, /window\.localStorage\.removeItem\(legacyKey\)/);
+  assert.match(auth, /redirectTo: window\.location\.origin/);
+  assert.match(auth, /client\.auth\.getUser\(\)/);
+  assert.match(auth, /event === "INITIAL_SESSION"/);
+  assert.doesNotMatch(auth, /access_type: "offline"/);
+  assert.ok(headers.some((rule) => rule.source === "/(.*)" && rule.headers.some(
+    (header) => header.key === "Referrer-Policy" && header.value === "no-referrer",
+  )));
+  for (const page of ["index.html", "app.html"]) {
+    assert.match(read(page), /<meta name="referrer" content="no-referrer"/);
+  }
+  assert.doesNotMatch(read("src/pages/profile/AccountSettings.tsx"), /name="twoFactorAuth"/);
+});
+
 test("demo card selection is visible but unpaid orders stay disabled", () => {
   const checkout = read("src/pages/Checkout.tsx");
   const payments = read("src/pages/profile/MyPayments.tsx");

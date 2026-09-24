@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
-import { getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
+import { clearBrowserAuthSession, getSupabaseClient, isSupabaseConfigured } from "../../lib/supabase";
 import type { AuthContextValue, AuthUser, RegisterInput } from "../../types/auth";
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
@@ -33,7 +33,7 @@ const getAuthErrorMessage = (error: { message?: string } | null | undefined, fal
   if (message.includes("password should be at least")) return "Şifre en az 6 karakter olmalıdır.";
   if (message.includes("rate limit")) return "Çok fazla deneme yapıldı. Lütfen kısa süre sonra tekrar deneyin.";
   if (message.includes("invalid email")) return "Geçerli bir e-posta adresi girin.";
-  return error?.message || fallback;
+  return fallback;
 };
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -47,28 +47,45 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     let mounted = true;
     let unsubscribe: () => void = () => undefined;
     const restoreSession = async () => {
-      const client = await getSupabaseClient();
-      if (!mounted) return;
-      if (!isSupabaseConfigured || !client) {
-        setAuthLoading(false);
-        return;
-      }
+      try {
+        const client = await getSupabaseClient();
+        if (!mounted || !isSupabaseConfigured || !client) return;
 
-      const { data } = await client.auth.getSession();
-      if (!mounted) return;
-      const restoredUser = mapSupabaseUser(data.session?.user);
-      setUser(restoredUser);
-      setHasSession(Boolean(data.session));
-      setAuthLoading(false);
-
-      const { data: listener } = client.auth.onAuthStateChange((_event, session) => {
+        const { data: sessionData, error: sessionError } = await client.auth.getSession();
+        // A locally stored session is not proof of identity. Verify it with Auth.
+        const { data: verifiedData, error: verificationError } = !sessionError && sessionData.session
+          ? await client.auth.getUser()
+          : { data: { user: null }, error: null };
         if (!mounted) return;
-        setUser(mapSupabaseUser(session?.user));
-        setHasSession(Boolean(session));
-        setAuthLoading(false);
-        if (session) setIsAuthModalOpen(false);
-      });
-      unsubscribe = () => listener.subscription.unsubscribe();
+        const restoredUser = verificationError ? null : mapSupabaseUser(verifiedData.user);
+        setUser(restoredUser);
+        setHasSession(Boolean(sessionData.session && restoredUser));
+
+        const { data: listener } = client.auth.onAuthStateChange((event, session) => {
+          if (!mounted || event === "INITIAL_SESSION") return;
+          setUser(mapSupabaseUser(session?.user));
+          setHasSession(Boolean(session));
+          if (session) setIsAuthModalOpen(false);
+        });
+        unsubscribe = () => listener.subscription.unsubscribe();
+      } catch {
+        if (mounted) {
+          setUser(null);
+          setHasSession(false);
+        }
+      } finally {
+        if (mounted) setAuthLoading(false);
+        // Supabase removes a successful code. Clear unsuccessful OAuth callback
+        // parameters too so they do not linger in history or same-origin logs.
+        if (window.location.pathname === "/") {
+          const url = new URL(window.location.href);
+          const keys = ["code", "error", "error_code", "error_description", "sb_flow_id"];
+          if (keys.some((key) => url.searchParams.has(key))) {
+            keys.forEach((key) => url.searchParams.delete(key));
+            window.history.replaceState(window.history.state, "", url.pathname + url.search + url.hash);
+          }
+        }
+      }
     };
 
     const restoreTimer = window.setTimeout(() => { void restoreSession(); }, 0);
@@ -126,10 +143,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       provider: "google",
       options: {
         redirectTo: window.location.origin,
-        queryParams: {
-          access_type: "offline",
-          prompt: "select_account",
-        },
       },
     });
 
@@ -226,14 +239,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // --- LOGOUT ---
-  const logout = useCallback(() => {
-    void getSupabaseClient().then((client) => {
-      if (client) client.auth.signOut().catch((error) => {
-        if (import.meta.env.DEV) console.error("Failed to sign out", error);
-      });
-    });
-    setUser(null);
-    setHasSession(false);
+  const logout = useCallback(async (): Promise<void> => {
+    try {
+      const client = await getSupabaseClient();
+      if (client) {
+        const { error } = await client.auth.signOut();
+        if (error && import.meta.env.DEV) console.error("Failed to revoke session", error);
+      }
+    } catch {
+      // Network failure must not leave a reusable local browser session.
+    } finally {
+      clearBrowserAuthSession();
+      setUser(null);
+      setHasSession(false);
+    }
   }, []);
 
   // --- MODAL CONTROL ---

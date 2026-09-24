@@ -24,7 +24,7 @@ export interface AuthContextValue {
   signInWithGoogle: () => Promise<void>;
   registerUser: (input: RegisterInput) => Promise<AuthUser>;
   updateUser: (fields: Partial<AuthUser>) => void;
-  logout: () => void;
+  logout: () => Promise<void>;
   isAuthModalOpen: boolean;
   openAuthModal: () => void;
   closeAuthModal: () => void;
