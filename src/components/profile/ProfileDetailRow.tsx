@@ -38,15 +38,15 @@ export default function ProfileDetailRow({
     <div className={`flex items-center justify-between py-[30px] max-md:items-start max-md:gap-4 ${last ? "" : "border-b border-[#f2f2f2]"}`}>
       {editing ? (
         <div className="flex w-full flex-col gap-3">
-          <span className="text-[15px] font-bold text-[#111]">{translate("Edit ")}{label}</span>
+          <span className="text-[15px] font-bold text-[#111]">{translate("Edit")} {translate(label)}</span>
           <div className="flex w-full flex-wrap gap-3">
             {inputs.map((input, index) => (
               <input
                 key={input.name}
                 type={input.type || "text"}
                 className={`h-[42px] min-w-[180px] flex-1 rounded-[10px] border-[1.5px] bg-white px-[14px] text-sm text-gray-900 outline-none transition focus:border-[#b6349a] focus:ring-[3px] focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-gray-200"}`}
-                aria-label={input.placeholder}
-                placeholder={input.placeholder}
+                aria-label={translate(input.placeholder)}
+                placeholder={translate(input.placeholder)}
                 value={input.value}
                 onChange={(event) => onChange(input.name, event.currentTarget.value)}
                 onKeyDown={handleKeyDown}
@@ -68,7 +68,7 @@ export default function ProfileDetailRow({
           <span className="text-[15px] font-bold text-[#111]">{translate(label)}</span>
             <span className="text-sm font-medium text-[#aaa]">{value}</span>
           </div>
-          <button type="button" className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]" onClick={onEdit} aria-label={`Edit ${label}`}>
+          <button type="button" className="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.05]" onClick={onEdit} aria-label={`${translate("Edit")} ${translate(label)}`}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
             {translate("\n            Edit\n          ")}</button>
         </>

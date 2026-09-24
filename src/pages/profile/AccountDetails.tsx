@@ -70,9 +70,9 @@ export default function AccountDetails() {
   };
 
   const rows = [
-    { id: "name", label: "Full Name", value: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Belirtilmemiş", inputs: [
-      { name: "firstName", value: formData.firstName, placeholder: "First Name (Ad)" },
-      { name: "lastName", value: formData.lastName, placeholder: "Last Name (Soyad)" },
+    { id: "name", label: "Full Name", value: `${user.firstName || ""} ${user.lastName || ""}`.trim() || "Not provided", inputs: [
+      { name: "firstName", value: formData.firstName, placeholder: "First Name" },
+      { name: "lastName", value: formData.lastName, placeholder: "Last Name" },
     ] },
     { id: "username", label: "Username", value: `@${user.username}`, inputs: [
       { name: "username", value: formData.username, placeholder: "Username (Kullanıcı Adı)" },
