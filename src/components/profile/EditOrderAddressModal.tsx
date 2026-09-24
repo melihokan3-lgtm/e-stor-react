@@ -77,7 +77,7 @@ export default function EditOrderAddressModal({
           <div>
             <h3 id="edit-address-modal-title" className="text-lg font-bold text-[#111]">{translate("Teslimat Adresini Değiştir")}</h3>
             <span className="text-xs text-[#999]">
-              {translate("\r\n              Sipariş: ")}{order.id} {translate(" • Durum: ")}{order.status}
+              {translate("Order: ")}{order.id} {translate(" • Status: ")}{translate(order.status)}
             </span>
           </div>
           <button

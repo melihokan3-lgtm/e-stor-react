@@ -71,7 +71,7 @@ export default function MyPayments() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Ödeme Yöntemlerim | E-Storee")} description="E-Storee kayıtlı ödeme yöntemlerinizi güvenli şekilde yönetin." canonicalPath="/profile/payments" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Ödeme Yöntemlerim | E-Storee")} description={translate("Manage your saved payment methods in E-Storee.")} canonicalPath="/profile/payments" robots="noindex,nofollow" />
       <ProfileToast message={toastMessage} />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
@@ -104,7 +104,7 @@ export default function MyPayments() {
             >
               <div className="flex justify-between text-xs opacity-80">
                 <span>
-                  {card.isDefault ? "Varsayılan Kart" : "E-Store Card"}
+                  {translate(card.isDefault ? "Default card" : "E-Store Card")}
                 </span>
                 <span>{card.cardType?.toUpperCase()}</span>
               </div>
@@ -129,7 +129,7 @@ export default function MyPayments() {
                 disabled={card.isDefault}
                 className="text-xs font-semibold text-[#b6349a] disabled:text-[#999]"
               >
-                {card.isDefault ? "Aktif Varsayılan" : "Varsayılan Yap"}
+                {translate(card.isDefault ? "Default" : "Set as default")}
               </button>
               <button
                 type="button"
@@ -194,7 +194,7 @@ export default function MyPayments() {
                 <span>{formData.cardNumber || "•••• •••• •••• ••••"}</span>
               </div>
               <div className="mt-10 flex justify-between text-xs">
-                <span>{formData.cardHolder || "KART SAHİBİ"}</span>
+                <span>{formData.cardHolder || translate("Cardholder")}</span>
                 <span>{formData.expiry || "AA/YY"}</span>
               </div>
             </div>
@@ -213,7 +213,7 @@ export default function MyPayments() {
                 />
                 {errors.cardHolder && (
                   <span className="text-xs text-red-600">
-                    {errors.cardHolder}
+                    {translate(errors.cardHolder)}
                   </span>
                 )}
               </label>
@@ -228,7 +228,7 @@ export default function MyPayments() {
                 />
                 {errors.cardNumber && (
                   <span className="text-xs text-red-600">
-                    {errors.cardNumber}
+                    {translate(errors.cardNumber)}
                   </span>
                 )}
               </label>
@@ -243,7 +243,7 @@ export default function MyPayments() {
                   />
                   {errors.expiry && (
                     <span className="text-xs text-red-600">
-                      {errors.expiry}
+                      {translate(errors.expiry)}
                     </span>
                   )}
                 </label>
@@ -257,7 +257,7 @@ export default function MyPayments() {
                     placeholder="•••"
                   />
                   {errors.cvv && (
-                    <span className="text-xs text-red-600">{errors.cvv}</span>
+                  <span className="text-xs text-red-600">{translate(errors.cvv)}</span>
                   )}
                 </label>
               </div>

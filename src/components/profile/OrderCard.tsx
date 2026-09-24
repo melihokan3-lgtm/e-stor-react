@@ -1,4 +1,4 @@
-import { translate } from "../../features/i18n/LanguageContext";
+import { translate, useLanguage } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import { canEditOrderAddress } from "../../features/orders/orderStatus";
 import { FALLBACK_IMG } from "../../services/api/productApi";
@@ -10,8 +10,9 @@ interface OrderCardProps {
 }
 
 export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
+  const { language } = useLanguage();
   const isEditable = canEditOrderAddress(order.status);
-  const orderDate = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString("tr-TR") : "");
+  const orderDate = order.date || (order.createdAt ? new Date(order.createdAt).toLocaleDateString(language === "tr" ? "tr-TR" : "en-US") : "");
 
   return (
     <div className="rounded-2xl border border-[#eee] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.03)]">
@@ -20,7 +21,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
         <div className="flex items-center gap-3">
           <span className="text-sm font-bold text-[#111]">{translate("Order ")}{order.isDemo ? String(order.id).replace(/^(?:demo_|test_)/, "T-") : order.id}</span>
           <span className="rounded-full bg-[#b6349a]/[.1] px-2.5 py-1 text-xs font-semibold text-[#b6349a]">
-            {order.isDemo ? "Test işlemi" : order.status}
+            {translate(order.isDemo ? "Test transaction" : order.status)}
           </span>
         </div>
         <span className="text-xs text-[#999]">{orderDate}</span>
@@ -35,7 +36,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
             </svg>
             <span className="text-xs font-bold text-[#555]">{translate("Teslimat Adresi")}</span>
           </div>
-          <span className="block break-words text-sm text-[#777]">{order.deliveryAddress || "Adres belirtilmemiş"}</span>
+          <span className="block break-words text-sm text-[#777]">{order.deliveryAddress || translate("Address not provided")}</span>
         </div>
 
         <div className="shrink-0">
@@ -100,7 +101,7 @@ export default function OrderCard({ order, onEditAddress }: OrderCardProps) {
 
       <div className="flex items-center justify-between border-t border-[#f2f2f2] pt-4">
         <span className="font-bold text-[#111]">{translate("Total: $")}{order.total.toFixed(2)}</span>
-        <span className="text-xs text-[#999]">{order.items.length} {translate(" item")}{order.items.length > 1 ? "s" : ""}</span>
+        <span className="text-xs text-[#999]">{order.items.length} {translate(order.items.length === 1 ? "item" : "items")}</span>
       </div>
     </div>
   );

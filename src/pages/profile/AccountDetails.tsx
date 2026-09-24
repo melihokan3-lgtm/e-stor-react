@@ -75,7 +75,7 @@ export default function AccountDetails() {
       { name: "lastName", value: formData.lastName, placeholder: "Last Name" },
     ] },
     { id: "username", label: "Username", value: `@${user.username}`, inputs: [
-      { name: "username", value: formData.username, placeholder: "Username (Kullanıcı Adı)" },
+      { name: "username", value: formData.username, placeholder: "Username" },
     ] },
     { id: "email", label: "Email Address", value: user.email, inputs: [
       { name: "email", value: formData.email, placeholder: "Email Address", type: "email" as const },
@@ -87,7 +87,7 @@ export default function AccountDetails() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Hesap Bilgilerim | E-Storee")} description="E-Storee hesap bilgilerinizi ve kişisel profil bilgilerinizi yönetin." canonicalPath="/profile/details" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Hesap Bilgilerim | E-Storee")} description={translate("Manage your E-Storee account details and personal profile information.")} canonicalPath="/profile/details" robots="noindex,nofollow" />
       <h1 className="mb-10 text-[28px] font-extrabold text-[#111]">{translate("Account Details")}</h1>
       <div className="flex flex-col rounded-[20px] border border-[#f2f2f2] px-[30px] max-md:px-4">
         {rows.map((row, index) => (
@@ -107,7 +107,7 @@ export default function AccountDetails() {
         ))}
       </div>
       {toastMessage && (
-        <div className="fixed right-5 top-5 z-[1000] rounded-xl border border-[#b6349a]/20 bg-white px-5 py-3 text-sm font-semibold text-[#b6349a] shadow-[0_8px_24px_rgba(182,52,154,0.18)]" role="status">{toastMessage}</div>
+        <div className="fixed right-5 top-5 z-[1000] rounded-xl border border-[#b6349a]/20 bg-white px-5 py-3 text-sm font-semibold text-[#b6349a] shadow-[0_8px_24px_rgba(182,52,154,0.18)]" role="status">{translate(toastMessage)}</div>
       )}
     </div>
   );

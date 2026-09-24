@@ -104,7 +104,7 @@ export default function Coupons() {
 
   const copyCode = (code: string) => {
     navigator.clipboard.writeText(code).then(() => {
-      setToast(`"${code}" kodu panoya kopyalandı!`);
+      setToast("Kupon kodu panoya kopyalandı!");
       setTimeout(() => setToast(""), 3000);
     });
   };
@@ -120,7 +120,7 @@ export default function Coupons() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Kuponlarım | E-Storee")} description="E-Storee hesabınızdaki indirim kuponlarını ve kampanyaları görüntüleyin." canonicalPath="/profile/coupons" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Kuponlarım | E-Storee")} description={translate("View the discount coupons and promotions in your E-Storee account.")} canonicalPath="/profile/coupons" robots="noindex,nofollow" />
       {/* HEADER */}
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
         <h1 className="text-[28px] font-extrabold text-[#111]">{translate("Kuponlarım")}</h1>
@@ -150,7 +150,7 @@ export default function Coupons() {
         <ProfileEmptyState>
           <div className="coupons-empty-icon">🎟️</div>
           <h3 className="font-bold text-[#111]">{translate("Henüz kuponunuz yok")}</h3>
-          <p className="text-sm text-[#777]">{translate("Kampanyalarımızı takip ederek yeni kuponlar kazanabilirsiniz.")}</p>
+          <p className="text-sm text-[#777]">{translate("Follow our promotions to earn new coupons.")}</p>
         </ProfileEmptyState>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
@@ -209,9 +209,9 @@ export default function Coupons() {
 
               {/* STATUS BADGE */}
               <span className="absolute right-4 top-4 rounded-full bg-[#f7f4f7] px-2 py-1 text-[11px] font-semibold text-[#b6349a]">
-                {coupon.status === "active" && "Aktif"}
-                {coupon.status === "used" && "Kullanıldı"}
-                {coupon.status === "expired" && "Süresi Doldu"}
+                {coupon.status === "active" && translate("Aktif")}
+                {coupon.status === "used" && translate("Kullanıldı")}
+                {coupon.status === "expired" && translate("Süresi Doldu")}
               </span>
             </div>
           ))}

@@ -42,18 +42,18 @@ export default function MyOrders() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Siparişlerim | E-Storee")} description="E-Storee sipariş geçmişinizi ve teslimat durumlarınızı görüntüleyin." canonicalPath="/profile/orders" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Siparişlerim | E-Storee")} description={translate("View your E-Storee order history and delivery updates.")} canonicalPath="/profile/orders" robots="noindex,nofollow" />
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
-        <h1 className="text-[28px] font-extrabold text-[#111]">{translate("Siparişlerim (My Orders)")}</h1>
+        <h1 className="text-[28px] font-extrabold text-[#111]">{translate("My Orders")}</h1>
         
         {/* Filters Tabs */}
         {!ordersLoading && !ordersError && orders.length > 0 && (
           <ProfileFilterTabs
             options={[
-              { id: "all", label: `Tüm Siparişlerim (${orders.length})` },
-              { id: "pending", label: `Devam Eden / Teslim Edilmeyenler (${pendingOrders.length})` },
-              { id: "delivered", label: `Teslim Edilenler (${deliveredOrders.length})` },
-              { id: "demo", label: `Test İşlemleri (${demoOrders.length})` },
+              { id: "all", label: `${translate("All orders")} (${orders.length})` },
+              { id: "pending", label: `${translate("In progress")} (${pendingOrders.length})` },
+              { id: "delivered", label: `${translate("Delivered")} (${deliveredOrders.length})` },
+              { id: "demo", label: `${translate("Test transactions")} (${demoOrders.length})` },
             ]}
             selected={filterTab}
             onSelect={setFilterTab}
@@ -61,11 +61,11 @@ export default function MyOrders() {
         )}
       </div>
 
-      {ordersError && orders.length > 0 && <p role="status" className="mb-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">{ordersError}</p>}
+      {ordersError && orders.length > 0 && <p role="status" className="mb-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">{translate("Some order details could not be refreshed. Please try again later.")}</p>}
       {ordersLoading ? (
         <div className="rounded-2xl border border-[#eee] p-8 text-center text-sm text-[#777]">{translate("Siparişler yükleniyor...")}</div>
       ) : ordersError && orders.length === 0 ? (
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{ordersError}</div>
+        <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{translate("Your orders could not be loaded. Please try again later.")}</div>
       ) : orders.length === 0 ? (
         <ProfileEmptyState>
           <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#ccc" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -82,7 +82,7 @@ export default function MyOrders() {
           {(filterTab === 'all' || filterTab === 'pending') && (
             <div className="orders-section">
               <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
-                {translate("\r\n                Devam Eden Siparişler (Pending)\r\n              ")}</h3>
+                {translate("Pending orders")}</h3>
               {renderOrderList(pendingOrders)}
             </div>
           )}
@@ -90,14 +90,14 @@ export default function MyOrders() {
           {(filterTab === 'all' || filterTab === 'delivered') && (
             <div className="orders-section">
               <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
-                {translate("\r\n                Teslim Edilenler / Kargodakiler\r\n              ")}</h3>
+                {translate("Delivered orders / In transit")}</h3>
               {renderOrderList(deliveredOrders)}
             </div>
           )}
 
           {(filterTab === 'all' || filterTab === 'demo') && demoOrders.length > 0 && (
             <div className="orders-section">
-              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">{translate("Test işlemleri — ödeme ve kargo yok")}</h3>
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">{translate("Test transactions — no payment or shipping")}</h3>
               {renderOrderList(demoOrders)}
             </div>
           )}

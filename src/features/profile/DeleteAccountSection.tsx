@@ -108,8 +108,8 @@ export default function DeleteAccountSection() {
       navigate("/", { replace: true, state: { accountDeleted: true } });
       await logout();
       clearLocalAccountData(user);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause.message : "Hesap silinemedi. Lütfen tekrar deneyin.");
+    } catch {
+      setError("Account deletion failed. Please try again later.");
       setPending(false);
     }
   };

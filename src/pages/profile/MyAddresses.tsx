@@ -8,7 +8,7 @@ export default function MyAddresses() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Adreslerim | E-Storee")} description="E-Storee kayıtlı teslimat adreslerinizi yönetin ve yeni adres ekleyin." canonicalPath="/profile/addresses" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Adreslerim | E-Storee")} description={translate("Manage your saved delivery addresses and add a new address in E-Storee.")} canonicalPath="/profile/addresses" robots="noindex,nofollow" />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
           <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">{translate("My Addresses")}</h1>

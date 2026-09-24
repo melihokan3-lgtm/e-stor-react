@@ -1,10 +1,11 @@
-import { translate } from "../../features/i18n/LanguageContext";
+import { translate, useLanguage } from "../../features/i18n/LanguageContext";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import { loadReferralData, type ReferralData } from "../../features/profile/referrals";
 import SeoMeta from "../../components/common/SeoMeta";
 
 export default function ReferFriends() {
+  const { language } = useLanguage();
   const { user } = useAuth();
   const [copyStatus, setCopyStatus] = useState("Kopyala");
   const [referralData, setReferralData] = useState<ReferralData>({
@@ -31,11 +32,13 @@ export default function ReferFriends() {
     }
   };
 
-  const shareText = `E-Storee'ye katıl, ilk siparişinde anında 100 TL indirim kazan! Davet Kodum: ${referralCode}`;
+  const shareText = language === "tr"
+    ? `E-Storee'ye katıl, ilk siparişinde anında 100 TL indirim kazan! Davet Kodum: ${referralCode}`
+    : `Join E-Storee and get 100 TL off your first order! My referral code: ${referralCode}`;
   
   return (
     <div className="space-y-8">
-      <SeoMeta title={translate("Arkadaşlarını Davet Et | E-Storee")} description="E-Storee davet programıyla arkadaşlarınızı davet edin ve indirim fırsatlarından yararlanın." canonicalPath="/profile/refer" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Arkadaşlarını Davet Et | E-Storee")} description={translate("Invite friends with the E-Storee referral program and earn discounts.")} canonicalPath="/profile/refer" robots="noindex,nofollow" />
       {/* 1. Hero & Kampanya Alanı */}
       <section className="rounded-2xl bg-gradient-to-br from-[#b6349a] to-[#831843] p-8 text-white">
         <div className="max-w-2xl">
@@ -75,7 +78,7 @@ export default function ReferFriends() {
             className="rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-semibold text-white"
             onClick={handleCopy}
           >
-            {copyStatus}
+            {translate(copyStatus)}
           </button>
         </div>
         
@@ -97,7 +100,7 @@ export default function ReferFriends() {
             >
               {translate("\r\n              X (Twitter)\r\n            ")}</a>
             <a 
-              href={`mailto:?subject=E-Storee 100 TL İndirim!&body=${encodeURIComponent(shareText)}`} 
+              href={`mailto:?subject=${encodeURIComponent(language === "tr" ? "E-Storee 100 TL İndirim!" : "Get 100 TL off with E-Storee!")}&body=${encodeURIComponent(shareText)}`}
               className="rounded-lg bg-[#555] px-3 py-2 text-xs font-semibold text-white"
             >
               {translate("\r\n              E-posta\r\n            ")}</a>
@@ -124,7 +127,7 @@ export default function ReferFriends() {
               {referralData.history.map((item) => (
                 <li key={item.name} className="flex items-center justify-between py-3 text-sm">
                   <span className="text-[#555]">{item.name}</span>
-                  <span className="font-semibold text-[#b6349a]">{item.status}</span>
+                  <span className="font-semibold text-[#b6349a]">{translate(item.status)}</span>
                 </li>
               ))}
             </ul>

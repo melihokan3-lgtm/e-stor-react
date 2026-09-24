@@ -49,7 +49,7 @@ export default function NotificationSetting() {
   // Clear all notifications
   const handleClearAll = () => {
     if (notifications.length === 0) return;
-    if (window.confirm("Tüm bildirimlerinizi silmek istediğinize emin misiniz?")) {
+    if (window.confirm(translate("Are you sure you want to clear all notifications?"))) {
       setNotifications([]);
       saveProfileNotifications(user, []);
       showToast("Tüm bildirimler temizlendi.");
@@ -111,14 +111,14 @@ export default function NotificationSetting() {
 
   return (
     <div className="w-full">
-      <SeoMeta title={translate("Bildirimlerim | E-Storee")} description="E-Storee bildirim tercihlerinizi ve hesap güncellemelerinizi yönetin." canonicalPath="/profile/notifications" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Bildirimlerim | E-Storee")} description={translate("Manage your E-Storee notification preferences and account updates.")} canonicalPath="/profile/notifications" robots="noindex,nofollow" />
       {/* Toast Alert */}
       <ProfileToast message={toastMessage} />
 
       {/* Header */}
       <div className="mb-6 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <div className="flex items-center gap-3"><h1 className="text-[28px] font-extrabold text-[#111]">{translate("Bildirimlerim (Notifications)")}</h1>
+          <div className="flex items-center gap-3"><h1 className="text-[28px] font-extrabold text-[#111]">{translate("My Notifications")}</h1>
             {unreadCount > 0 && (
               <span className="rounded-full bg-[#b6349a] px-2.5 py-1 text-xs font-semibold text-white">{unreadCount} {translate(" Yeni")}</span>
             )}
@@ -159,8 +159,8 @@ export default function NotificationSetting() {
       <ProfileFilterTabs
         className="mb-4"
         options={[
-          { id: "all", label: `Tüm Bildirimler (${notifications.length})` },
-          { id: "unread", label: `Okunmamışlar (${unreadCount})` },
+          { id: "all", label: `${translate("All notifications")} (${notifications.length})` },
+          { id: "unread", label: `${translate("Unread")} (${unreadCount})` },
         ]}
         selected={activeFilter}
         onSelect={setActiveFilter}
@@ -179,8 +179,8 @@ export default function NotificationSetting() {
             <h4 className="font-bold text-[#333]">{translate("Henüz Bildiriminiz Yok")}</h4>
             <p className="mt-2">
               {activeFilter === "unread"
-                ? "Okunmamış bildiriminiz bulunmuyor. Tüm güncel haberleri takip ettiniz!"
-                : "Yeni bir bildirim aldığınızda burada görüntülenecektir."}
+                ? translate("You have no unread notifications. You are all caught up!")
+                : translate("New notifications will appear here when you receive them.")}
             </p>
           </ProfileEmptyState>
         ) : (

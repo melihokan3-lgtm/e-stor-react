@@ -75,7 +75,7 @@ export default function HelpCenter() {
 
   return (
     <div className="w-full space-y-5">
-      <SeoMeta title={translate("Yardım ve Destek | E-Storee")} description="E-Storee yardım merkeziyle sipariş, teslimat ve hesap sorularınıza yanıt bulun." canonicalPath="/profile/help" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Yardım ve Destek | E-Storee")} description={translate("Find answers about orders, delivery and your account in the E-Storee Help Center.")} canonicalPath="/profile/help" robots="noindex,nofollow" />
       {/* Header Banner */}
       <div className="rounded-2xl bg-[#fff8fd] p-6">
         <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">{translate("Yardım ve Destek Merkezi")}</h1>
@@ -116,7 +116,7 @@ export default function HelpCenter() {
             className={`rounded-full border px-3 py-2 text-xs font-semibold transition ${selectedCategory === cat ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#eee] bg-white text-[#777]"}`}
             onClick={() => setSelectedCategory(cat)}
           >
-            {cat}
+            {translate(cat)}
           </button>
         ))}
       </div>
@@ -129,7 +129,7 @@ export default function HelpCenter() {
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <p>"{searchQuery}{translate("\" aramasıyla eşleşen bir soru bulunamadı.")}</p>
+            <p>{translate("No matching questions for")} “{searchQuery}”</p>
             <span>{translate("Farklı bir anahtar kelime deneyebilir veya aşağıdaki Canlı Destek ekibimizle iletişime geçebilirsiniz.")}</span>
           </ProfileEmptyState>
         ) : (
@@ -241,7 +241,7 @@ export default function HelpCenter() {
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     e.preventDefault();
-                    alert("Mesajınız canlı destek temsilcimize iletildi.");
+                    alert(translate("Your message has been sent to live support."));
                     e.currentTarget.value = "";
                   }
                 }}
@@ -249,7 +249,7 @@ export default function HelpCenter() {
               <button
                 type="button"
                 className="rounded-lg bg-[#b6349a] px-3 text-white"
-                onClick={() => alert("Mesajınız canlı destek temsilcimize iletildi.")}
+                onClick={() => alert(translate("Your message has been sent to live support."))}
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
