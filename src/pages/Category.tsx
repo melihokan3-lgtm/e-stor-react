@@ -124,9 +124,7 @@ export default function Category() {
   const newFilter = activeFilterParams.get("new") === "true";
   const fastShippingFilter = activeFilterParams.get("fast_shipping") === "true";
   const minRatingFilter = Number(activeFilterParams.get("rating")) || 0;
-  const categoryLabel = catFilter === "all"
-    ? "Tüm Ürünler"
-    : catFilter.split("-").map((word) => word.charAt(0).toUpperCase() + word.slice(1)).join(" ");
+  const categoryLabel = catFilter === "all" ? "Tüm Ürünler" : catFilter.replaceAll("-", " ");
   const categoryCanonical = catFilter === "all" ? "/category" : `/category?cat=${encodeURIComponent(catFilter)}`;
 
   // Compute category list with counts
@@ -200,7 +198,7 @@ export default function Category() {
   ].filter(Boolean).length;
 
   const filteredCategoryList = categoryStats.filter((c) =>
-    c.name.toLowerCase().includes(categorySearch.toLowerCase())
+    translate(c.name).toLowerCase().includes(categorySearch.toLowerCase())
   );
 
   return (
@@ -342,7 +340,7 @@ export default function Category() {
                       onChange={() => updateFilter("cat", cat.name)}
                     />
                     <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
-                    <span className="flex-1">{cat.name}</span>
+                    <span className="flex-1">{translate(cat.name)}</span>
                     <span className="text-xs text-[#94a3b8]">({cat.count})</span>
                   </label>
                 ))}
@@ -553,7 +551,7 @@ export default function Category() {
                 to={`/category?cat=${encodeURIComponent(cat.name)}`}
                 className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${catFilter.toLowerCase() === cat.name.toLowerCase() ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
               >
-                {cat.name} ({cat.count})
+                {translate(cat.name)} ({cat.count})
               </Link>
             ))}
           </div>

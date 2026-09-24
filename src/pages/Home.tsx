@@ -80,10 +80,10 @@ export default function Home() {
               {categories.map((cat) => (
                 <Link
                   key={cat}
-                  to={`/category?cat=${cat}`}
+                  to={`/category?cat=${encodeURIComponent(cat)}`}
                   className="flex shrink-0 items-center gap-2 whitespace-nowrap rounded-[30px] border border-transparent bg-[#faf5f9] px-[22px] py-[10px] text-[14px] font-medium text-[#333] transition-all duration-200 hover:border-[#b6349a] hover:bg-white hover:text-[#b6349a]"
                 >
-                  <span>{cat}</span>
+                  <span>{translate(cat)}</span>
                 </Link>
               ))}
             </div>
@@ -114,7 +114,7 @@ export default function Home() {
                         onClick={() => setSelectedWeeklyCat(cat)}
                         className={`cursor-pointer rounded-[30px] border px-[18px] py-[7px] text-[13px] font-medium transition-all duration-200 hover:border-[#b6349a] ${selectedWeekly === cat ? "border-[#b6349a] bg-[#fdf5fd] text-[#b6349a]" : "border-[#e0e0e0] bg-white text-[#555]"}`}
                       >
-                        {cat}
+                        {translate(cat)}
                       </button>
                     ))}
                   </div>
