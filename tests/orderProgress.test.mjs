@@ -88,5 +88,9 @@ test("demo checkout result never claims a real payment or shipment", () => {
   assert.match(html, /Demo ödeme tamamlandı/);
   assert.match(html, /Gerçek para çekilmedi/);
   assert.match(html, /ürün gönderilmeyecek/);
+  assert.match(html, /Organic Milk/);
+  assert.match(html, /Order Summary/);
+  assert.match(html, /Demo Kart \(tahsilat yok\)/);
+  assert.match(html, /Seçilen Adres \(gönderim yok\)/);
   assert.doesNotMatch(html, /Order is Placed/);
 });

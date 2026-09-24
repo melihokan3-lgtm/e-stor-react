@@ -52,21 +52,6 @@ export default function OrderProgress() {
     );
   }
 
-  if (order.isDemo) {
-    return (
-      <main className="min-h-screen bg-[#fafafa] px-5 py-10">
-        <SeoMeta title="Demo Sipariş | E-Storee" description="Demo ödeme sonucu" canonicalPath="/order-progress" robots="noindex,nofollow" />
-        <div className="mx-auto w-full max-w-[800px] rounded-2xl border border-amber-200 bg-white p-6 shadow-sm">
-          <h1 className="text-2xl font-bold text-[#111]">Demo ödeme tamamlandı</h1>
-          <p className="mt-3 text-sm leading-6 text-[#555]">Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.</p>
-          <p className="mt-3 text-sm font-semibold text-[#333]">Demo kayıt: {order.id}</p>
-          <p className="mt-1 text-sm text-[#555]">Gösterilen toplam: ${order.total.toFixed(2)}</p>
-          <Link to="/profile/orders" className="mt-5 inline-flex rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#98277f]">Demo kayıtlarımı gör</Link>
-        </div>
-      </main>
-    );
-  }
-
   const itemsPerPage = 4;
   const totalPages = Math.max(1, Math.ceil(order.items.length / itemsPerPage));
   const page = Math.min(currentPage, totalPages);
@@ -80,9 +65,16 @@ export default function OrderProgress() {
 
   return (
     <main className="min-h-screen bg-[#fafafa] px-5 py-10">
-      <SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" />
-      <h1 className="sr-only">Sipariş Takibi</h1>
+      <SeoMeta title={order.isDemo ? "Demo Ödeme Onayı | E-Storee" : "Sipariş Takibi | E-Storee"} description={order.isDemo ? "Demo ödeme onayı ve ürün özeti. Gerçek ödeme alınmaz." : "E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin."} canonicalPath="/order-progress" robots="noindex,nofollow" />
+      <h1 className="sr-only">{order.isDemo ? "Demo Ödeme Onayı" : "Sipariş Takibi"}</h1>
       <div className="mx-auto w-full max-w-[1200px]">
+
+        {order.isDemo && (
+          <div role="status" className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950">
+            <h2 className="text-xl font-bold">Demo ödeme tamamlandı</h2>
+            <p className="mt-1 text-sm leading-6">Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.</p>
+          </div>
+        )}
 
         {/* Top Actions */}
         <div className="mb-6 flex items-center justify-between">
@@ -92,11 +84,11 @@ export default function OrderProgress() {
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
           </button>
-          <Link to="/profile/help" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f] no-underline">
+          <Link to={order.isDemo ? "/profile/orders" : "/profile/help"} className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f] no-underline">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
             </svg>
-            Help
+            {order.isDemo ? "Demo kayıtlarım" : "Help"}
           </Link>
         </div>
 
@@ -108,8 +100,8 @@ export default function OrderProgress() {
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
-                  <h2>Order {status === "Processing" ? "In Progress" : status}</h2>
-                  <p>Order placed on {placedAt}</p>
+                  <h2>{order.isDemo ? "Ödeme Onayı ve Özet" : `Order ${status === "Processing" ? "In Progress" : status}`}</h2>
+                  <p>{order.isDemo ? "Demo işlem tarihi" : "Order placed on"} {placedAt}</p>
                 </div>
                 <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{status}</div>
               </div>
@@ -120,10 +112,10 @@ export default function OrderProgress() {
                     <polyline points="20 6 9 17 4 12"></polyline>
                   </svg>
                 </div>
-                <h3>Order is Placed</h3>
+                <h3>{order.isDemo ? "Demo işlem onaylandı" : "Order is Placed"}</h3>
               </div>
 
-              <div className="relative mt-8">
+              {!order.isDemo && <div className="relative mt-8">
                 <div className="absolute left-0 right-0 top-4 h-1 bg-[#eee]"></div>
                 <div className="absolute left-0 top-4 h-1 w-1/2 bg-[#b6349a]"></div>
 
@@ -147,7 +139,7 @@ export default function OrderProgress() {
                     <span className="text-xs text-[#777]">Pending</span>
                   </div>
                 </div>
-              </div>
+              </div>}
             </div>
 
             {/* Items List Card */}
@@ -181,7 +173,7 @@ export default function OrderProgress() {
                           <h4 className="truncate text-sm font-semibold text-[#222]">{item.title}</h4>
                           <div className="mt-1 flex items-center gap-2">
                             <span className="text-sm font-semibold text-[#222]">{formatAmount(item.price)}</span>
-                            <span className="text-xs text-[#999] line-through">{formatAmount(item.price * 1.2)}</span>
+                            {!order.isDemo && <span className="text-xs text-[#999] line-through">{formatAmount(item.price * 1.2)}</span>}
                           </div>
                         </div>
                       </div>
@@ -273,7 +265,7 @@ export default function OrderProgress() {
 
             {/* Pay With */}
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-              <h3 className="mb-4 text-base font-semibold text-[#222]">Pay With</h3>
+              <h3 className="mb-4 text-base font-semibold text-[#222]">{order.isDemo ? "Demo Kart (tahsilat yok)" : "Pay With"}</h3>
               <div className="flex items-center gap-3 text-sm">
                 <svg width="32" height="20" viewBox="0 0 32 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <rect width="32" height="20" rx="4" fill="#111"/>
@@ -286,7 +278,7 @@ export default function OrderProgress() {
 
             {/* Delivery Address */}
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-              <h3 className="mb-4 text-base font-semibold text-[#222]">Delivery Address</h3>
+              <h3 className="mb-4 text-base font-semibold text-[#222]">{order.isDemo ? "Seçilen Adres (gönderim yok)" : "Delivery Address"}</h3>
               <div className="flex items-center gap-3 text-sm">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
