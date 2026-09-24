@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState, useEffect, type FormEvent } from "react";
 import { CARD_THEMES, detectCardType } from "../../utils/cardUtils";
 import { loadSavedCards, saveSavedCards } from "../../features/payments/savedCards";
@@ -91,12 +92,11 @@ export default function PaymentSelectionModal({
         {/* Header */}
         <div className="mb-5 flex items-start justify-between gap-4 border-b border-[#eee] pb-4">
           <div>
-            <h3 className="text-lg font-bold text-[#222] sm:text-xl">Test Kartı Seçin</h3>
+            <h3 className="text-lg font-bold text-[#222] sm:text-xl">{translate("Test Kartı Seçin")}</h3>
             <p className="mt-1 text-sm text-[#777]">
-              Yalnızca test kartı seçin veya ekleyin; gerçek kart bilgisi girmeyin.
-            </p>
+              {translate("\n              Yalnızca test kartı seçin veya ekleyin; gerçek kart bilgisi girmeyin.\n            ")}</p>
           </div>
-          <button className="grid h-9 w-9 place-items-center rounded-full text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" onClick={onClose} aria-label="Kapat">
+          <button className="grid h-9 w-9 place-items-center rounded-full text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" onClick={onClose} aria-label={translate("Kapat")}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -104,8 +104,7 @@ export default function PaymentSelectionModal({
           </button>
         </div>
         <p role="note" className="mb-5 rounded-lg bg-amber-50 p-3 text-xs text-amber-900">
-          Gerçek kart bilgisi girmeyin. Test kartı: 4242 4242 4242 4242. Ödeme alınmaz; yalnızca maskelenmiş son dört hane tarayıcınızda saklanır, CVV saklanmaz.
-        </p>
+          {translate("\n          Gerçek kart bilgisi girmeyin. Test kartı: 4242 4242 4242 4242. Ödeme alınmaz; yalnızca maskelenmiş son dört hane tarayıcınızda saklanır, CVV saklanmaz.\n        ")}</p>
 
         {/* Tab Navigation */}
         <div className="mb-5 flex gap-2 border-b border-[#eee]">
@@ -118,7 +117,7 @@ export default function PaymentSelectionModal({
               <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
               <line x1="2" y1="10" x2="22" y2="10"></line>
             </svg>
-            Kayıtlı Kartlarım ({cards.length})
+            {translate("\n            Kayıtlı Kartlarım (")}{cards.length})
           </button>
           <button
             type="button"
@@ -129,8 +128,7 @@ export default function PaymentSelectionModal({
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            Yeni Kart Ekle
-          </button>
+            {translate("\n            Yeni Kart Ekle\n          ")}</button>
         </div>
 
         {/* TAB 1: SAVED CARDS */}
@@ -138,14 +136,13 @@ export default function PaymentSelectionModal({
           <div className="grid gap-4">
             {cards.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-[#e5e7eb] bg-[#f9fafb] p-8 text-center">
-                <p>Henüz kayıtlı bir kredi kartınız bulunmuyor.</p>
+                <p>{translate("Henüz kayıtlı bir kredi kartınız bulunmuyor.")}</p>
                 <button
                   type="button"
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#b6349a] px-4 py-3 text-sm font-semibold text-white hover:bg-[#98277f]"
                   onClick={() => setActiveTab("new")}
                 >
-                  + İlk Kartınızı Ekleyin
-                </button>
+                  {translate("\n                  + İlk Kartınızı Ekleyin\n                ")}</button>
               </div>
             ) : (
               <>
@@ -186,13 +183,13 @@ export default function PaymentSelectionModal({
                               {card.cardType === "visa" ? "Visa" : "Mastercard"} •••• {card.last4 || card.maskedNumber?.slice(-4)}
                             </span>
                             {card.isDefault && (
-                              <span className="rounded-full bg-[#fff0fa] px-2 py-0.5 text-[10px] font-semibold text-[#b6349a]">Varsayılan</span>
+                              <span className="rounded-full bg-[#fff0fa] px-2 py-0.5 text-[10px] font-semibold text-[#b6349a]">{translate("Varsayılan")}</span>
                             )}
                           </div>
                           <div className="mt-1 flex gap-2 text-xs text-[#888]">
                             <span>{card.cardHolder}</span>
                             <span>•</span>
-                            <span>SKT: {card.expiry}</span>
+                            <span>{translate("SKT: ")}{card.expiry}</span>
                           </div>
                         </div>
 
@@ -218,8 +215,7 @@ export default function PaymentSelectionModal({
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
-                  Başka Bir Kart Ekle
-                </button>
+                  {translate("\n                  Başka Bir Kart Ekle\n                ")}</button>
               </>
             )}
           </div>
@@ -252,11 +248,11 @@ export default function PaymentSelectionModal({
 
                 <div className="mt-10 flex justify-between gap-4">
                   <div className="flex min-w-0 flex-col">
-                    <span className="text-[10px] uppercase text-white/70">KART SAHİBİ</span>
+                    <span className="text-[10px] uppercase text-white/70">{translate("KART SAHİBİ")}</span>
                     <span className="mt-1 text-sm font-semibold">{formData.cardHolder || "AD SOYAD"}</span>
                   </div>
                   <div className="flex shrink-0 flex-col">
-                    <span className="text-[10px] uppercase text-white/70">SON KULLANMA</span>
+                    <span className="text-[10px] uppercase text-white/70">{translate("SON KULLANMA")}</span>
                     <span className="mt-1 text-sm font-semibold">{formData.expiry || "AA/YY"}</span>
                   </div>
                 </div>
@@ -269,7 +265,7 @@ export default function PaymentSelectionModal({
             {/* Form Fields */}
             <form onSubmit={handleAddCardSubmit} className="grid gap-4" noValidate>
               <div className="grid gap-1.5">
-                <label className="text-sm font-semibold text-[#555]">Kart Üzerindeki İsim</label>
+                <label className="text-sm font-semibold text-[#555]">{translate("Kart Üzerindeki İsim")}</label>
                 <div className={cardFieldClass}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -277,8 +273,8 @@ export default function PaymentSelectionModal({
                   </svg>
                   <input
                     type="text"
-                    aria-label="Test kartı üzerindeki isim"
-                    placeholder="AD SOYAD"
+                    aria-label={translate("Test kartı üzerindeki isim")}
+                    placeholder={translate("AD SOYAD")}
                     value={formData.cardHolder}
                     onChange={handleNameChange}
                     maxLength={30}
@@ -289,7 +285,7 @@ export default function PaymentSelectionModal({
               </div>
 
               <div className="grid gap-1.5">
-                <label className="text-sm font-semibold text-[#555]">Kart Numarası</label>
+                <label className="text-sm font-semibold text-[#555]">{translate("Kart Numarası")}</label>
                 <div className={cardFieldClass}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                     <rect x="2" y="5" width="20" height="14" rx="2" ry="2" />
@@ -297,7 +293,7 @@ export default function PaymentSelectionModal({
                   </svg>
                   <input
                     type="text"
-                    aria-label="Test kartı numarası"
+                    aria-label={translate("Test kartı numarası")}
                     inputMode="numeric"
                     autoComplete="off"
                     placeholder="4242 4242 4242 4242"
@@ -312,7 +308,7 @@ export default function PaymentSelectionModal({
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-1.5 min-w-0">
-                  <label className="text-sm font-semibold text-[#555]">Son Kullanma</label>
+                  <label className="text-sm font-semibold text-[#555]">{translate("Son Kullanma")}</label>
                   <div className={cardFieldClass}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
                       <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -322,8 +318,8 @@ export default function PaymentSelectionModal({
                     </svg>
                     <input
                       type="text"
-                      aria-label="Test kartı son kullanma tarihi"
-                      placeholder="AA/YY"
+                      aria-label={translate("Test kartı son kullanma tarihi")}
+                      placeholder={translate("AA/YY")}
                       value={formData.expiry}
                       onChange={handleExpiryChange}
                       maxLength={5}
@@ -335,8 +331,7 @@ export default function PaymentSelectionModal({
 
                 <div className="grid gap-1.5 min-w-0">
                   <label className="text-sm font-semibold text-[#555]">
-                    CVV / CVC
-                    <span className="text-xs font-normal text-[#999]">(3 hane)</span>
+                    {translate("\n                    CVV / CVC\n                    ")}<span className="text-xs font-normal text-[#999]">{translate("(3 hane)")}</span>
                   </label>
                   <div className={cardFieldClass}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2">
@@ -345,7 +340,7 @@ export default function PaymentSelectionModal({
                     </svg>
                     <input
                       type="password"
-                      aria-label="Test kartı güvenlik kodu"
+                      aria-label={translate("Test kartı güvenlik kodu")}
                       autoComplete="off"
                       placeholder="•••"
                       value={formData.cvv}
@@ -362,8 +357,7 @@ export default function PaymentSelectionModal({
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
-                Kartı Kaydet ve Siparişte Kullan
-              </button>
+                {translate("\n                Kartı Kaydet ve Siparişte Kullan\n              ")}</button>
             </form>
           </div>
         )}

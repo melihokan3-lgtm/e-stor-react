@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
@@ -197,12 +198,12 @@ export default function Checkout() {
   return (
     <main className="mx-auto max-w-[1400px] bg-[#fafafa] px-[60px] py-10 max-[768px]:px-6 max-[768px]:py-6">
       <SeoMeta
-        title="Ödeme | E-Storee"
+        title={translate("Ödeme | E-Storee")}
         description="E-Storee test kartı seçimi ve sipariş özeti. Gerçek ödeme alınmaz."
         canonicalPath="/checkout"
         robots="noindex,nofollow"
       />
-      <h1 className="sr-only">Siparişi Tamamla</h1>
+      <h1 className="sr-only">{translate("Siparişi Tamamla")}</h1>
       <div className="grid grid-cols-[minmax(0,2fr)_minmax(320px,1fr)] items-start gap-10 max-[1024px]:grid-cols-1">
 
         {/* LEFT COLUMN */}
@@ -217,7 +218,7 @@ export default function Checkout() {
                   <line x1="2" y1="10" x2="22" y2="10"></line>
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#111]">Ödeme ve Teslimat</h2>
+              <h2 className="text-2xl font-bold text-[#111]">{translate("Ödeme ve Teslimat")}</h2>
             </div>
             <div className="flex max-w-[55%] min-w-0 items-start gap-2 break-words text-sm leading-5 text-[#555] max-[640px]:max-w-full max-[640px]:text-xs">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -244,7 +245,7 @@ export default function Checkout() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#111]">Delivery info</h3>
+                <h3 className="text-base font-bold text-[#111]">{translate("Delivery info")}</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -258,7 +259,7 @@ export default function Checkout() {
               </div>
             </div>
             <div className="mt-4 flex min-w-0 items-start gap-2 max-[640px]:gap-1.5">
-              <span className="text-xs font-semibold text-[#777]">Deliver to</span>
+              <span className="text-xs font-semibold text-[#777]">{translate("Deliver to")}</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                 <circle cx="12" cy="10" r="3"></circle>
@@ -283,7 +284,7 @@ export default function Checkout() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#111]">Payment Method</h3>
+                <h3 className="text-base font-bold text-[#111]">{translate("Payment Method")}</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -297,21 +298,21 @@ export default function Checkout() {
               </div>
             </div>
             <div className="mt-4 flex items-center gap-2">
-              <span className="text-xs font-semibold text-[#777]">Pay With</span>
+              <span className="text-xs font-semibold text-[#777]">{translate("Pay With")}</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#b6349a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <rect x="2" y="5" width="20" height="14" rx="2" ry="2"></rect>
                 <line x1="2" y1="10" x2="22" y2="10"></line>
               </svg>
               <span className="text-sm font-semibold text-[#b6349a]">{cardDisplayName}</span>
             </div>
-            <p className="mt-2 text-xs text-amber-800">Yalnızca test kartı kullanın; gerçek ödeme alınmaz.</p>
+            <p className="mt-2 text-xs text-amber-800">{translate("Yalnızca test kartı kullanın; gerçek ödeme alınmaz.")}</p>
           </div>
 
           {/* INFO CARD 3: Review Order */}
           <div className="rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)]">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <h3 className="text-base font-bold text-[#111]">Review Order</h3>
+                <h3 className="text-base font-bold text-[#111]">{translate("Review Order")}</h3>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#555" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="16" x2="12" y2="12"></line>
@@ -367,32 +368,32 @@ export default function Checkout() {
         <div className="min-w-0">
           <div className="rounded-2xl bg-white p-7 shadow-[0_4px_24px_rgba(0,0,0,0.05)] max-[640px]:p-5">
 
-            <h3 className="mb-6 text-xl font-bold text-[#111]">Order Summary</h3>
+            <h3 className="mb-6 text-xl font-bold text-[#111]">{translate("Order Summary")}</h3>
 
             <div className="flex flex-col gap-4">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#888]">Delivery fee</span>
+                <span className="text-[#888]">{translate("Delivery fee")}</span>
                 <span className="font-semibold text-[#111]">
                   {appliedCoupon?.discountType === "shipping" ? (
-                    <><s className="mr-1 text-gray-400">${deliveryFee.toFixed(2)}</s> <span className="font-bold text-emerald-600">FREE</span></>
+                    <><s className="mr-1 text-gray-400">${deliveryFee.toFixed(2)}</s> <span className="font-bold text-emerald-600">{translate("FREE")}</span></>
                   ) : (
                     `$${deliveryFee.toFixed(2)}`
                   )}
                 </span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#888]">Service fee</span>
+                <span className="text-[#888]">{translate("Service fee")}</span>
                 <span className="font-semibold text-[#111]">${itemsTotal.toFixed(2)}</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-[#888]">Items total</span>
+                <span className="text-[#888]">{translate("Items total")}</span>
                 <span className="font-semibold text-[#111]">${itemsTotal.toFixed(2)}</span>
               </div>
             </div>
 
             <div className="mt-7 border-t border-[#f0f0f0] pt-6">
-              <h4 className="mb-1 text-sm font-bold text-[#111]">Delivery Tip</h4>
-              <p className="mb-3 text-xs text-[#999]">Your delivery person keeps 100% of tips.</p>
+              <h4 className="mb-1 text-sm font-bold text-[#111]">{translate("Delivery Tip")}</h4>
+              <p className="mb-3 text-xs text-[#999]">{translate("Your delivery person keeps 100% of tips.")}</p>
 
               <div className="flex flex-wrap gap-2">
                 {[5, 10, 15, 20, 30].map((tip) => (
@@ -410,14 +411,13 @@ export default function Checkout() {
                   className={`rounded-[30px] border px-3 py-2 text-xs font-semibold transition ${activeTip === 'Other' ? "border-[#b6349a] bg-[#b6349a] text-white" : "border-[#ddd] bg-white text-[#555] hover:border-[#b6349a] hover:text-[#b6349a]"}`}
                   onClick={() => setActiveTip(activeTip === 'Other' ? null : 'Other')}
                 >
-                  Other
-                </button>
+                  {translate("\r\n                  Other\r\n                ")}</button>
                 {activeTip === 'Other' && (
                   <input
                     type="number"
                     min="0"
                     step="1"
-                    placeholder="Enter amount"
+                    placeholder={translate("Enter amount")}
                     value={customTip}
                     onChange={(e) => setCustomTip(e.target.value)}
                     className="w-[120px] rounded-[30px] border border-[#ddd] px-3 py-2 text-[13px] outline-none focus:border-[#b6349a]"
@@ -428,7 +428,7 @@ export default function Checkout() {
 
             {/* COUPON ROW */}
             <div className="relative mt-7 flex items-center justify-between border-t border-[#f0f0f0] pt-6">
-              <span className="text-sm font-semibold text-[#555]">Coupon</span>
+              <span className="text-sm font-semibold text-[#555]">{translate("Coupon")}</span>
 
               {appliedCoupon ? (
                 <div className="flex items-center gap-2 rounded-lg bg-[#fdf5fb] px-2.5 py-1.5 text-xs">
@@ -442,7 +442,7 @@ export default function Checkout() {
                   <button
                     className="text-[#999] transition hover:text-red-500"
                     onClick={handleRemoveCoupon}
-                    aria-label="Kuponu kaldır"
+                    aria-label={translate("Kuponu kaldır")}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -459,15 +459,14 @@ export default function Checkout() {
                     <line x1="12" y1="5" x2="12" y2="19"></line>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                   </svg>
-                  Add Coupon
-                </button>
+                  {translate("\r\n                  Add Coupon\r\n                ")}</button>
               )}
 
               {/* COUPON DROPDOWN PANEL */}
               {isCouponPanelOpen && (
                 <div className="absolute right-0 top-full z-20 mt-2 w-[min(360px,calc(100vw-3rem))] overflow-hidden rounded-xl border border-[#eee] bg-white shadow-[0_12px_32px_rgba(0,0,0,0.12)]">
                   <div className="flex items-center justify-between border-b border-[#f0f0f0] px-4 py-3">
-                    <h4 className="text-sm font-bold text-[#111]">Kuponlarım</h4>
+                    <h4 className="text-sm font-bold text-[#111]">{translate("Kuponlarım")}</h4>
                     <button
                       className="text-[#777] hover:text-[#111]"
                       onClick={() => setIsCouponPanelOpen(false)}
@@ -492,8 +491,8 @@ export default function Checkout() {
                             {COUPON_ICONS[coupon.type]}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="text-sm font-semibold text-[#111]">{coupon.title}</div>
-                            <div className="mt-0.5 text-xs text-[#888]">{coupon.description}</div>
+                            <div className="text-sm font-semibold text-[#111]">{translate(coupon.title)}</div>
+                            <div className="mt-0.5 text-xs text-[#888]">{translate(coupon.description)}</div>
                             <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-[#888]">
                               <span className="rounded bg-[#fdf5fb] px-1.5 py-0.5 font-semibold text-[#b6349a]">{coupon.code}</span>
                               <span className="flex items-center gap-1">
@@ -503,12 +502,11 @@ export default function Checkout() {
                                 </svg>
                                 {formatDate(coupon.expiry)}
                               </span>
-                              {coupon.minOrder > 0 && <span>Min. ${coupon.minOrder}</span>}
+                              {coupon.minOrder > 0 && <span>{translate("Min. $")}{coupon.minOrder}</span>}
                             </div>
                             {!isEligible && (
                               <div className="mt-2 text-[11px] font-semibold text-red-500">
-                                Min. ${coupon.minOrder} sipariş tutarına ulaşmanız gerekiyor
-                              </div>
+                                {translate("\r\n                                Min. $")}{coupon.minOrder} {translate(" sipariş tutarına ulaşmanız gerekiyor\r\n                              ")}</div>
                             )}
                           </div>
                         </div>
@@ -523,7 +521,7 @@ export default function Checkout() {
             {appliedCoupon && couponDiscount > 0 && (
               <div className="mt-4 flex items-center justify-between text-sm">
                 <span className="font-semibold text-emerald-600">
-                  🏷️ Kupon İndirimi ({appliedCoupon.code})
+                  {translate("\r\n                  🏷️ Kupon İndirimi (")}{appliedCoupon.code})
                 </span>
                 <span className="font-bold text-emerald-600">
                   -${couponDiscount.toFixed(2)}
@@ -532,11 +530,11 @@ export default function Checkout() {
             )}
 
             <div className="mt-6 flex items-center justify-between border-t border-[#f0f0f0] pt-5">
-              <span className="text-lg font-bold text-[#111]">Total</span>
+              <span className="text-lg font-bold text-[#111]">{translate("Total")}</span>
               <span className="text-xl font-extrabold text-[#b6349a]">${finalTotal.toFixed(2)}</span>
             </div>
 
-            <p className="mt-5 text-sm text-amber-800">Bu bir test işlemidir. Gerçek para çekilmez; sipariş Supabase'e gönderilmez ve ürün gönderilmez.</p>
+            <p className="mt-5 text-sm text-amber-800">{translate("Bu bir test işlemidir. Gerçek para çekilmez; sipariş Supabase'e gönderilmez ve ürün gönderilmez.")}</p>
             {checkoutError && <p role="alert" className="mt-3 text-sm font-medium text-red-700">{checkoutError}</p>}
             <button type="button" onClick={() => void handleDemoCheckout()} disabled={placingDemoOrder} className="mt-4 w-full rounded-[30px] bg-[#b6349a] px-5 py-3.5 text-sm font-bold text-white transition hover:bg-[#98277f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b6349a] disabled:cursor-wait disabled:opacity-50">{placingDemoOrder ? "İşlem hazırlanıyor..." : "Test işlemini tamamla"}</button>
 

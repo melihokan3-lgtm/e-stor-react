@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/AuthContext";
@@ -110,21 +111,20 @@ export default function NotificationSetting() {
 
   return (
     <div className="w-full">
-      <SeoMeta title="Bildirimlerim | E-Storee" description="E-Storee bildirim tercihlerinizi ve hesap güncellemelerinizi yönetin." canonicalPath="/profile/notifications" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Bildirimlerim | E-Storee")} description="E-Storee bildirim tercihlerinizi ve hesap güncellemelerinizi yönetin." canonicalPath="/profile/notifications" robots="noindex,nofollow" />
       {/* Toast Alert */}
       <ProfileToast message={toastMessage} />
 
       {/* Header */}
       <div className="mb-6 flex items-start justify-between gap-4 max-md:flex-col">
         <div>
-          <div className="flex items-center gap-3"><h1 className="text-[28px] font-extrabold text-[#111]">Bildirimlerim (Notifications)</h1>
+          <div className="flex items-center gap-3"><h1 className="text-[28px] font-extrabold text-[#111]">{translate("Bildirimlerim (Notifications)")}</h1>
             {unreadCount > 0 && (
-              <span className="rounded-full bg-[#b6349a] px-2.5 py-1 text-xs font-semibold text-white">{unreadCount} Yeni</span>
+              <span className="rounded-full bg-[#b6349a] px-2.5 py-1 text-xs font-semibold text-white">{unreadCount} {translate(" Yeni")}</span>
             )}
           </div>
           <p className="mt-2 text-sm text-[#777]">
-            Sipariş takibi, kampanyalar ve hesap güvenliğinizle ilgili tüm anlık güncellemeler.
-          </p>
+            {translate("\r\n            Sipariş takibi, kampanyalar ve hesap güvenliğinizle ilgili tüm anlık güncellemeler.\r\n          ")}</p>
         </div>
 
         {/* Global Actions */}
@@ -138,8 +138,7 @@ export default function NotificationSetting() {
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
               </svg>
-              Tümünü Okundu Say
-            </button>
+              {translate("\r\n              Tümünü Okundu Say\r\n            ")}</button>
           )}
           {notifications.length > 0 && (
             <button
@@ -151,8 +150,7 @@ export default function NotificationSetting() {
                 <polyline points="3 6 5 6 21 6"></polyline>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
               </svg>
-              Tümünü Temizle
-            </button>
+              {translate("\r\n              Tümünü Temizle\r\n            ")}</button>
           )}
         </div>
       </div>
@@ -178,7 +176,7 @@ export default function NotificationSetting() {
                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
               </svg>
             </div>
-            <h4 className="font-bold text-[#333]">Henüz Bildiriminiz Yok</h4>
+            <h4 className="font-bold text-[#333]">{translate("Henüz Bildiriminiz Yok")}</h4>
             <p className="mt-2">
               {activeFilter === "unread"
                 ? "Okunmamış bildiriminiz bulunmuyor. Tüm güncel haberleri takip ettiniz!"
@@ -192,7 +190,7 @@ export default function NotificationSetting() {
               className={`relative flex items-start gap-4 rounded-2xl border p-4 ${item.isRead ? "border-[#eee] bg-white" : "border-[#b6349a]/[.3] bg-[#fff8fd]"}`}
             >
               {/* Unread Glowing Dot */}
-              {!item.isRead && <span className="absolute left-2 top-2 h-2 w-2 rounded-full bg-[#b6349a]" title="Okunmadı"></span>}
+              {!item.isRead && <span className="absolute left-2 top-2 h-2 w-2 rounded-full bg-[#b6349a]" title={translate("Okunmadı")}></span>}
 
               {/* Icon Container */}
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f7f4f7]">
@@ -200,9 +198,9 @@ export default function NotificationSetting() {
               </div>
 
               {/* Notification Content */}
-              <div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><h4 className="font-bold text-[#222]">{item.title}</h4><span className="shrink-0 text-xs text-[#999]">{item.time}</span>
+              <div className="min-w-0 flex-1"><div className="flex items-start justify-between gap-3"><h4 className="font-bold text-[#222]">{translate(item.title)}</h4><span className="shrink-0 text-xs text-[#999]">{translate(item.time)}</span>
                 </div>
-                <p className="my-2 text-sm leading-5 text-[#777]">{item.message}</p>
+                <p className="my-2 text-sm leading-5 text-[#777]">{translate(item.message)}</p>
                 {item.actionText && item.actionUrl && (
                   <div>
                     <Link
@@ -212,7 +210,7 @@ export default function NotificationSetting() {
                         if (!item.isRead) handleToggleRead(item.id);
                       }}
                     >
-                      {item.actionText}
+                      {translate(item.actionText)}
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <polyline points="9 18 15 12 9 6"></polyline>
                       </svg>
@@ -226,7 +224,7 @@ export default function NotificationSetting() {
                 <button
                   type="button"
                   className="rounded-lg p-2 text-[#777] hover:bg-[#f5f5f5]"
-                  title={item.isRead ? "Okunmadı olarak işaretle" : "Okundu olarak işaretle"}
+                  title={translate(item.isRead ? "Okunmadı olarak işaretle" : "Okundu olarak işaretle")}
                   onClick={() => handleToggleRead(item.id)}
                 >
                   {item.isRead ? (
@@ -244,7 +242,7 @@ export default function NotificationSetting() {
                 <button
                   type="button"
                   className="rounded-lg p-2 text-red-500 hover:bg-red-50"
-                  title="Bildirimi Sil"
+                  title={translate("Bildirimi Sil")}
                   onClick={() => handleDelete(item.id)}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

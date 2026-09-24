@@ -1,6 +1,8 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState } from "react";
 import { ProfileEmptyState, ProfileToast } from "../../components/profile";
 import SeoMeta from "../../components/common/SeoMeta";
+import { useLanguage } from "../../features/i18n/LanguageContext";
 
 type CouponType = "discount" | "shipping" | "special";
 type CouponStatus = "active" | "expired" | "used";
@@ -93,6 +95,7 @@ const ICONS: Record<CouponType, string> = {
 };
 
 export default function Coupons() {
+  const { language } = useLanguage();
   const [toast, setToast] = useState("");
 
   const activeCoupons = COUPONS_DATA.filter((c) => c.status === "active");
@@ -108,7 +111,7 @@ export default function Coupons() {
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
-    return d.toLocaleDateString("tr-TR", {
+    return d.toLocaleDateString(language === "tr" ? "tr-TR" : "en-US", {
       day: "numeric",
       month: "long",
       year: "numeric",
@@ -117,31 +120,28 @@ export default function Coupons() {
 
   return (
     <div className="w-full">
-      <SeoMeta title="Kuponlarım | E-Storee" description="E-Storee hesabınızdaki indirim kuponlarını ve kampanyaları görüntüleyin." canonicalPath="/profile/coupons" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Kuponlarım | E-Storee")} description="E-Storee hesabınızdaki indirim kuponlarını ve kampanyaları görüntüleyin." canonicalPath="/profile/coupons" robots="noindex,nofollow" />
       {/* HEADER */}
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
-        <h1 className="text-[28px] font-extrabold text-[#111]">Kuponlarım</h1>
+        <h1 className="text-[28px] font-extrabold text-[#111]">{translate("Kuponlarım")}</h1>
         <div className="flex flex-wrap gap-2">
           <span className="rounded-full bg-green-50 px-3 py-1.5 text-xs font-semibold text-green-700">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
-            {activeCoupons.length} Aktif
-          </span>
+            {activeCoupons.length} {translate(" Aktif\r\n          ")}</span>
           <span className="rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-600">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
               <polyline points="22 4 12 14.01 9 11.01"></polyline>
             </svg>
-            {usedCoupons.length} Kullanıldı
-          </span>
+            {usedCoupons.length} {translate(" Kullanıldı\r\n          ")}</span>
           <span className="rounded-full bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-700">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            {expiredCoupons.length} Süresi Doldu
-          </span>
+            {expiredCoupons.length} {translate(" Süresi Doldu\r\n          ")}</span>
         </div>
       </div>
 
@@ -149,8 +149,8 @@ export default function Coupons() {
       {COUPONS_DATA.length === 0 ? (
         <ProfileEmptyState>
           <div className="coupons-empty-icon">🎟️</div>
-          <h3 className="font-bold text-[#111]">Henüz kuponunuz yok</h3>
-          <p className="text-sm text-[#777]">Kampanyalarımızı takip ederek yeni kuponlar kazanabilirsiniz.</p>
+          <h3 className="font-bold text-[#111]">{translate("Henüz kuponunuz yok")}</h3>
+          <p className="text-sm text-[#777]">{translate("Kampanyalarımızı takip ederek yeni kuponlar kazanabilirsiniz.")}</p>
         </ProfileEmptyState>
       ) : (
         <div className="grid gap-4 md:grid-cols-2">
@@ -172,7 +172,7 @@ export default function Coupons() {
                 </div>
 
                 {/* INFO */}
-                <div className="min-w-0 flex-1"><div className="font-bold text-[#111]">{coupon.title}</div><div className="mt-1 text-sm text-[#777]">{coupon.description}</div>
+                <div className="min-w-0 flex-1"><div className="font-bold text-[#111]">{translate(coupon.title)}</div><div className="mt-1 text-sm text-[#777]">{translate(coupon.description)}</div>
 
                   <div className="mt-4 flex flex-wrap items-center gap-2 text-xs text-[#777]">
                     <span
@@ -201,8 +201,7 @@ export default function Coupons() {
 
                     {coupon.minOrder > 0 && (
                       <span>
-                        Min. {coupon.minOrder} TL
-                      </span>
+                        {translate("\r\n                        Min. ")}{coupon.minOrder} {translate(" TL\r\n                      ")}</span>
                     )}
                   </div>
                 </div>

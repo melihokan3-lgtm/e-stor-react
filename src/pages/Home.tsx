@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import useProducts from "../features/products/useProducts";
@@ -53,14 +54,14 @@ export default function Home() {
   return (
     <main className="mx-auto flex max-w-[1600px] overflow-visible bg-white font-sans text-[#333] [@media(max-width:768px)]:block">
       <SeoMeta
-        title="E-Storee | Online Market Alışverişi"
+        title={translate("E-Storee | Online Market Alışverişi")}
         description="E-Storee ile taze market ürünlerini keşfedin, uygun fiyatlarla güvenli ve hızlı online alışveriş yapın."
         canonicalPath="/"
       />
-      <h1 className="sr-only">E-Storee Online Market</h1>
+      <h1 className="sr-only">{translate("E-Storee Online Market")}</h1>
       <div className="mx-auto w-full max-w-[1600px]">
         {error && (
-          <p className="text-center text-[15px] text-[#888]">{error}</p>
+          <p className="text-center text-[15px] text-[#888]">{translate(error)}</p>
         )}
 
         {/* ─── 1. TOP BANNER SWIPER ─── */}
@@ -73,8 +74,7 @@ export default function Home() {
         <section className="mb-[50px] border-b border-[#f0f0f0] pb-[30px]">
           {categories.length === 0 && !loading ? (
             <p className="text-center text-[15px] text-[#888]">
-              Kategori bulunamadı
-            </p>
+              {translate("\r\n              Kategori bulunamadı\r\n            ")}</p>
           ) : (
             <div className="flex gap-[14px] overflow-x-auto py-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {categories.map((cat) => (
@@ -92,7 +92,7 @@ export default function Home() {
 
         {/* ─── 3. BEST SELLER ─── */}
         <ProductSection
-          title="Best Seller"
+          title={translate("Best Seller")}
           products={rankedProducts.slice(0, 10)}
           viewAllHref="/category"
           sectionKey="best-seller"
@@ -106,8 +106,7 @@ export default function Home() {
               <div className="w-full max-w-[calc(100%-235px)] rounded-tl-[24px] rounded-tr-[32px] bg-white px-5 pt-5 pb-[14px] [@media(max-width:768px)]:max-w-none [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-5 [@media(max-width:640px)]:pb-3 [@media(max-width:480px)]:rounded-tl-none [@media(max-width:480px)]:rounded-tr-none">
                 <div className="flex flex-col gap-[14px]">
                   <h2 className="m-0 text-[16px] font-bold text-[#111]">
-                    Trending Store Favorites
-                  </h2>
+                    {translate("\r\n                    Trending Store Favorites\r\n                  ")}</h2>
                   <div className="flex flex-wrap gap-[10px]">
                     {categories.slice(0, 10).map((cat) => (
                       <button
@@ -137,17 +136,14 @@ export default function Home() {
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
                         <polyline points="22 4 12 14.01 9 11.01" />
                       </svg>
-                      Freshness Guarantee
-                    </p>
+                      {translate("\r\n                      Freshness Guarantee\r\n                    ")}</p>
                     <h3 className="m-0 text-[18px] font-bold">
-                      Weekly sold 1k+
-                    </h3>
+                      {translate("\r\n                      Weekly sold 1k+\r\n                    ")}</h3>
                     <Link
                       to="/category"
                       className="mt-[2px] inline-flex w-fit items-center gap-1 rounded-[30px] bg-white px-[10px] py-[5px] text-[9px] font-bold text-[#111]"
                     >
-                      View More →
-                    </Link>
+                      {translate("\r\n                      View More →\r\n                    ")}</Link>
                   </div>
                 </div>
               </div>
@@ -155,7 +151,7 @@ export default function Home() {
 
             <div className="relative z-[2] w-full rounded-[0_32px_24px_24px] bg-white px-5 pb-5 [&_.swiper-slide]:h-auto [&_.swiper-wrapper]:items-stretch [@media(max-width:640px)]:overflow-hidden [@media(max-width:640px)]:rounded-none [@media(max-width:640px)]:rounded-b-[18px] [@media(max-width:640px)]:bg-white [@media(max-width:640px)]:px-4 [@media(max-width:640px)]:pt-[14px] [@media(max-width:640px)]:pb-[18px]">
               <ProductSection
-                title="Weekly Sold"
+                title={translate("Weekly Sold")}
                 products={weeklyProducts}
                 variant="weekly"
                 sectionKey="weekly-sold"
@@ -167,7 +163,7 @@ export default function Home() {
 
         {/* ─── 4. TRENDING STORE FAVORITES ─── */}
         <ProductSection
-          title="Trending Store Favorites"
+          title={translate("Trending Store Favorites")}
           products={trendProducts}
           viewAllHref="/category"
           showFilters

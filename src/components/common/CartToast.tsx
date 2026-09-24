@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../features/cart/CartContext";
@@ -41,11 +42,11 @@ export default function CartToast() {
         </svg>
       </span>
       <div className="min-w-0 flex-1">
-        <p className="m-0 text-sm font-bold text-[#222]">Added to cart</p>
+        <p className="m-0 text-sm font-bold text-[#222]">{translate("Added to cart")}</p>
         <p className="mt-1 truncate text-xs text-[#777]" title={lastAddedProduct}>{lastAddedProduct}</p>
-        <Link to="/cart" onClick={closeToast} className="mt-2 inline-flex text-xs font-bold text-[#b6349a] hover:text-[#92277a]">View cart</Link>
+        <Link to="/cart" onClick={closeToast} className="mt-2 inline-flex text-xs font-bold text-[#b6349a] hover:text-[#92277a]">{translate("View cart")}</Link>
       </div>
-      <button type="button" onClick={closeToast} className="grid size-7 shrink-0 place-items-center rounded-full text-lg leading-none text-[#999] transition hover:bg-[#f8e8f5] hover:text-[#b6349a]" aria-label="Close notification">×</button>
+      <button type="button" onClick={closeToast} className="grid size-7 shrink-0 place-items-center rounded-full text-lg leading-none text-[#999] transition hover:bg-[#f8e8f5] hover:text-[#b6349a]" aria-label={translate("Close notification")}>×</button>
     </div>
   );
 }

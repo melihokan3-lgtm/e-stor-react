@@ -4,9 +4,11 @@ import { CartProvider } from "../features/cart/CartContext";
 import { LocationProvider } from "../features/addresses/LocationContext";
 import { OrdersProvider } from "../features/orders/OrdersContext";
 import CartToast from "../components/common/CartToast";
+import { LanguageProvider } from "../features/i18n/LanguageContext";
 
 export default function AppProviders({ children }: { children: ReactNode }) {
   return (
+    <LanguageProvider>
     <AuthProvider>
       <LocationProvider>
         <OrdersProvider>
@@ -17,5 +19,6 @@ export default function AppProviders({ children }: { children: ReactNode }) {
         </OrdersProvider>
       </LocationProvider>
     </AuthProvider>
+    </LanguageProvider>
   );
 }

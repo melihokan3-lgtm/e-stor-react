@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import ProductCard from "../product/ProductCard";
 import type { Product } from "../../types/product";
@@ -22,20 +23,20 @@ export default function HomePromoSection({ products, categories, variant }: Home
           ))}
         </div>
         <div className="min-w-0 flex-1 [@media(max-width:1024px)]:w-full">
-          <p className="mb-[10px] text-[14px] font-bold text-[#b6349a]">Get 10% OFF On Your First Order</p>
-          <h2 className="mb-6 text-[34px] font-extrabold leading-[1.2] text-[#111] [@media(max-width:480px)]:text-[26px]">Order Now Your Grocery!</h2>
+          <p className="mb-[10px] text-[14px] font-bold text-[#b6349a]">{translate("Get 10% OFF On Your First Order")}</p>
+          <h2 className="mb-6 text-[34px] font-extrabold leading-[1.2] text-[#111] [@media(max-width:480px)]:text-[26px]">{translate("Order Now Your Grocery!")}</h2>
           {isStats ? (
             <>
               <div className="mb-7 flex gap-7">
-                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">1k+</h3><p className="text-[12px] font-medium text-[#777]">Items</p></div>
-                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">20</h3><p className="text-[12px] font-medium text-[#777]">Minutes</p></div>
-                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">30%</h3><p className="text-[12px] font-medium text-[#777]">Up to off firm</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">1k+</h3><p className="text-[12px] font-medium text-[#777]">{translate("Items")}</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">20</h3><p className="text-[12px] font-medium text-[#777]">{translate("Minutes")}</p></div>
+                <div><h3 className="mb-1 text-[26px] font-extrabold text-[#111]">30%</h3><p className="text-[12px] font-medium text-[#777]">{translate("Up to off firm")}</p></div>
               </div>
-              <button type="button" className="cursor-pointer rounded-[30px] bg-[#b6349a] px-[34px] py-[14px] text-[15px] font-bold text-white transition-colors duration-200 hover:bg-[#92277a]">Order Now →</button>
+              <button type="button" className="cursor-pointer rounded-[30px] bg-[#b6349a] px-[34px] py-[14px] text-[15px] font-bold text-white transition-colors duration-200 hover:bg-[#92277a]">{translate("Order Now →")}</button>
             </>
           ) : (
             <div className="flex flex-wrap gap-[10px]">
-              {categories.map((category) => <Link key={category} to={`/category?cat=${encodeURIComponent(category)}`} className="rounded-[30px] border border-[#e0e0e0] bg-white px-4 py-[7px] text-[13px] font-medium text-[#444] transition-colors duration-200 hover:border-[#b6349a] hover:text-[#b6349a]">{category}</Link>)}
+              {categories.map((category) => <Link key={category} to={`/category?cat=${encodeURIComponent(category)}`} className="rounded-[30px] border border-[#e0e0e0] bg-white px-4 py-[7px] text-[13px] font-medium text-[#444] transition-colors duration-200 hover:border-[#b6349a] hover:text-[#b6349a]">{translate(category)}</Link>)}
             </div>
           )}
         </div>

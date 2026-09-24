@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { CARD_THEMES } from "../../utils/cardUtils";
 
 interface CardThemeSelectorProps {
@@ -8,7 +9,7 @@ interface CardThemeSelectorProps {
 export default function CardThemeSelector({ selectedTheme, onSelectTheme }: CardThemeSelectorProps) {
   return (
     <div className="mb-4 flex items-center justify-between">
-      <span className="field-label-text">Kart Teması:</span>
+      <span className="field-label-text">{translate("Kart Teması:")}</span>
       <div className="flex gap-[10px]">
         {CARD_THEMES.map((theme) => (
           <button

@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState } from "react";
 import { ProfileEmptyState } from "../../components/profile";
 import SeoMeta from "../../components/common/SeoMeta";
@@ -74,13 +75,12 @@ export default function HelpCenter() {
 
   return (
     <div className="w-full space-y-5">
-      <SeoMeta title="Yardım ve Destek | E-Storee" description="E-Storee yardım merkeziyle sipariş, teslimat ve hesap sorularınıza yanıt bulun." canonicalPath="/profile/help" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Yardım ve Destek | E-Storee")} description="E-Storee yardım merkeziyle sipariş, teslimat ve hesap sorularınıza yanıt bulun." canonicalPath="/profile/help" robots="noindex,nofollow" />
       {/* Header Banner */}
       <div className="rounded-2xl bg-[#fff8fd] p-6">
-        <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">Yardım ve Destek Merkezi</h1>
+        <h1 className="mb-2 text-[28px] font-extrabold text-[#111]">{translate("Yardım ve Destek Merkezi")}</h1>
         <p className="mb-5 text-sm text-[#777]">
-          Siparişleriniz, iade süreçleriniz ve ödeme güvenliği hakkında merak ettiğiniz tüm soruların yanıtları.
-        </p>
+          {translate("\r\n          Siparişleriniz, iade süreçleriniz ve ödeme güvenliği hakkında merak ettiğiniz tüm soruların yanıtları.\r\n        ")}</p>
 
         {/* Real-time Search Box */}
         <div className="flex items-center gap-3 rounded-xl border border-[#eee] bg-white px-4 py-3">
@@ -90,7 +90,7 @@ export default function HelpCenter() {
           </svg>
           <input
             type="text"
-            placeholder="Bir konu, soru veya anahtar kelime arayın (Örn: iade, kargo, kart...)"
+            placeholder={translate("Bir konu, soru veya anahtar kelime arayın (Örn: iade, kargo, kart...)")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="min-w-0 flex-1 border-0 text-sm outline-none"
@@ -129,8 +129,8 @@ export default function HelpCenter() {
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="8" y1="12" x2="16" y2="12"></line>
             </svg>
-            <p>"{searchQuery}" aramasıyla eşleşen bir soru bulunamadı.</p>
-            <span>Farklı bir anahtar kelime deneyebilir veya aşağıdaki Canlı Destek ekibimizle iletişime geçebilirsiniz.</span>
+            <p>"{searchQuery}{translate("\" aramasıyla eşleşen bir soru bulunamadı.")}</p>
+            <span>{translate("Farklı bir anahtar kelime deneyebilir veya aşağıdaki Canlı Destek ekibimizle iletişime geçebilirsiniz.")}</span>
           </ProfileEmptyState>
         ) : (
           filteredFaqs.map((item) => {
@@ -147,8 +147,8 @@ export default function HelpCenter() {
                   aria-expanded={isOpen}
                 >
                   <span className="flex min-w-0 flex-wrap items-center gap-2">
-                    <span className="rounded-full bg-[#b6349a]/[.1] px-2 py-1 text-[11px] text-[#b6349a]">{item.category}</span>
-                    {item.question}
+                    <span className="rounded-full bg-[#b6349a]/[.1] px-2 py-1 text-[11px] text-[#b6349a]">{translate(item.category)}</span>
+                    {translate(item.question)}
                   </span>
                   <span className={`transition ${isOpen ? "rotate-180" : ""}`}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -159,7 +159,7 @@ export default function HelpCenter() {
 
                 {isOpen && (
                   <div className="border-t border-[#eee] bg-[#fafafa] p-4 text-sm leading-6 text-[#666]">
-                    <p className="m-0">{item.answer}</p>
+                    <p className="m-0">{translate(item.answer)}</p>
                   </div>
                 )}
               </div>
@@ -177,16 +177,15 @@ export default function HelpCenter() {
             </svg>
           </div>
           <div>
-            <div className="flex items-center gap-2"><h4 className="font-bold text-[#111]">Canlı Destek</h4><span className="text-xs text-emerald-700">7/24 Aktif</span></div>
-            <p className="my-2 text-sm text-[#666]">Müşteri temsilcilerimizle anında yazışarak sipariş ve iade desteği alın.</p><span className="text-xs text-[#777]">Ortalama yanıt süresi: &lt; 2 dakika</span>
+            <div className="flex items-center gap-2"><h4 className="font-bold text-[#111]">{translate("Canlı Destek")}</h4><span className="text-xs text-emerald-700">{translate("7/24 Aktif")}</span></div>
+            <p className="my-2 text-sm text-[#666]">{translate("Müşteri temsilcilerimizle anında yazışarak sipariş ve iade desteği alın.")}</p><span className="text-xs text-[#777]">{translate("Ortalama yanıt süresi: &lt; 2 dakika")}</span>
           </div>
           <button
             type="button"
             className="self-start rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white"
             onClick={() => setChatModalOpen(true)}
           >
-            Sohbeti Başlat
-          </button>
+            {translate("\r\n            Sohbeti Başlat\r\n          ")}</button>
         </div>
 
         <div className="flex flex-col gap-4 rounded-2xl border border-pink-100 bg-pink-50 p-5">
@@ -196,16 +195,15 @@ export default function HelpCenter() {
               <polyline points="22,6 12,13 2,6"></polyline>
             </svg>
           </div>
-          <div><h4 className="font-bold text-[#111]">Bize Ulaşın</h4><p className="my-2 text-sm text-[#666]">Sorularınızı ve kurumsal taleplerinizi destek ekibimize e-posta veya telefonla iletin.</p><span className="text-xs text-[#777]">
-              <strong>destek@estore.com</strong> &bull; <strong>0850 123 45 67</strong>
+          <div><h4 className="font-bold text-[#111]">{translate("Bize Ulaşın")}</h4><p className="my-2 text-sm text-[#666]">{translate("Sorularınızı ve kurumsal taleplerinizi destek ekibimize e-posta veya telefonla iletin.")}</p><span className="text-xs text-[#777]">
+              <strong>{translate("destek@estore.com")}</strong> &bull; <strong>0850 123 45 67</strong>
             </span>
           </div>
           <a
             href="mailto:destek@estore.com"
             className="self-start rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white"
           >
-            E-Posta Gönder
-          </a>
+            {translate("\r\n            E-Posta Gönder\r\n          ")}</a>
         </div>
       </div>
 
@@ -219,7 +217,7 @@ export default function HelpCenter() {
                   <span>🎧</span>
                   <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[#111] bg-emerald-500"></span>
                 </div>
-                <div><h4 className="font-bold text-[#111]">Müşteri Temsilcisi (Selin Y.)</h4><span className="text-xs text-[#777]">Canlı Destek Ekibi &bull; Çevrimiçi</span>
+                <div><h4 className="font-bold text-[#111]">{translate("Müşteri Temsilcisi (Selin Y.)")}</h4><span className="text-xs text-[#777]">{translate("Canlı Destek Ekibi &bull; Çevrimiçi")}</span>
                 </div>
               </div>
               <button
@@ -231,14 +229,14 @@ export default function HelpCenter() {
               </button>
             </div>
 
-            <div className="min-h-48 bg-[#fafafa] p-4"><div className="max-w-[85%] rounded-xl bg-white p-3 text-sm text-[#555] shadow-sm"><p className="m-0">Merhaba! E-Store Canlı Destek hattına hoş geldiniz. Size siparişleriniz veya ürünlerinizle ilgili nasıl yardımcı olabilirim?</p><span className="mt-2 block text-xs text-[#999]">Şimdi</span>
+            <div className="min-h-48 bg-[#fafafa] p-4"><div className="max-w-[85%] rounded-xl bg-white p-3 text-sm text-[#555] shadow-sm"><p className="m-0">{translate("Merhaba! E-Store Canlı Destek hattına hoş geldiniz. Size siparişleriniz veya ürünlerinizle ilgili nasıl yardımcı olabilirim?")}</p><span className="mt-2 block text-xs text-[#999]">{translate("Şimdi")}</span>
               </div>
             </div>
 
             <div className="flex gap-2 border-t border-[#eee] p-4">
               <input
                 type="text"
-                placeholder="Mesajınızı buraya yazın..."
+                placeholder={translate("Mesajınızı buraya yazın...")}
                 className="min-w-0 flex-1 rounded-lg border border-[#ddd] px-3 py-2 text-sm outline-none focus:border-[#b6349a]"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {

@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../features/cart/CartContext";
@@ -31,7 +32,7 @@ export default function Cart() {
     return (
       <main className="flex min-h-[60vh] flex-col items-center justify-center px-5 py-10 text-center">
           <SeoMeta
-            title="Sepetim | E-Storee"
+            title={translate("Sepetim | E-Storee")}
             description="E-Storee alışveriş sepetinizi görüntüleyin ve siparişinizi kolayca tamamlayın."
             canonicalPath="/cart"
             robots="noindex,nofollow"
@@ -57,12 +58,11 @@ export default function Cart() {
             </svg>
           </div>
 
-          <h1 className="mb-2 text-2xl font-bold text-[#111]">Sepetin şu an boş</h1>
-          <p className="mb-6 max-w-[520px] text-sm text-[#777]">Sepetini fırsatlarla dolu dünyamızdan doldurmak için hemen alışverişe başlayabilirsin.</p>
+          <h1 className="mb-2 text-2xl font-bold text-[#111]">{translate("Sepetin şu an boş")}</h1>
+          <p className="mb-6 max-w-[520px] text-sm text-[#777]">{translate("Sepetini fırsatlarla dolu dünyamızdan doldurmak için hemen alışverişe başlayabilirsin.")}</p>
 
           <Link to="/" className="rounded-xl bg-[#b6349a] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#de57c4]">
-            Alışverişe Başla
-          </Link>
+            {translate("\r\n            Alışverişe Başla\r\n          ")}</Link>
       </main>
     );
   }
@@ -70,12 +70,12 @@ export default function Cart() {
   return (
     <main className="mx-auto flex w-full max-w-[1400px] justify-center overflow-x-hidden px-[60px] py-10 max-[768px]:px-6 max-[480px]:px-4">
       <SeoMeta
-        title="Sepetim | E-Storee"
+        title={translate("Sepetim | E-Storee")}
         description="E-Storee alışveriş sepetinizdeki ürünleri kontrol edin ve siparişinizi tamamlayın."
         canonicalPath="/cart"
         robots="noindex,nofollow"
       />
-      <h1 className="sr-only">Sepetim</h1>
+      <h1 className="sr-only">{translate("Sepetim")}</h1>
       <div className="grid w-full grid-cols-[minmax(0,2fr)_minmax(280px,1fr)] items-start gap-10 max-[992px]:grid-cols-1">
 
         {/* LEFT COLUMN */}
@@ -127,11 +127,11 @@ export default function Cart() {
                 <line x1="8" y1="2" x2="8" y2="6"></line>
                 <line x1="3" y1="10" x2="21" y2="10"></line>
               </svg>
-              Change address {'>'}
+              {translate("\r\n              Change address ")}{'>'}
             </button>
           </div>
 
-          <div className="mb-4 text-xs text-[#888]">Items Name</div>
+          <div className="mb-4 text-xs text-[#888]">{translate("Items Name")}</div>
 
           {/* CART ITEMS LIST */}
           <div className="mb-10 flex flex-col gap-6">
@@ -204,8 +204,7 @@ export default function Cart() {
                       className="border-0 bg-transparent text-xs font-semibold text-[#b6349a]"
                       onClick={() => removeFromCart(product.id)}
                     >
-                      Remove
-                    </button>
+                      {translate("\r\n                      Remove\r\n                    ")}</button>
                     <div className="min-w-[60px] text-right text-base font-extrabold text-[#111]">
                       ${itemTotal}
                     </div>
@@ -218,10 +217,10 @@ export default function Cart() {
           {/* RECOMMENDATIONS */}
           <div className="mt-10 min-w-0 max-w-full">
             <div className="mb-6 flex items-center justify-between gap-4 max-[480px]:flex-col max-[480px]:items-start">
-              <h2 className="m-0 text-xl font-bold">Recommendations</h2>
+              <h2 className="m-0 text-xl font-bold">{translate("Recommendations")}</h2>
               <div className="flex gap-3">
-                <button type="button" aria-label="Previous recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] prev-rec">‹</button>
-                <button type="button" aria-label="Next recommendations" className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] next-rec">›</button>
+                <button type="button" aria-label={translate("Previous recommendations")} className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] prev-rec">‹</button>
+                <button type="button" aria-label={translate("Next recommendations")} className="flex h-10 w-10 items-center justify-center rounded-full border border-[#eee] bg-white text-xl text-[#555] transition hover:bg-[#fdf5fb] hover:text-[#b6349a] next-rec">›</button>
               </div>
             </div>
             <Swiper
@@ -255,25 +254,25 @@ export default function Cart() {
               <div className="h-full w-[65%] rounded-[3px] bg-[#b6349a]"></div>
             </div>
             <p className="mb-8 text-xs text-[#555]">
-              Free delivery + saving $3.00 on this order <strong className="text-[#111]">Go to</strong>
+              {translate("\r\n              Free delivery + saving $3.00 on this order ")}<strong className="text-[#111]">{translate("Go to")}</strong>
             </p>
 
-            <h2 className="mb-6 text-lg font-bold text-[#111]">Order Summary</h2>
+            <h2 className="mb-6 text-lg font-bold text-[#111]">{translate("Order Summary")}</h2>
 
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm text-[#555]">Items total</span>
+              <span className="text-sm text-[#555]">{translate("Items total")}</span>
               <span className="text-sm font-medium text-[#555]">${itemsTotal.toFixed(2)}</span>
             </div>
 
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-sm text-[#555]">Delivery fee</span>
+              <span className="text-sm text-[#555]">{translate("Delivery fee")}</span>
               <span className="text-sm font-medium text-[#555]">${deliveryFee.toFixed(2)}</span>
             </div>
 
             <div className="my-6 h-px bg-[#eee]"></div>
 
             <div className="mb-4 flex items-center justify-between">
-              <span className="text-base font-bold text-[#111]">Subtotal</span>
+              <span className="text-base font-bold text-[#111]">{translate("Subtotal")}</span>
               <span className="text-base font-bold text-[#111]">${finalSubtotal.toFixed(2)}</span>
             </div>
 
@@ -287,7 +286,7 @@ export default function Cart() {
                     <line x1="3" y1="10" x2="21" y2="10"></line>
                   </svg>
                 </div>
-                <span className="text-base font-semibold">Checkout</span>
+                <span className="text-base font-semibold">{translate("Checkout")}</span>
               </div>
               <span className="text-base font-bold">${finalSubtotal.toFixed(2)}</span>
             </Link>

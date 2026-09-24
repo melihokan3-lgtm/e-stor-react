@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useEffect, useState, type FormEvent } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import {
@@ -70,16 +71,14 @@ export default function MyPayments() {
 
   return (
     <div className="w-full">
-      <SeoMeta title="Ödeme Yöntemlerim | E-Storee" description="E-Storee kayıtlı ödeme yöntemlerinizi güvenli şekilde yönetin." canonicalPath="/profile/payments" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Ödeme Yöntemlerim | E-Storee")} description="E-Storee kayıtlı ödeme yöntemlerinizi güvenli şekilde yönetin." canonicalPath="/profile/payments" robots="noindex,nofollow" />
       <ProfileToast message={toastMessage} />
       <div className="mb-8 flex items-start justify-between gap-4 max-sm:flex-col">
         <div>
           <h1 className="text-[28px] font-extrabold text-[#111]">
-            Ödeme Yöntemlerim
-          </h1>
+            {translate("\n            Ödeme Yöntemlerim\n          ")}</h1>
           <p className="mt-2 text-sm text-[#777]">
-            Test kartı görünümlerinizi yönetin. Gerçek kart bilgisi girmeyin; test kartı: 4242 4242 4242 4242. Bu ekranda ödeme yapılmaz.
-          </p>
+            {translate("\n            Test kartı görünümlerinizi yönetin. Gerçek kart bilgisi girmeyin; test kartı: 4242 4242 4242 4242. Bu ekranda ödeme yapılmaz.\n          ")}</p>
         </div>
         <button
           type="button"
@@ -89,8 +88,7 @@ export default function MyPayments() {
           }}
           className="rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white"
         >
-          + Yeni Kart Ekle
-        </button>
+          {translate("\n          + Yeni Kart Ekle\n        ")}</button>
       </div>
       <div className="grid gap-5 md:grid-cols-2">
         {cards.map((card) => (
@@ -115,11 +113,11 @@ export default function MyPayments() {
               </div>
               <div className="mt-6 flex justify-between text-xs">
                 <span>
-                  <small className="block opacity-70">KART SAHİBİ</small>
+                  <small className="block opacity-70">{translate("KART SAHİBİ")}</small>
                   {card.cardHolder}
                 </span>
                 <span>
-                  <small className="block opacity-70">SON KULLANMA</small>
+                  <small className="block opacity-70">{translate("SON KULLANMA")}</small>
                   {card.expiry}
                 </span>
               </div>
@@ -138,15 +136,13 @@ export default function MyPayments() {
                 onClick={() => setCardToDelete(card)}
                 className="text-xs font-semibold text-red-600"
               >
-                Sil
-              </button>
+                {translate("\n                Sil\n              ")}</button>
             </div>
           </article>
         ))}
         {cards.length === 0 && (
           <ProfileEmptyState compact className="text-sm text-[#777]">
-            Kayıtlı kartınız bulunmuyor.
-          </ProfileEmptyState>
+            {translate("\n            Kayıtlı kartınız bulunmuyor.\n          ")}</ProfileEmptyState>
         )}
         <button
           type="button"
@@ -157,20 +153,17 @@ export default function MyPayments() {
           className="flex min-h-48 flex-col items-center justify-center rounded-2xl border-2 border-dashed border-[#d9b4d0] bg-[#fff8fd] p-6 text-center"
         >
           <span className="text-3xl text-[#b6349a]">+</span>
-          <strong className="mt-2 text-[#333]">Yeni Kart Ekle</strong>
+          <strong className="mt-2 text-[#333]">{translate("Yeni Kart Ekle")}</strong>
           <span className="mt-1 text-xs text-[#777]">
-            Kredi veya banka kartı ekleyerek hızlı ödeme yapın
-          </span>
+            {translate("\n            Kredi veya banka kartı ekleyerek hızlı ödeme yapın\n          ")}</span>
         </button>
       </div>
       <div className="mt-6 flex gap-3 rounded-2xl border border-green-100 bg-green-50 p-4 text-sm text-green-800">
         <span>🔒</span>
         <p className="m-0">
-          <strong>Test Kartı Görünümü</strong>
+          <strong>{translate("Test Kartı Görünümü")}</strong>
           <br />
-          Yalnızca maskelenmiş kart numarası tarayıcıda saklanır. Gerçek kart
-          bilgisi girmeyin.
-        </p>
+          {translate("\n          Yalnızca maskelenmiş kart numarası tarayıcıda saklanır. Gerçek kart\n          bilgisi girmeyin.\n        ")}</p>
       </div>
 
       {isModalOpen && (
@@ -183,7 +176,7 @@ export default function MyPayments() {
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex justify-between border-b border-[#eee] pb-4">
-              <h3 className="text-lg font-bold text-[#111]">Yeni Kart Ekle</h3>
+              <h3 className="text-lg font-bold text-[#111]">{translate("Yeni Kart Ekle")}</h3>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
@@ -197,7 +190,7 @@ export default function MyPayments() {
               style={{ background: getCardThemeGradient(formData.theme) }}
             >
               <div className="flex justify-between text-xs">
-                <span>E-Store Card</span>
+                <span>{translate("E-Store Card")}</span>
                 <span>{formData.cardNumber || "•••• •••• •••• ••••"}</span>
               </div>
               <div className="mt-10 flex justify-between text-xs">
@@ -211,13 +204,12 @@ export default function MyPayments() {
                 onSelectTheme={setTheme}
               />
               <label className="block space-y-1 text-sm font-semibold text-[#555]">
-                Kart Üzerindeki İsim
-                <input
+                {translate("\n                Kart Üzerindeki İsim\n                ")}<input
                   name="cardHolder"
                   value={formData.cardHolder}
                   onChange={handleNameChange}
                   className={inputClass}
-                  placeholder="Örn: MELİH YILMAZ"
+                  placeholder={translate("Örn: MELİH YILMAZ")}
                 />
                 {errors.cardHolder && (
                   <span className="text-xs text-red-600">
@@ -226,8 +218,7 @@ export default function MyPayments() {
                 )}
               </label>
               <label className="block space-y-1 text-sm font-semibold text-[#555]">
-                Kart Numarası
-                <input
+                {translate("\n                Kart Numarası\n                ")}<input
                   name="cardNumber"
                   inputMode="numeric"
                   value={formData.cardNumber}
@@ -243,13 +234,12 @@ export default function MyPayments() {
               </label>
               <div className="grid gap-4 sm:grid-cols-2">
                 <label className="block space-y-1 text-sm font-semibold text-[#555]">
-                  Son Kullanma
-                  <input
+                  {translate("\n                  Son Kullanma\n                  ")}<input
                     name="expiry"
                     value={formData.expiry}
                     onChange={handleExpiryChange}
                     className={inputClass}
-                    placeholder="AA/YY"
+                    placeholder={translate("AA/YY")}
                   />
                   {errors.expiry && (
                     <span className="text-xs text-red-600">
@@ -258,8 +248,7 @@ export default function MyPayments() {
                   )}
                 </label>
                 <label className="block space-y-1 text-sm font-semibold text-[#555]">
-                  CVV
-                  <input
+                  {translate("\n                  CVV\n                  ")}<input
                     name="cvv"
                     type="password"
                     value={formData.cvv}
@@ -278,14 +267,12 @@ export default function MyPayments() {
                   onClick={() => setIsModalOpen(false)}
                   className="rounded-lg bg-[#f3f3f3] px-4 py-2.5 text-sm font-semibold text-[#555]"
                 >
-                  Vazgeç
-                </button>
+                  {translate("\n                  Vazgeç\n                ")}</button>
                 <button
                   type="submit"
                   className="rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white"
                 >
-                  Test Kartını Kaydet
-                </button>
+                  {translate("\n                  Test Kartını Kaydet\n                ")}</button>
               </div>
             </form>
           </div>
@@ -301,27 +288,22 @@ export default function MyPayments() {
             onClick={(event) => event.stopPropagation()}
           >
             <h3 className="text-lg font-bold text-[#111]">
-              Kartı silmek istediğinize emin misiniz?
-            </h3>
+              {translate("\n              Kartı silmek istediğinize emin misiniz?\n            ")}</h3>
             <p className="mt-2 text-sm text-[#777]">
-              {cardToDelete.maskedNumber} kartı silinecek. Bu işlem geri
-              alınamaz.
-            </p>
+              {cardToDelete.maskedNumber} {translate(" kartı silinecek. Bu işlem geri\n              alınamaz.\n            ")}</p>
             <div className="mt-6 flex justify-end gap-2">
               <button
                 type="button"
                 onClick={() => setCardToDelete(null)}
                 className="rounded-lg bg-[#f3f3f3] px-4 py-2.5 text-sm font-semibold text-[#555]"
               >
-                Vazgeç
-              </button>
+                {translate("\n                Vazgeç\n              ")}</button>
               <button
                 type="button"
                 onClick={removeCard}
                 className="rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white"
               >
-                Evet, Kartı Sil
-              </button>
+                {translate("\n                Evet, Kartı Sil\n              ")}</button>
             </div>
           </div>
         </div>

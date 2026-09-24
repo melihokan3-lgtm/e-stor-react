@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState, useEffect, type FormEvent } from "react";
 import { useAuth } from "../../features/auth/AuthContext";
 import Button from "./ui/Button";
@@ -200,15 +201,13 @@ export default function AuthModal() {
             className={`flex-1 border-b-2 py-3 text-sm font-semibold transition ${mode === "login" ? "border-[#b6349a] text-[#b6349a]" : "border-transparent text-[#999]"}`}
             onClick={() => { setSuccess(""); setMode("login"); }}
           >
-            Giriş Yap
-          </button>
+            {translate("\r\n            Giriş Yap\r\n          ")}</button>
           <button
             type="button"
             className={`flex-1 border-b-2 py-3 text-sm font-semibold transition ${mode === "register" ? "border-[#b6349a] text-[#b6349a]" : "border-transparent text-[#999]"}`}
             onClick={() => { setSuccess(""); setMode("register"); }}
           >
-            Kayıt Ol
-          </button>
+            {translate("\r\n            Kayıt Ol\r\n          ")}</button>
         </div>
 
         {/* Status message */}
@@ -237,7 +236,7 @@ export default function AuthModal() {
               <line x1="15" y1="9" x2="9" y2="15" />
               <line x1="9" y1="9" x2="15" y2="15" />
             </svg>
-            {error}
+            {translate(error)}
           </div>
         )}
 
@@ -262,12 +261,12 @@ export default function AuthModal() {
 
             <div className="flex items-center gap-3 text-xs text-[#aaa]" aria-hidden="true">
               <span className="h-px flex-1 bg-[#eee]" />
-              <span>veya</span>
+              <span>{translate("veya")}</span>
               <span className="h-px flex-1 bg-[#eee]" />
             </div>
 
             <div className="grid gap-1.5">
-              <label className="text-sm font-semibold text-[#555]">E-posta</label>
+              <label className="text-sm font-semibold text-[#555]">{translate("E-posta")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -285,7 +284,7 @@ export default function AuthModal() {
                 </svg>
                 <input className={authInputClass}
                   type="email"
-                  placeholder="ornek@email.com"
+                  placeholder={translate("ornek@email.com")}
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
@@ -294,7 +293,7 @@ export default function AuthModal() {
             </div>
 
             <div className="grid gap-1.5">
-              <label className="text-sm font-semibold text-[#555]">Şifre</label>
+              <label className="text-sm font-semibold text-[#555]">{translate("Şifre")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -328,8 +327,7 @@ export default function AuthModal() {
               {loading ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  Yükleniyor...
-                </>
+                  {translate("\r\n                  Yükleniyor...\r\n                ")}</>
               ) : (
                 "Giriş Yap"
               )}
@@ -343,22 +341,22 @@ export default function AuthModal() {
           <form className="grid gap-4" onSubmit={handleRegister}>
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-1.5">
-                <label className="text-sm font-semibold text-[#555]">Ad</label>
+                <label className="text-sm font-semibold text-[#555]">{translate("Ad")}</label>
                 <div className={authFieldClass}>
                   <input className={authInputClass}
                     type="text"
-                    placeholder="John"
+                    placeholder={translate("John")}
                     value={regFirstName}
                     onChange={(e) => setRegFirstName(e.target.value)}
                   />
                 </div>
               </div>
               <div className="grid gap-1.5">
-                <label className="text-sm font-semibold text-[#555]">Soyad</label>
+                <label className="text-sm font-semibold text-[#555]">{translate("Soyad")}</label>
                 <div className={authFieldClass}>
                   <input className={authInputClass}
                     type="text"
-                    placeholder="Doe"
+                    placeholder={translate("Doe")}
                     value={regLastName}
                     onChange={(e) => setRegLastName(e.target.value)}
                   />
@@ -367,7 +365,7 @@ export default function AuthModal() {
             </div>
 
             <div className="grid gap-1.5">
-              <label>Kullanıcı Adı</label>
+              <label>{translate("Kullanıcı Adı")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -386,7 +384,7 @@ export default function AuthModal() {
                 <input
                   className={authInputClass}
                   type="text"
-                  placeholder="johndoe"
+                  placeholder={translate("johndoe")}
                   value={regUsername}
                   onChange={(e) => setRegUsername(e.target.value)}
                 />
@@ -394,7 +392,7 @@ export default function AuthModal() {
             </div>
 
             <div className="grid gap-1.5">
-              <label>E-posta</label>
+              <label>{translate("E-posta")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -413,7 +411,7 @@ export default function AuthModal() {
                 <input
                   className={authInputClass}
                   type="email"
-                  placeholder="john@example.com"
+                  placeholder={translate("john@example.com")}
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
                 />
@@ -421,7 +419,7 @@ export default function AuthModal() {
             </div>
 
             <div className="grid gap-1.5">
-              <label>Şifre</label>
+              <label>{translate("Şifre")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -448,7 +446,7 @@ export default function AuthModal() {
             </div>
 
             <div className="grid gap-1.5">
-              <label>Şifre Tekrar</label>
+              <label>{translate("Şifre Tekrar")}</label>
               <div className={authFieldClass}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -482,8 +480,7 @@ export default function AuthModal() {
               {loading ? (
                 <>
                   <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
-                  Yükleniyor...
-                </>
+                  {translate("\r\n                  Yükleniyor...\r\n                ")}</>
               ) : (
                 "Kayıt Ol"
               )}

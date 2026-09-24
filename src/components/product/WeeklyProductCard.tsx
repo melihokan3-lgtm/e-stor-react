@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import { cleanImageUrl, FALLBACK_IMG } from "../../services/api/productApi";
 import { useCart } from "../../features/cart/CartContext";
@@ -29,19 +30,18 @@ export default function WeeklyProductCard({ product }: { product: Product }) {
         />
       </div>
       <p className="mb-2 overflow-hidden text-ellipsis whitespace-nowrap text-[11px] font-medium leading-[1.25] text-[#111]">{product.title}</p>
-      <p className="mb-[3px] text-[9px] leading-[1.2] text-[#111]">${Number(product.price).toFixed(2)}/lb</p>
+      <p className="mb-[3px] text-[9px] leading-[1.2] text-[#111]">${Number(product.price).toFixed(2)}{translate("/lb")}</p>
       <div className="mb-[5px] flex items-baseline gap-[7px]">
         <strong className="text-[13px] font-extrabold text-[#111]">${Number(product.price).toFixed(2)}</strong>
         <span className="text-[9px] text-[#999] line-through">${oldPrice}</span>
       </div>
       <div className="flex gap-2 text-[9px] leading-[1.2] text-[#999]">
-        <span className="text-[#b6349a]">{stockLeft} Left</span>
-        <span>12 Left</span>
+        <span className="text-[#b6349a]">{stockLeft} {translate(" Left")}</span>
+        <span>{translate("12 Left")}</span>
       </div>
       </Link>
       <button type="button" className="mt-3 w-full cursor-pointer rounded-[12px] bg-[#b6349a] px-4 py-[10px] text-[14px] font-semibold text-white transition-[background-color,transform] duration-200 hover:bg-[#de57c4] active:scale-[0.98]" onClick={() => addToCart(product)}>
-        Add to Cart
-      </button>
+        {translate("\r\n        Add to Cart\r\n      ")}</button>
     </article>
   );
 }

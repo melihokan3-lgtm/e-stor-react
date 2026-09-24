@@ -1,3 +1,4 @@
+import { translate, useLanguage } from "../features/i18n/LanguageContext";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useOrders } from "../features/orders/OrdersContext";
@@ -9,6 +10,7 @@ const formatAmount = (amount: number): string =>
   `${amount < 0 ? "-" : ""}$${Math.abs(amount).toFixed(2)}`;
 
 export default function OrderProgress() {
+  const { language } = useLanguage();
   const { orders, ordersLoading, ordersError } = useOrders();
   const { isLoggedIn, openAuthModal } = useAuth();
   const [searchParams] = useSearchParams();
@@ -24,29 +26,29 @@ export default function OrderProgress() {
   if (!isLoggedIn) {
     return (
       <main className="min-h-screen bg-[#fafafa] px-5 py-10">
-        <SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" />
-        <h1 className="sr-only">Sipariş Takibi</h1>
+        <SeoMeta title={translate("Sipariş Takibi | E-Storee")} description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" />
+        <h1 className="sr-only">{translate("Sipariş Takibi")}</h1>
         <div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <p>Siparişinizi görmek için giriş yapın.</p>
-          <button type="button" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]" onClick={openAuthModal}>Login</button>
+          <p>{translate("Siparişinizi görmek için giriş yapın.")}</p>
+          <button type="button" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]" onClick={openAuthModal}>{translate("Login")}</button>
         </div>
       </main>
     );
   }
   if (ordersLoading) {
-    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">Sipariş Takibi</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">Loading order...</div></main>;
+    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title={translate("Sipariş Takibi | E-Storee")} description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">{translate("Sipariş Takibi")}</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">{translate("Loading order...")}</div></main>;
   }
   if (ordersError && !order?.isDemo) {
-    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">Sipariş Takibi</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]" role="alert">{ordersError}</div></main>;
+    return <main className="min-h-screen bg-[#fafafa] px-5 py-10"><SeoMeta title={translate("Sipariş Takibi | E-Storee")} description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" /><h1 className="sr-only">{translate("Sipariş Takibi")}</h1><div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]" role="alert">{ordersError}</div></main>;
   }
   if (!order) {
     return (
       <main className="min-h-screen bg-[#fafafa] px-5 py-10">
-        <SeoMeta title="Sipariş Takibi | E-Storee" description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" />
-        <h1 className="sr-only">Sipariş Takibi</h1>
+        <SeoMeta title={translate("Sipariş Takibi | E-Storee")} description="E-Storee siparişinizin durumunu ve teslimat bilgilerini takip edin." canonicalPath="/order-progress" robots="noindex,nofollow" />
+        <h1 className="sr-only">{translate("Sipariş Takibi")}</h1>
         <div className="mx-auto w-full max-w-[1200px] rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-          <p>Order not found.</p>
-          <Link to="/profile/orders" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]">My Orders</Link>
+          <p>{translate("Order not found.")}</p>
+          <Link to="/profile/orders" className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white no-underline hover:bg-[#98277f]">{translate("My Orders")}</Link>
         </div>
       </main>
     );
@@ -59,7 +61,7 @@ export default function OrderProgress() {
   const itemsTotal = order.items.reduce((total, item) => total + item.price * item.qty, 0);
   const adjustments = order.total - itemsTotal;
   const placedAt = order.createdAt
-    ? new Date(order.createdAt).toLocaleString("en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
+    ? new Date(order.createdAt).toLocaleString(language === "tr" ? "tr-TR" : "en-US", { year: "numeric", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" })
     : order.date || "";
   const status = order.isDemo ? "Test işlemi" : order.status || "Processing";
 
@@ -71,14 +73,14 @@ export default function OrderProgress() {
 
         {order.isDemo && (
           <div role="status" className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950">
-            <h2 className="text-xl font-bold">Test işlemi tamamlandı</h2>
-            <p className="mt-1 text-sm leading-6">Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.</p>
+            <h2 className="text-xl font-bold">{translate("Test işlemi tamamlandı")}</h2>
+            <p className="mt-1 text-sm leading-6">{translate("Bu bir test işlemidir. Gerçek para çekilmedi, Supabase'te gerçek sipariş oluşturulmadı ve ürün gönderilmeyecek.")}</p>
           </div>
         )}
 
         {/* Top Actions */}
         <div className="mb-6 flex items-center justify-between">
-          <button type="button" aria-label="Go back" className="grid h-10 w-10 place-items-center rounded-full border border-[#eee] bg-white text-[#555] hover:border-[#b6349a]" onClick={() => navigate(-1)}>
+          <button type="button" aria-label={translate("Go back")} className="grid h-10 w-10 place-items-center rounded-full border border-[#eee] bg-white text-[#555] hover:border-[#b6349a]" onClick={() => navigate(-1)}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
@@ -103,7 +105,7 @@ export default function OrderProgress() {
                   <h2>{order.isDemo ? "Ödeme Onayı ve Özet" : `Order ${status === "Processing" ? "In Progress" : status}`}</h2>
                   <p>{order.isDemo ? "Test işlem tarihi" : "Order placed on"} {placedAt}</p>
                 </div>
-                <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{status}</div>
+                <div className="rounded-full bg-[#fff0fa] px-3 py-1 text-xs font-semibold text-[#b6349a]">{translate(status)}</div>
               </div>
 
               <div className="my-8 flex flex-col items-center justify-center gap-3">
@@ -131,12 +133,12 @@ export default function OrderProgress() {
 
                   <div className="flex flex-col items-center gap-2 text-center">
                     <div className="grid h-8 w-8 place-items-center rounded-full border-2 border-[#b6349a] bg-white"></div>
-                    <span className="text-xs text-[#777]">{status}</span>
+                    <span className="text-xs text-[#777]">{translate(status)}</span>
                   </div>
 
                   <div className="flex flex-col items-center gap-2 text-center">
                     <div className="grid h-8 w-8 place-items-center rounded-full border-2 border-[#ddd] bg-white"></div>
-                    <span className="text-xs text-[#777]">Pending</span>
+                    <span className="text-xs text-[#777]">{translate("Pending")}</span>
                   </div>
                 </div>
               </div>}
@@ -145,8 +147,8 @@ export default function OrderProgress() {
             {/* Items List Card */}
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
               <div className="mb-4 flex justify-between border-b border-[#eee] pb-3 text-sm font-semibold text-[#555]">
-                <span className="h-left">Items Name</span>
-                <span className="h-right">N.of items</span>
+                <span className="h-left">{translate("Items Name")}</span>
+                <span className="h-right">{translate("N.of items")}</span>
               </div>
 
               <div className="space-y-3">
@@ -185,8 +187,7 @@ export default function OrderProgress() {
                 })}
                 {order.items.length === 0 && (
                   <div style={{ textAlign: 'center', padding: '20px', color: '#888' }}>
-                    No items in order.
-                  </div>
+                    {translate("\r\n                    No items in order.\r\n                  ")}</div>
                 )}
               </div>
 
@@ -228,8 +229,8 @@ export default function OrderProgress() {
 
             {/* Help Card */}
             <div className="flex items-center justify-between gap-4 rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-              <p>Need help with this order?</p>
-              <Link className="rounded-lg border border-[#b6349a] px-4 py-2 text-sm font-semibold text-[#b6349a] no-underline no-underline" to="/profile/help">Help Center</Link>
+              <p>{translate("Need help with this order?")}</p>
+              <Link className="rounded-lg border border-[#b6349a] px-4 py-2 text-sm font-semibold text-[#b6349a] no-underline no-underline" to="/profile/help">{translate("Help Center")}</Link>
             </div>
           </div>
 
@@ -238,9 +239,9 @@ export default function OrderProgress() {
 
             {/* Order Summary */}
             <div className="rounded-2xl bg-white p-6 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
-              <h3 className="mb-4 text-base font-semibold text-[#222]">Order Summary</h3>
+              <h3 className="mb-4 text-base font-semibold text-[#222]">{translate("Order Summary")}</h3>
               <div className="flex items-center justify-between gap-4 border-b border-[#eee] pb-3">
-                <span className="text-sm text-[#888]">Order Number</span>
+                <span className="text-sm text-[#888]">{translate("Order Number")}</span>
                 <span className="text-sm font-bold text-[#111] text-[#b6349a] flex min-w-0 items-center gap-2 break-all min-w-0 break-all">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -250,15 +251,15 @@ export default function OrderProgress() {
                 </span>
               </div>
               <div className="flex items-center justify-between gap-4 mt-4">
-                <span className="text-sm text-[#888]">Items total</span>
+                <span className="text-sm text-[#888]">{translate("Items total")}</span>
                 <span className="text-sm font-bold text-[#111]">{formatAmount(itemsTotal)}</span>
               </div>
               <div className="flex items-center justify-between gap-4">
-                <span className="text-sm text-[#888]">Delivery & adjustments</span>
+                <span className="text-sm text-[#888]">{translate("Delivery & adjustments")}</span>
                 <span className="text-sm font-bold text-[#111]">{formatAmount(adjustments)}</span>
               </div>
               <div className="flex items-center justify-between gap-4 border-t border-[#eee] pt-5 mt-6">
-                <span className="text-base font-semibold text-[#222]">Total</span>
+                <span className="text-base font-semibold text-[#222]">{translate("Total")}</span>
                 <span className="text-lg font-bold text-[#b6349a]">{formatAmount(order.total)}</span>
               </div>
             </div>

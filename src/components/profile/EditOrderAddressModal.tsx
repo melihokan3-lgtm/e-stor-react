@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState, useEffect, type FormEvent } from "react";
 import { useLocation } from "../../features/addresses/LocationContext";
 import type { Order } from "../../types/order";
@@ -74,16 +75,16 @@ export default function EditOrderAddressModal({
         {/* Header */}
         <div className="mb-5 flex items-start justify-between gap-4 border-b border-[#eee] pb-4">
           <div>
-            <h3 id="edit-address-modal-title" className="text-lg font-bold text-[#111]">Teslimat Adresini Değiştir</h3>
+            <h3 id="edit-address-modal-title" className="text-lg font-bold text-[#111]">{translate("Teslimat Adresini Değiştir")}</h3>
             <span className="text-xs text-[#999]">
-              Sipariş: {order.id} • Durum: {order.status}
+              {translate("\r\n              Sipariş: ")}{order.id} {translate(" • Durum: ")}{order.status}
             </span>
           </div>
           <button
             type="button"
             className="rounded-lg p-2 text-[#777] hover:bg-[#f5f5f5]"
             onClick={onClose}
-            aria-label="Kapat"
+            aria-label={translate("Kapat")}
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -100,15 +101,15 @@ export default function EditOrderAddressModal({
             <line x1="12" y1="8" x2="12.01" y2="8"></line>
           </svg>
           <div>
-            <strong className="block">Kargoya Verilmedi</strong>
-            <p className="m-0 mt-1 text-xs">Siparişiniz henüz kargoya teslim edilmediği için teslimat adresinizi güncelleyebilirsiniz.</p>
+            <strong className="block">{translate("Kargoya Verilmedi")}</strong>
+            <p className="m-0 mt-1 text-xs">{translate("Siparişiniz henüz kargoya teslim edilmediği için teslimat adresinizi güncelleyebilirsiniz.")}</p>
           </div>
         </div>
 
         {/* Quick select pills */}
         {uniqueQuickOptions.length > 0 && (
           <div className="mb-5">
-            <span className="mb-2 block text-xs font-semibold text-[#777]">Kayıtlı & Önerilen Adresler:</span>
+            <span className="mb-2 block text-xs font-semibold text-[#777]">{translate("Kayıtlı & Önerilen Adresler:")}</span>
             <div className="flex flex-wrap gap-2">
               {uniqueQuickOptions.map((opt) => (
                 <button
@@ -134,11 +135,11 @@ export default function EditOrderAddressModal({
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
-            <label className="mb-2 block text-sm font-semibold text-[#333]">Yeni Teslimat Adresi</label>
+            <label className="mb-2 block text-sm font-semibold text-[#333]">{translate("Yeni Teslimat Adresi")}</label>
             <textarea
               className={`w-full resize-y rounded-xl border bg-white p-3 text-sm outline-none transition focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/[.12] ${error ? "border-red-500" : "border-[#ddd]"}`}
               rows={3}
-              placeholder="Mahalle, sokak, bina no, ilçe ve şehir giriniz..."
+              placeholder={translate("Mahalle, sokak, bina no, ilçe ve şehir giriniz...")}
               value={addressInput}
               onChange={(e) => {
                 setAddressInput(e.target.value);
@@ -146,7 +147,7 @@ export default function EditOrderAddressModal({
               }}
               autoFocus
             />
-            {error && <span className="mt-1 block text-xs text-red-600">{error}</span>}
+            {error && <span className="mt-1 block text-xs text-red-600">{translate(error)}</span>}
           </div>
 
           <div className="flex justify-end gap-2">
@@ -155,8 +156,7 @@ export default function EditOrderAddressModal({
               className="rounded-lg bg-[#f3f3f3] px-4 py-2.5 text-sm font-semibold text-[#555]"
               onClick={onClose}
             >
-              Vazgeç
-            </button>
+              {translate("\r\n              Vazgeç\r\n            ")}</button>
             <button
               type="submit"
               className="inline-flex items-center gap-2 rounded-lg bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#92277a]"
@@ -164,8 +164,7 @@ export default function EditOrderAddressModal({
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M20 6L9 17l-5-5"></path>
               </svg>
-              Adresi Güncelle
-            </button>
+              {translate("\r\n              Adresi Güncelle\r\n            ")}</button>
           </div>
         </form>
       </div>

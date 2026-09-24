@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useState } from "react";
 import { useOrders } from "../../features/orders/OrdersContext";
 import { isPendingOrder } from "../../features/orders/orderStatus";
@@ -29,7 +30,7 @@ export default function MyOrders() {
 
   const renderOrderList = (orderList: Order[]) => (
     orderList.length === 0 ? (
-      <ProfileEmptyState compact className="text-sm text-[#777]">Bu kategoride siparişiniz bulunmuyor.</ProfileEmptyState>
+      <ProfileEmptyState compact className="text-sm text-[#777]">{translate("Bu kategoride siparişiniz bulunmuyor.")}</ProfileEmptyState>
     ) : (
       <div className="flex flex-col gap-4">
         {orderList.map((order) => (
@@ -41,9 +42,9 @@ export default function MyOrders() {
 
   return (
     <div className="w-full">
-      <SeoMeta title="Siparişlerim | E-Storee" description="E-Storee sipariş geçmişinizi ve teslimat durumlarınızı görüntüleyin." canonicalPath="/profile/orders" robots="noindex,nofollow" />
+      <SeoMeta title={translate("Siparişlerim | E-Storee")} description="E-Storee sipariş geçmişinizi ve teslimat durumlarınızı görüntüleyin." canonicalPath="/profile/orders" robots="noindex,nofollow" />
       <div className="mb-8 flex items-start justify-between gap-4 max-md:flex-col">
-        <h1 className="text-[28px] font-extrabold text-[#111]">Siparişlerim (My Orders)</h1>
+        <h1 className="text-[28px] font-extrabold text-[#111]">{translate("Siparişlerim (My Orders)")}</h1>
         
         {/* Filters Tabs */}
         {!ordersLoading && !ordersError && orders.length > 0 && (
@@ -62,7 +63,7 @@ export default function MyOrders() {
 
       {ordersError && orders.length > 0 && <p role="status" className="mb-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">{ordersError}</p>}
       {ordersLoading ? (
-        <div className="rounded-2xl border border-[#eee] p-8 text-center text-sm text-[#777]">Siparişler yükleniyor...</div>
+        <div className="rounded-2xl border border-[#eee] p-8 text-center text-sm text-[#777]">{translate("Siparişler yükleniyor...")}</div>
       ) : ordersError && orders.length === 0 ? (
         <div className="rounded-2xl border border-red-200 bg-red-50 p-8 text-center text-sm text-red-700" role="alert">{ordersError}</div>
       ) : orders.length === 0 ? (
@@ -72,8 +73,8 @@ export default function MyOrders() {
             <line x1="3" y1="6" x2="21" y2="6"></line>
             <path d="M16 10a4 4 0 0 1-8 0"></path>
           </svg>
-          <p className="font-semibold text-[#555]">You have no orders yet.</p>
-          <span className="text-sm text-[#999]">Your past orders will appear here after you complete a purchase.</span>
+          <p className="font-semibold text-[#555]">{translate("You have no orders yet.")}</p>
+          <span className="text-sm text-[#999]">{translate("Your past orders will appear here after you complete a purchase.")}</span>
         </ProfileEmptyState>
       ) : (
         <div className="flex flex-col gap-8">
@@ -81,8 +82,7 @@ export default function MyOrders() {
           {(filterTab === 'all' || filterTab === 'pending') && (
             <div className="orders-section">
               <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
-                Devam Eden Siparişler (Pending)
-              </h3>
+                {translate("\r\n                Devam Eden Siparişler (Pending)\r\n              ")}</h3>
               {renderOrderList(pendingOrders)}
             </div>
           )}
@@ -90,15 +90,14 @@ export default function MyOrders() {
           {(filterTab === 'all' || filterTab === 'delivered') && (
             <div className="orders-section">
               <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">
-                Teslim Edilenler / Kargodakiler
-              </h3>
+                {translate("\r\n                Teslim Edilenler / Kargodakiler\r\n              ")}</h3>
               {renderOrderList(deliveredOrders)}
             </div>
           )}
 
           {(filterTab === 'all' || filterTab === 'demo') && demoOrders.length > 0 && (
             <div className="orders-section">
-              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">Test işlemleri — ödeme ve kargo yok</h3>
+              <h3 className="mb-4 border-b-2 border-[#eaeaea] pb-2 text-lg font-bold text-[#111]">{translate("Test işlemleri — ödeme ve kargo yok")}</h3>
               {renderOrderList(demoOrders)}
             </div>
           )}

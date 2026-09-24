@@ -1,3 +1,4 @@
+import { translate, useLanguage } from "../i18n/LanguageContext";
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent, type SyntheticEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
@@ -13,10 +14,12 @@ type DeleteAccountDialogProps = {
 };
 
 export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }: DeleteAccountDialogProps) {
+  const { language } = useLanguage();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [confirmation, setConfirmation] = useState("");
-  const confirmed = confirmation.trim().toLocaleUpperCase("tr-TR") === "ONAY";
+  const expectedConfirmation = language === "tr" ? "ONAY" : "DELETE";
+  const confirmed = confirmation.trim().toLocaleUpperCase(language === "tr" ? "tr-TR" : "en-US") === expectedConfirmation;
 
   useEffect(() => {
     if (!open) {
@@ -55,15 +58,13 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
     >
       <form onSubmit={handleSubmit} className="space-y-5 p-6 sm:p-8">
         <div>
-          <h2 id="delete-account-title" className="text-xl font-bold text-[#222]">Hesabınızı silmek istediğinize emin misiniz?</h2>
+          <h2 id="delete-account-title" className="text-xl font-bold text-[#222]">{translate("Hesabınızı silmek istediğinize emin misiniz?")}</h2>
           <p id="delete-account-description" className="mt-2 text-sm leading-6 text-[#666]">
-            Bu işlem kalıcıdır. Giriş hesabınız ile profil, adres, sepet ve sipariş kayıtlarınız silinir. Bu tarayıcıdaki size ait test verileri de temizlenir.
-          </p>
+            {translate("\n            Bu işlem kalıcıdır. Giriş hesabınız ile profil, adres, sepet ve sipariş kayıtlarınız silinir. Bu tarayıcıdaki size ait test verileri de temizlenir.\n          ")}</p>
         </div>
 
         <label htmlFor="delete-account-confirmation" className="block text-sm font-semibold text-[#444]">
-          Onaylamak için <span className="font-bold text-red-700">ONAY</span> yazın
-        </label>
+          {translate("\n          Onaylamak için ")}<span className="font-bold text-red-700">{translate("ONAY")}</span> {translate(" yazın\n        ")}</label>
         <input
           ref={inputRef}
           id="delete-account-confirmation"
@@ -75,12 +76,12 @@ export function DeleteAccountDialog({ open, pending, error, onClose, onConfirm }
           className="w-full rounded-xl border border-[#ddd] px-3 py-3 text-sm outline-none focus-visible:border-red-500 focus-visible:ring-2 focus-visible:ring-red-200 disabled:opacity-60"
         />
 
-        {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{translate(error)}</p>}
 
         <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
-          <button type="button" onClick={onClose} disabled={pending} className="rounded-xl border border-[#ddd] px-4 py-2.5 text-sm font-semibold text-[#444] hover:bg-[#fafafa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b6349a] disabled:opacity-60">Vazgeç</button>
+          <button type="button" onClick={onClose} disabled={pending} className="rounded-xl border border-[#ddd] px-4 py-2.5 text-sm font-semibold text-[#444] hover:bg-[#fafafa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#b6349a] disabled:opacity-60">{translate("Vazgeç")}</button>
           <button type="submit" disabled={!confirmed || pending} className="rounded-xl bg-red-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-not-allowed disabled:opacity-50">
-            {pending ? "Hesap siliniyor..." : "Hesabımı kalıcı olarak sil"}
+            {pending ? translate("Hesap siliniyor...") : translate("Hesabımı kalıcı olarak sil")}
           </button>
         </div>
       </form>
@@ -115,15 +116,14 @@ export default function DeleteAccountSection() {
 
   return (
     <section className="rounded-2xl border border-red-200 bg-red-50 p-6" aria-labelledby="delete-account-heading">
-      <h2 id="delete-account-heading" className="text-xl font-bold text-red-800">Hesabı sil</h2>
-      <p className="mt-2 text-sm leading-6 text-red-700">Hesabınızı ve kayıtlı kullanıcı verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.</p>
+      <h2 id="delete-account-heading" className="text-xl font-bold text-red-800">{translate("Hesabı sil")}</h2>
+      <p className="mt-2 text-sm leading-6 text-red-700">{translate("Hesabınızı ve kayıtlı kullanıcı verilerinizi kalıcı olarak silin. Bu işlem geri alınamaz.")}</p>
       <button
         type="button"
         onClick={() => { setError(""); setOpen(true); }}
         className="mt-5 rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-700 hover:bg-red-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
       >
-        Hesabımı sil
-      </button>
+        {translate("\n        Hesabımı sil\n      ")}</button>
       <DeleteAccountDialog open={open} pending={pending} error={error} onClose={() => setOpen(false)} onConfirm={() => void handleDelete()} />
     </section>
   );

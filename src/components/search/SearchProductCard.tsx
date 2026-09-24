@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import { cleanImageUrl, FALLBACK_IMG } from "../../services/api/productApi";
 import { useCart } from "../../features/cart/CartContext";
@@ -37,7 +38,7 @@ export default function SearchProductCard({ product }: { product: Product }) {
         >
           {product.title || "This is product a"}
         </p>
-        <p className="m-0 truncate whitespace-nowrap text-xs text-[#555]">$2.71/lb</p>
+        <p className="m-0 truncate whitespace-nowrap text-xs text-[#555]">{translate("$2.71/lb")}</p>
         <div className="flex items-baseline gap-1.5">
           <span className="text-base font-extrabold text-[#111]">${product.price || "99.99"}</span>
           <span className="text-xs text-[#999] line-through">${oldPrice || "99.99"}</span>
@@ -49,8 +50,7 @@ export default function SearchProductCard({ product }: { product: Product }) {
         className="mt-3 w-full cursor-pointer rounded-xl border-0 bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-[#9d2d85] active:scale-[0.98]"
         onClick={() => addToCart(product)}
       >
-        Add to Cart
-      </button>
+        {translate("\r\n        Add to Cart\r\n      ")}</button>
     </article>
   );
 }

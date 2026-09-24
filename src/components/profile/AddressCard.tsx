@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import type { Address } from "../../types/address";
 
 interface AddressCardProps {
@@ -18,8 +19,7 @@ export default function AddressCard({ address, selected, onSelect, onRemove }: A
         </span>
       </button>
       <button type="button" className="shrink-0 rounded-lg px-3 py-2 text-sm font-semibold text-[#b6349a] transition hover:bg-[#b6349a]/[.06]" onClick={() => onRemove(address.id)} aria-label={`${address.label} adresini kaldır`}>
-        Remove
-      </button>
+        {translate("\r\n        Remove\r\n      ")}</button>
     </article>
   );
 }

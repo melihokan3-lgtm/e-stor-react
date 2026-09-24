@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -107,18 +108,18 @@ export default function ProductDetail() {
   if (loading)
     return (
       <main className="min-h-screen bg-white">
-        <SeoMeta title="Ürün Detayı | E-Storee" description="E-Storee ürün detaylarını inceleyin ve online sipariş verin." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} />
+        <SeoMeta title={translate("Ürün Detayı | E-Storee")} description="E-Storee ürün detaylarını inceleyin ve online sipariş verin." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} />
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
-          <p>Loading product details...</p>
+          <p>{translate("Loading product details...")}</p>
         </div>
       </main>
     );
   if (error || !product)
     return (
       <main className="min-h-screen bg-white">
-        <SeoMeta title="Ürün Bulunamadı | E-Storee" description="Aradığınız ürün bulunamadı." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} robots="noindex,nofollow" />
+        <SeoMeta title={translate("Ürün Bulunamadı | E-Storee")} description="Aradığınız ürün bulunamadı." canonicalPath={`/${categorySlug || "category"}/${productId || "product"}`} robots="noindex,nofollow" />
         <div className="mx-auto w-full max-w-7xl px-5 py-10">
-          <p>Product not found.</p>
+          <p>{translate("Product not found.")}</p>
         </div>
       </main>
     );
@@ -161,14 +162,14 @@ export default function ProductDetail() {
     <main className="mx-auto flex w-full max-w-[1544px] flex-col px-5 pb-8">
       <SeoMeta
         title={`${product.title} | E-Storee`}
-        description={(product.description || `${product.title} ürününü E-Storee'de keşfedin ve online sipariş verin.`).slice(0, 160)}
+        description={translate(product.description || `${product.title} ürününü E-Storee'de keşfedin ve online sipariş verin.`).slice(0, 160)}
         canonicalPath={productPath}
         structuredData={productStructuredData}
       />
-      <nav aria-label="Breadcrumb" className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
-        <Link to="/"> Home &gt; &nbsp; </Link>
-        <Link to="/category"> Category &gt; &nbsp; </Link>
-        <span className="text-[#b6349a]"> Details </span>
+      <nav aria-label={translate("Breadcrumb")} className="flex max-w-[1544px] items-center gap-1 pt-5 text-2xl text-[#5f6980]">
+        <Link to="/"> {translate(" Home &gt; &nbsp; ")}</Link>
+        <Link to="/category"> {translate(" Category &gt; &nbsp; ")}</Link>
+        <span className="text-[#b6349a]"> {translate(" Details ")}</span>
       </nav>
 
       <div className="mx-auto w-full max-w-[1544px]">
@@ -219,11 +220,11 @@ export default function ProductDetail() {
               <h1 className="text-3xl font-bold text-black">{product.title}</h1>
               {product.description && (
                 <p className="mt-3 mb-4 leading-6 text-[#555]">
-                  {product.description}
+                  {translate(product.description)}
                 </p>
               )}
               <div className="mt-5">
-                <p className="mb-2 text-sm text-[#888]">$2.71/lb</p>
+                <p className="mb-2 text-sm text-[#888]">{translate("$2.71/lb")}</p>
                 <div className="flex items-center gap-2.5">
                   <p className="text-[32px] font-bold text-black">
                     ${product.price}
@@ -232,7 +233,7 @@ export default function ProductDetail() {
                     $99.99
                   </span>
                 </div>
-                <p className="mt-2 text-sm font-bold text-[#b6349a]">12 Left</p>
+                <p className="mt-2 text-sm font-bold text-[#b6349a]">{translate("12 Left")}</p>
               </div>
             </div>
 
@@ -281,34 +282,29 @@ export default function ProductDetail() {
                   strokeLinejoin="round"
                 />
               </svg>
-              Add To Cart
-            </button>
+              {translate("\r\n              Add To Cart\r\n            ")}</button>
 
             <div className="mt-8 border-t border-[#eee] pt-6">
               <h2 className="mb-4 text-[22px] font-medium text-[#6b7280]">
-                About Product
-              </h2>
+                {translate("\r\n                About Product\r\n              ")}</h2>
               <div className="mb-3 flex items-center gap-3 text-[22px]">
                 <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#fff0fa] text-base">
                   🏆
                 </div>
                 <p className="flex-1 font-medium text-[#1f2937]">
-                  Best Seller Product
-                </p>
+                  {translate("\r\n                  Best Seller Product\r\n                ")}</p>
                 <a
                   href="#"
                   className="ml-auto whitespace-nowrap text-base font-semibold text-[#b6349a]"
                 >
-                  View More &gt;
-                </a>
+                  {translate("\r\n                  View More &gt;\r\n                ")}</a>
               </div>
               <div className="flex items-center gap-3 text-[22px]">
                 <div className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-full bg-[#ecfdf5] text-base">
                   ✔
                 </div>
                 <p className="flex-1 font-medium text-[#1f2937]">
-                  100% satisfaction guarantee
-                </p>
+                  {translate("\r\n                  100% satisfaction guarantee\r\n                ")}</p>
               </div>
             </div>
           </div>
@@ -318,8 +314,8 @@ export default function ProductDetail() {
         <section className="rounded-2xl border border-[#eee] p-6">
           <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
-              <h2 className="mb-2.5 text-2xl">Customer Reviews</h2>
-              <p className="text-sm text-[#777]">Average rating: 4.5 (5391)</p>
+              <h2 className="mb-2.5 text-2xl">{translate("Customer Reviews")}</h2>
+              <p className="text-sm text-[#777]">{translate("Average rating: 4.5 (5391)")}</p>
               <div className="mt-5 space-y-3">
                 {[5, 4, 3, 2, 1].map((star) => (
                   <div key={star} className="flex items-center gap-3">
@@ -340,13 +336,13 @@ export default function ProductDetail() {
             <div>
               <details open>
                 <summary className="flex cursor-pointer list-none items-center justify-between border-b border-[#eee] pb-3">
-                  <h3 className="font-semibold">Reviews</h3>
-                  <span className="text-sm text-[#777]">Recent</span>
+                  <h3 className="font-semibold">{translate("Reviews")}</h3>
+                  <span className="text-sm text-[#777]">{translate("Recent")}</span>
                 </summary>
 
                 <div className="space-y-5 pt-4">
                   <div className="border-b border-[#eee] pb-5">
-                    <h4 className="font-semibold">Perfect Combination!!</h4>
+                    <h4 className="font-semibold">{translate("Perfect Combination!!")}</h4>
                     <div className="my-2 flex gap-1">
                       <StarIcon />
                       <StarIcon />
@@ -355,16 +351,11 @@ export default function ProductDetail() {
                       <StarIcon filled={false} />
                     </div>
                     <p className="text-sm leading-6 text-[#666]">
-                      This review was collected as part of a promotion.) I
-                      forgot to post my photos from my review! So here is my
-                      review again. A perfect combination of softness, strength,
-                      and proper friction to make any user leaving clean and
-                      spotless!!
-                    </p>
+                      {translate("\r\n                      This review was collected as part of a promotion.) I\r\n                      forgot to post my photos from my review! So here is my\r\n                      review again. A perfect combination of softness, strength,\r\n                      and proper friction to make any user leaving clean and\r\n                      spotless!!\r\n                    ")}</p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold">Perfect Combination!!</h4>
+                    <h4 className="font-semibold">{translate("Perfect Combination!!")}</h4>
                     <div className="my-2 flex gap-1">
                       <StarIcon />
                       <StarIcon />
@@ -373,10 +364,7 @@ export default function ProductDetail() {
                       <StarIcon filled={false} />
                     </div>
                     <p className="text-sm leading-6 text-[#666]">
-                      This review was collected as part of a promotion.) A
-                      perfect combination of softness, strength, and proper
-                      friction for a clean result.
-                    </p>
+                      {translate("\r\n                      This review was collected as part of a promotion.) A\r\n                      perfect combination of softness, strength, and proper\r\n                      friction for a clean result.\r\n                    ")}</p>
                   </div>
                 </div>
               </details>
@@ -387,27 +375,23 @@ export default function ProductDetail() {
         {/* ACCORDION SECTION */}
         <section className="space-y-2">
           <details className="rounded-xl border border-[#eee] p-4" open>
-            <summary className="cursor-pointer font-semibold">Details</summary>
+            <summary className="cursor-pointer font-semibold">{translate("Details")}</summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
-              {product.description ||
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."}
+              {translate(product.description ||
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")}
             </div>
           </details>
           <details className="rounded-xl border border-[#eee] p-4">
             <summary className="cursor-pointer font-semibold">
-              Conservation and storage
-            </summary>
+              {translate("\r\n              Conservation and storage\r\n            ")}</summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
-              Store in a cool, dry place. Keep away from direct sunlight.
-            </div>
+              {translate("\r\n              Store in a cool, dry place. Keep away from direct sunlight.\r\n            ")}</div>
           </details>
           <details className="rounded-xl border border-[#eee] p-4">
             <summary className="cursor-pointer font-semibold">
-              Ingredients
-            </summary>
+              {translate("\r\n              Ingredients\r\n            ")}</summary>
             <div className="pt-3 text-sm leading-6 text-[#666]">
-              100% Natural ingredients.
-            </div>
+              {translate("\r\n              100% Natural ingredients.\r\n            ")}</div>
           </details>
         </section>
       </div>
@@ -415,13 +399,12 @@ export default function ProductDetail() {
       <section className="mt-12 min-w-0 overflow-hidden">
         <section>
           <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-2xl font-semibold">Recomended For You</h2>
+            <h2 className="text-2xl font-semibold">{translate("Recomended For You")}</h2>
             <Link
               to={`/category?cat=${encodeURIComponent(product.category || "all")}`}
               className="rounded-lg border border-[#b6349a] px-5 py-2.5 text-sm font-semibold text-[#b6349a]"
             >
-              View All &rarr;
-            </Link>
+              {translate("\r\n              View All &rarr;\r\n            ")}</Link>
           </div>
           <Swiper
             slidesPerView={2}

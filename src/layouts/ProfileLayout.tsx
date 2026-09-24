@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useEffect, type ReactNode } from "react";
 import { useAuth } from "../features/auth/AuthContext";
@@ -92,7 +93,7 @@ export default function ProfileLayout() {
                 className={({ isActive }) => `flex w-full items-center gap-[14px] rounded-[10px] bg-transparent px-[14px] py-3 text-left text-[15px] font-medium transition-all duration-300 hover:translate-x-1 hover:bg-[#f8f9fa] hover:text-[#b6349a] ${isActive ? "bg-[#b6349a]/[.08] font-semibold text-[#b6349a]" : "text-[#757575]"}`}
               >
                 <span className="flex items-center justify-center">{renderIcon(link.icon)}</span>
-                <span>{link.name}</span>
+                <span>{translate(link.name)}</span>
               </NavLink>
             ))}
           </nav>
@@ -101,7 +102,7 @@ export default function ProfileLayout() {
         <div className="mt-auto rounded-2xl border border-[#f0f0f0] bg-white p-5 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
           <button className="flex w-full items-center gap-[14px] rounded-[10px] bg-transparent px-[14px] py-3 text-left text-[15px] font-medium text-[#757575] transition-all duration-300 hover:translate-x-1 hover:bg-[#f8f9fa] hover:text-[#b6349a]" onClick={handleLogout}>
             <span className="flex items-center justify-center">{renderIcon("log-out")}</span>
-            <span>Logout</span>
+            <span>{translate("Logout")}</span>
           </button>
         </div>
       </div>

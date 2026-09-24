@@ -1,3 +1,4 @@
+import { translate } from "../features/i18n/LanguageContext";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -66,19 +67,19 @@ function SortSelect({ value, onChange }: { value: string; onChange: (value: stri
     <div ref={containerRef} className="relative min-w-[170px] max-[480px]:min-w-0 max-[480px]:flex-1">
       <button
         type="button"
-        aria-label="Ürünleri sırala"
+        aria-label={translate("Ürünleri sırala")}
         aria-haspopup="listbox"
         aria-expanded={open}
         className="flex w-full items-center justify-between gap-3 rounded-[10px] border border-[#e7dfe7] bg-white px-3.5 py-2 text-left text-[13px] font-semibold text-[#333] shadow-[0_2px_8px_rgba(182,52,154,0.06)] outline-none transition hover:border-[#b6349a] focus:border-[#b6349a] focus:ring-2 focus:ring-[#b6349a]/15"
         onClick={() => setOpen((isOpen) => !isOpen)}
       >
-        <span className="truncate">{selectedOption.label}</span>
+        <span className="truncate">{translate(selectedOption.label)}</span>
         <svg className={`size-4 shrink-0 text-[#b6349a] transition-transform ${open ? "rotate-180" : ""}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
           <path d="m6 9 6 6 6-6" />
         </svg>
       </button>
       {open && (
-        <div className="absolute right-0 top-full z-50 mt-2 w-full min-w-[210px] overflow-hidden rounded-[12px] border border-[#f0e1ed] bg-white p-1.5 shadow-[0_12px_28px_rgba(62,24,54,0.14)]" role="listbox" aria-label="Sıralama seçenekleri">
+        <div className="absolute right-0 top-full z-50 mt-2 w-full min-w-[210px] overflow-hidden rounded-[12px] border border-[#f0e1ed] bg-white p-1.5 shadow-[0_12px_28px_rgba(62,24,54,0.14)]" role="listbox" aria-label={translate("Sıralama seçenekleri")}>
           {sortOptions.map((option) => (
             <button
               key={option.value}
@@ -91,7 +92,7 @@ function SortSelect({ value, onChange }: { value: string; onChange: (value: stri
                 setOpen(false);
               }}
             >
-              {option.label}
+              {translate(option.label)}
               {option.value === value && <span aria-hidden="true">✓</span>}
             </button>
           ))}
@@ -205,7 +206,7 @@ export default function Category() {
   return (
     <main className="min-h-screen bg-[#fafafa] px-6 py-8 max-[640px]:px-3 max-[640px]:py-4">
       <SeoMeta
-        title={`${categoryLabel} | E-Storee`}
+        title={`${translate(categoryLabel)} | E-Storee`}
         description={`${categoryLabel} ürünlerini E-Storee'de keşfedin. Güncel fiyatları karşılaştırın ve online sipariş verin.`}
         canonicalPath={categoryCanonical}
       />
@@ -223,7 +224,7 @@ export default function Category() {
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6" />
             </svg>
-            <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
+            <span>{translate("Filters ")}{activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
           </button>
           
           <div>
@@ -241,7 +242,7 @@ export default function Category() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d73f98" strokeWidth="2.2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" />
                 </svg>
-                <h2 className="font-bold text-[#0f172a]">Filters</h2>
+                <h2 className="font-bold text-[#0f172a]">{translate("Filters")}</h2>
                 {activeFiltersCount > 0 && (
                   <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#d73f98] px-1 text-xs font-bold text-white">{activeFiltersCount}</span>
                 )}
@@ -249,18 +250,16 @@ export default function Category() {
               <div className="flex items-center gap-3">
                 {activeFiltersCount > 0 && (
                   <button type="button" className="text-xs font-semibold text-[#d73f98] hover:underline" onClick={resetFilters}>
-                    Clear All
-                  </button>
+                    {translate("\r\n                    Clear All\r\n                  ")}</button>
                 )}
                 <button
                   type="button"
                   className="hidden items-center gap-1 rounded-lg border border-[#e2e8f0] px-2.5 py-1.5 text-xs font-semibold text-[#475569] hover:border-[#d73f98] hover:text-[#d73f98] max-[1024px]:inline-flex"
                   onClick={() => setMobileFilterOpen(false)}
-                  aria-label="Filtreleri kapat"
+                  aria-label={translate("Filtreleri kapat")}
                 >
                   <span aria-hidden="true">×</span>
-                  Close
-                </button>
+                  {translate("\r\n                  Close\r\n                ")}</button>
               </div>
             </div>
 
@@ -279,18 +278,15 @@ export default function Category() {
                 )}
                 {dealsFilter && (
                   <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("deals", false)}>
-                    Deals ✕
-                  </span>
+                    {translate("\r\n                    Deals ✕\r\n                  ")}</span>
                 )}
                 {newFilter && (
                   <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("new", false)}>
-                    New Arrivals ✕
-                  </span>
+                    {translate("\r\n                    New Arrivals ✕\r\n                  ")}</span>
                 )}
                 {fastShippingFilter && (
                   <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("fast_shipping", false)}>
-                    Fast Delivery ✕
-                  </span>
+                    {translate("\r\n                    Fast Delivery ✕\r\n                  ")}</span>
                 )}
                 {minRatingFilter > 0 && (
                   <span className="cursor-pointer rounded-full bg-[#fff0fa] px-2.5 py-1 text-xs text-[#b6349a]" onClick={() => updateFilter("rating", 0)}>
@@ -303,15 +299,15 @@ export default function Category() {
             {/* 1. CATEGORIES */}
             <div className="mt-6 border-t border-[#f1f5f9] pt-5">
               <div className="mb-3 font-semibold text-[#0f172a]">
-                <span>Categories</span>
+                <span>{translate("Categories")}</span>
               </div>
               
               {categoryStats.length > 5 && (
                 <div className="mb-3">
                   <input
                     type="text"
-                    aria-label="Kategori ara"
-                    placeholder="Search category..."
+                    aria-label={translate("Kategori ara")}
+                    placeholder={translate("Search category...")}
                     className="w-full rounded-lg border border-[#e2e8f0] bg-[#f8fafc] px-3 py-2 text-xs text-[#0f172a] outline-none transition focus:border-[#d73f98] focus:bg-white"
                     value={categorySearch}
                     onChange={(e) => setCategorySearch(e.target.value)}
@@ -329,7 +325,7 @@ export default function Category() {
                     onChange={() => updateFilter("cat", "all")}
                   />
                   <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
-                  <span className="flex-1">All Categories</span>
+                  <span className="flex-1">{translate("All Categories")}</span>
                   <span className="text-xs text-[#94a3b8]">({products.length})</span>
                 </label>
 
@@ -356,7 +352,7 @@ export default function Category() {
             {/* 2. PRICE RANGE */}
             <div className="mt-6 border-t border-[#f1f5f9] pt-5">
               <div className="mb-3 font-semibold text-[#0f172a]">
-                <span>Price Range</span>
+                <span>{translate("Price Range")}</span>
               </div>
 
               {/* Quick price radios */}
@@ -370,7 +366,7 @@ export default function Category() {
                     onChange={() => updateFilter("price", "all")}
                   />
                   <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
-                  <span>All Prices</span>
+                  <span>{translate("All Prices")}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 rounded-md px-2 py-2 text-sm text-[#475569] hover:bg-[#f8fafc]">
                   <input
@@ -414,16 +410,16 @@ export default function Category() {
                     onChange={() => updateFilter("price", "100-10000")}
                   />
                   <span className="relative h-4 w-4 shrink-0 rounded-full border border-[#cbd5e1] transition peer-checked:border-[#d73f98] peer-checked:bg-[#d73f98] after:absolute after:left-1/2 after:top-1/2 after:size-1.5 after:-translate-x-1/2 after:-translate-y-1/2 after:rounded-full after:bg-white after:opacity-0 peer-checked:after:opacity-100"></span>
-                  <span>$100 & Above</span>
+                  <span>{translate("$100 & Above")}</span>
                 </label>
               </div>
 
               {/* Min - Max custom inputs */}
               <form onSubmit={handleCustomPriceSubmit} className="mt-4 rounded-xl border border-[#edf0f4] bg-[#fafbfc] p-3">
-                <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-[#94a3b8]">Custom price</div>
+                <div className="mb-2 text-[11px] font-semibold uppercase tracking-[0.04em] text-[#94a3b8]">{translate("Custom price")}</div>
                 <div className="flex items-end gap-2">
                   <label className="min-w-0 flex-1">
-                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">Minimum</span>
+                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">{translate("Minimum")}</span>
                     <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
                       <span className="text-xs text-[#94a3b8]">$</span>
                       <input
@@ -437,23 +433,23 @@ export default function Category() {
                       />
                     </span>
                   </label>
-                  <span className="mb-2 text-xs font-semibold text-[#94a3b8]">to</span>
+                  <span className="mb-2 text-xs font-semibold text-[#94a3b8]">{translate("to")}</span>
                   <label className="min-w-0 flex-1">
-                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">Maximum</span>
+                    <span className="mb-1 block text-[11px] font-medium text-[#64748b]">{translate("Maximum")}</span>
                     <span className="flex items-center rounded-lg border border-[#e2e8f0] bg-white px-2.5 transition focus-within:border-[#d73f98] focus-within:ring-2 focus-within:ring-[#d73f98]/10">
                       <span className="text-xs text-[#94a3b8]">$</span>
                       <input
                         type="text"
                         inputMode="numeric"
                         pattern="[0-9]*"
-                        placeholder="Any"
+                        placeholder={translate("Any")}
                         value={maxPriceInput}
                         onChange={(e) => setMaxPriceInput(e.target.value)}
                         className="min-w-0 w-full border-0 bg-transparent px-1.5 py-2 text-sm text-[#0f172a] outline-none"
                       />
                     </span>
                   </label>
-                  <button type="submit" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#d73f98] text-white shadow-[0_4px_10px_rgba(215,63,152,0.2)] transition hover:bg-[#b6349a] focus:outline-none focus:ring-2 focus:ring-[#d73f98]/30" title="Apply Filter" aria-label="Apply price filter">
+                  <button type="submit" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#d73f98] text-white shadow-[0_4px_10px_rgba(215,63,152,0.2)] transition hover:bg-[#b6349a] focus:outline-none focus:ring-2 focus:ring-[#d73f98]/30" title={translate("Apply Filter")} aria-label={translate("Apply price filter")}>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
                       <path d="M5 12h14M12 5l7 7-7 7" />
                     </svg>
@@ -465,13 +461,13 @@ export default function Category() {
             {/* 3. DEALS & PERKS */}
             <div className="mt-6 border-t border-[#f1f5f9] pt-5">
               <div className="mb-3 font-semibold text-[#0f172a]">
-                <span>Deals & Perks</span>
+                <span>{translate("Deals & Perks")}</span>
               </div>
               <div className="space-y-3">
                 <label className="flex cursor-pointer items-center justify-between gap-2">
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-[#0f172a]">Discounted Products</span>
-                    <span className="text-[11px] text-[#64748b]">Special promotions</span>
+                    <span className="text-sm font-semibold text-[#0f172a]">{translate("Discounted Products")}</span>
+                    <span className="text-[11px] text-[#64748b]">{translate("Special promotions")}</span>
                   </div>
                   <input
                     type="checkbox"
@@ -484,8 +480,8 @@ export default function Category() {
 
                 <label className="flex cursor-pointer items-center justify-between gap-2">
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-[#0f172a]">New Arrivals</span>
-                    <span className="text-[11px] text-[#64748b]">Recently added</span>
+                    <span className="text-sm font-semibold text-[#0f172a]">{translate("New Arrivals")}</span>
+                    <span className="text-[11px] text-[#64748b]">{translate("Recently added")}</span>
                   </div>
                   <input
                     type="checkbox"
@@ -498,8 +494,8 @@ export default function Category() {
 
                 <label className="flex cursor-pointer items-center justify-between gap-2">
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-[#0f172a]">Fast Delivery</span>
-                    <span className="text-[11px] text-[#64748b]">Ships today</span>
+                    <span className="text-sm font-semibold text-[#0f172a]">{translate("Fast Delivery")}</span>
+                    <span className="text-[11px] text-[#64748b]">{translate("Ships today")}</span>
                   </div>
                   <input
                     type="checkbox"
@@ -515,7 +511,7 @@ export default function Category() {
             {/* 4. CUSTOMER RATING */}
             <div className="mt-6 border-t border-[#f1f5f9] pt-5">
               <div className="mb-3 font-semibold text-[#0f172a]">
-                <span>Customer Rating</span>
+                <span>{translate("Customer Rating")}</span>
               </div>
               <div className="space-y-1">
                 {[4, 3, 2].map((stars) => (
@@ -531,7 +527,7 @@ export default function Category() {
                     <div className="text-[15px] tracking-[1px] text-amber-500">
                       {"★".repeat(stars)}{"☆".repeat(5 - stars)}
                     </div>
-                    <span className="text-xs font-medium text-[#64748b]">& up</span>
+                    <span className="text-xs font-medium text-[#64748b]">{translate("& up")}</span>
                   </label>
                 ))}
               </div>
@@ -549,7 +545,7 @@ export default function Category() {
               to="/category"
               className={`inline-flex shrink-0 items-center whitespace-nowrap rounded-[30px] border px-[18px] py-2 text-[13.5px] font-semibold transition-all ${!catFilter || catFilter === "all" ? "border-[#d73f98] bg-[#d73f98] text-white shadow-[0_4px_12px_rgba(215,63,152,0.25)]" : "border-[#e2e8f0] bg-white text-[#334155] hover:border-[#d73f98] hover:text-[#d73f98]"}`}
             >
-              All ({products.length})
+              {translate("\r\n              All (")}{products.length})
             </Link>
             {categoryStats.map((cat) => (
               <Link
@@ -581,7 +577,7 @@ export default function Category() {
               {promoBanners.map((banner, i) => (
                 <SwiperSlide key={i} className="w-auto!">
                   <Link to={banner.link} className="inline-flex h-[220px] w-auto shrink-0 overflow-hidden rounded-[18px] bg-[#f1f5f9] shadow-[0_3px_12px_rgba(0,0,0,0.06)] transition hover:-translate-y-[3px] hover:shadow-[0_8px_22px_rgba(215,63,152,0.18)]">
-                    <img className="block h-full w-auto max-w-none rounded-[18px] object-contain" src={banner.img} alt={banner.alt} width={banner.img.includes("Frame 33") ? 568 : banner.img.includes("Frame 34") ? 276 : banner.img.includes("Frame 35") ? 853 : banner.img.includes("Frame 366") ? 258 : 422} height={248} loading="lazy" decoding="async" />
+                    <img className="block h-full w-auto max-w-none rounded-[18px] object-contain" src={banner.img} alt={translate(banner.alt)} width={banner.img.includes("Frame 33") ? 568 : banner.img.includes("Frame 34") ? 276 : banner.img.includes("Frame 35") ? 853 : banner.img.includes("Frame 366") ? 258 : 422} height={248} loading="lazy" decoding="async" />
                   </Link>
                 </SwiperSlide>
               ))}
@@ -591,14 +587,13 @@ export default function Category() {
           {/* Results Toolbar / Sort */}
           <div className="mb-6 flex items-center justify-between rounded-[14px] border border-[#e2e8f0] bg-white px-5 py-3.5 shadow-[0_1px_4px_rgba(15,23,42,0.03)]">
             <div className="flex items-baseline gap-2.5">
-              <h1 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{categoryLabel}</h1>
+              <h1 className="m-0 text-xl font-extrabold capitalize text-[#0f172a]">{translate(categoryLabel)}</h1>
               <span className="text-[13.5px] text-[#64748b]">
-                (<strong className="text-[#0f172a]">{filtered.length}</strong> products found)
-              </span>
+                (<strong className="text-[#0f172a]">{filtered.length}</strong> {translate(" products found)\r\n              ")}</span>
             </div>
 
             <div className="flex items-center gap-2.5 max-[1024px]:hidden">
-              <span className="text-[13.5px] font-semibold text-[#475569]">Sort by:</span>
+              <span className="text-[13.5px] font-semibold text-[#475569]">{translate("Sort by:")}</span>
               <SortSelect value={sortBy} onChange={setSortBy} />
             </div>
           </div>
@@ -607,12 +602,12 @@ export default function Category() {
           {loading ? (
             <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
               <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-[3.5px] border-[#f3f4f6] border-t-[#d73f98]"></div>
-              <p>Loading products...</p>
+              <p>{translate("Loading products...")}</p>
             </div>
           ) : error ? (
             <div className="rounded-2xl border border-[#fee2e2] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
-              <h2 className="mb-2 text-lg font-extrabold text-[#991b1b]">Products could not be loaded</h2>
-              <p className="text-sm text-[#64748b]">{error}</p>
+              <h2 className="mb-2 text-lg font-extrabold text-[#991b1b]">{translate("Products could not be loaded")}</h2>
+              <p className="text-sm text-[#64748b]">{translate(error)}</p>
             </div>
           ) : filtered.length > 0 ? (
             <div className="grid w-full grid-cols-[repeat(auto-fill,minmax(230px,1fr))] gap-5 max-[640px]:grid-cols-[repeat(auto-fill,minmax(160px,1fr))] max-[640px]:gap-3" id="category-Conteiner">
@@ -623,11 +618,10 @@ export default function Category() {
           ) : (
             <div className="rounded-2xl border border-[#e2e8f0] bg-white px-5 py-[60px] text-center shadow-[0_1px_4px_rgba(0,0,0,0.03)]">
               <div className="mb-4 text-5xl">🔍</div>
-              <h2 className="mb-2 text-lg font-extrabold text-[#0f172a]">No products found matching your criteria</h2>
-              <p className="mb-5 text-sm text-[#64748b]">Try clearing or modifying your filters.</p>
+              <h2 className="mb-2 text-lg font-extrabold text-[#0f172a]">{translate("No products found matching your criteria")}</h2>
+              <p className="mb-5 text-sm text-[#64748b]">{translate("Try clearing or modifying your filters.")}</p>
               <button type="button" className="rounded-[30px] bg-[#d73f98] px-6 py-2.5 text-sm font-bold text-white transition hover:opacity-90" onClick={resetFilters}>
-                Clear Filters
-              </button>
+                {translate("\r\n                Clear Filters\r\n              ")}</button>
             </div>
           )}
 

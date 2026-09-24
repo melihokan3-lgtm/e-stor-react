@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
@@ -29,7 +30,7 @@ export default function HomeBannerCarousel({ images, reverseDirection = false, r
           <div className="flex h-[250px] cursor-grab overflow-hidden rounded-[20px] bg-[#f8f8f8] shadow-[0_4px_16px_rgba(0,0,0,0.06)] transition-[transform,box-shadow] duration-[250ms] hover:-translate-y-[2px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] active:cursor-grabbing [@media(max-width:640px)]:h-[160px] [@media(max-width:480px)]:h-[135px]">
             <img
               src={getOptimizedBanner(src)}
-              alt="Kampanya Banner"
+              alt={translate("Kampanya Banner")}
               width={bannerDimensions[src]?.[0] ?? 568}
               height={bannerDimensions[src]?.[1] ?? 248}
               loading={index === 0 ? "eager" : "lazy"}

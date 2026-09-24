@@ -12,11 +12,13 @@ import { useAuth } from "../../features/auth/AuthContext";
 import { useLocation } from "../../features/addresses/LocationContext";
 import { readUserStorage, writeUserStorage } from "../../utils/userStorage";
 import useProducts from "../../features/products/useProducts";
+import { useLanguage, translate } from "../../features/i18n/LanguageContext";
 
 const AuthModal = lazy(() => import("../common/AuthModal"));
 const LocationModal = lazy(() => import("../common/LocationModal"));
 
 export default function Navbar() {
+  const { language, setLanguage } = useLanguage();
   const { products } = useProducts();
   const { totalItems } = useCart();
   const { user, isLoggedIn, isAuthModalOpen, openAuthModal } = useAuth();
@@ -145,8 +147,13 @@ export default function Navbar() {
       <nav className="relative z-20 flex flex-wrap items-center justify-between gap-[15px] border-b border-[var(--border-light)] px-5 py-4 md:flex-nowrap md:justify-start md:px-5">
         <div className="order-1 flex w-auto items-center gap-4 md:w-auto">
           <Link to="/">
-            <img src="/img/icon/logo2.svg" alt="E-Storee" width={136} height={32} />
+            <img src="/img/icon/logo2.svg" alt={translate("E-Storee")} width={136} height={32} />
           </Link>
+          <label className="sr-only" htmlFor="site-language-mobile">{translate("Site language")}</label>
+          <select id="site-language-mobile" aria-label={translate("Site language")} value={language} onChange={(event) => setLanguage(event.target.value as "tr" | "en")} className="rounded-full border border-[#eee] bg-white px-2 py-1.5 text-xs font-semibold text-[#333] focus-visible:outline-2 focus-visible:outline-[#b6349a] md:hidden">
+            <option value="tr">{translate("TR")}</option>
+            <option value="en">{translate("EN")}</option>
+          </select>
         </div>
 
         <div
@@ -172,7 +179,7 @@ export default function Navbar() {
             >
               <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-            <span>Categories</span>
+            <span>{translate("Categories")}</span>
           </button>
           {categoriesOpen && (
             <div
@@ -187,7 +194,7 @@ export default function Navbar() {
                   className="rounded-xl px-3 py-3 text-sm font-medium text-[#444] transition hover:bg-[#fff5fc] hover:text-[#b6349a]"
                   role="menuitem"
                 >
-                  {category.label}
+                  {translate(category.label)}
                 </Link>
               ))}
               <Link
@@ -195,8 +202,7 @@ export default function Navbar() {
                 onClick={() => setCategoriesOpen(false)}
                 className="col-span-2 mt-1 border-t border-[#eee] px-3 pt-3 text-sm font-bold text-[#b6349a]"
               >
-                View all categories →
-              </Link>
+                {translate("\r\n                View all categories →\r\n              ")}</Link>
             </div>
           )}
         </div>
@@ -232,7 +238,7 @@ export default function Navbar() {
                     {totalItems}
                   </span>
                 </span>
-                <span>Cart</span>
+                <span>{translate("Cart")}</span>
               </Link>
               {isLoggedIn && user ? (
                 <Link
@@ -247,7 +253,7 @@ export default function Navbar() {
                     height={28}
                     className="h-7 w-7 rounded-full object-cover"
                   />
-                  <span>My Account</span>
+                  <span>{translate("My Account")}</span>
                 </Link>
               ) : (
                 <button
@@ -259,7 +265,7 @@ export default function Navbar() {
                   className="flex min-h-[72px] flex-col items-center justify-center gap-2 rounded-[14px] border border-[#d73f98] bg-white text-sm font-semibold text-[#333] transition hover:bg-[#fff5fc]"
                 >
                   <img src="/img/icon/2 User.svg" alt="" aria-hidden="true" width={24} height={24} className="h-6 w-6" />
-                  <span>Login</span>
+                  <span>{translate("Login")}</span>
                 </button>
               )}
             </div>
@@ -281,14 +287,13 @@ export default function Navbar() {
 
             <div className="rounded-[14px] border border-[#eee] bg-white p-4">
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-sm font-bold text-[#222]">Categories</p>
+                <p className="text-sm font-bold text-[#222]">{translate("Categories")}</p>
                 <Link
                   to="/category"
                   onClick={() => setMenuOpen(false)}
                   className="text-xs font-bold text-[#b6349a]"
                 >
-                  View all
-                </Link>
+                  {translate("\r\n                  View all\r\n                ")}</Link>
               </div>
               <div className="grid grid-cols-2 gap-2">
                 {navbarCategories.map((category) => (
@@ -298,16 +303,16 @@ export default function Navbar() {
                     onClick={() => setMenuOpen(false)}
                     className="rounded-lg bg-[#faf9fa] px-3 py-2.5 text-xs font-medium text-[#444] transition hover:bg-[#fff0fa] hover:text-[#b6349a]"
                   >
-                    {category.label}
+                    {translate(category.label)}
                   </Link>
                 ))}
               </div>
             </div>
 
             <div className="flex w-full flex-col gap-6 rounded-[14px] bg-[#f8f7f8] p-4">
-              <p className="text-base font-semibold text-[#222]">Filters</p>
+              <p className="text-base font-semibold text-[#222]">{translate("Filters")}</p>
               <div className="flex flex-col gap-3">
-                <p className="text-sm font-semibold text-[#222]">Price</p>
+                <p className="text-sm font-semibold text-[#222]">{translate("Price")}</p>
                 <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#555]">
                   <input
                     className="peer sr-only"
@@ -317,7 +322,7 @@ export default function Navbar() {
                     onChange={(e) => handlePriceFilter(e.target.value)}
                   />
                   <span className="relative inline-block h-[34px] w-[60px] rounded-[34px] bg-[#ccc] transition-colors peer-checked:bg-[#a0cfc1] peer-focus-visible:ring-2 peer-focus-visible:ring-[#a0cfc1] before:absolute before:bottom-1 before:left-1 before:h-[26px] before:w-[26px] before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-[26px]"></span>
-                  <span>Under $50</span>
+                  <span>{translate("Under $50")}</span>
                 </label>
                 <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-[#555]">
                   <input
@@ -339,7 +344,7 @@ export default function Navbar() {
                     onChange={(e) => handlePriceFilter(e.target.value)}
                   />
                   <span className="relative inline-block h-[34px] w-[60px] rounded-[34px] bg-[#ccc] transition-colors peer-checked:bg-[#a0cfc1] peer-focus-visible:ring-2 peer-focus-visible:ring-[#a0cfc1] before:absolute before:bottom-1 before:left-1 before:h-[26px] before:w-[26px] before:rounded-full before:bg-white before:transition-transform peer-checked:before:translate-x-[26px]"></span>
-                  <span>Over $100</span>
+                  <span>{translate("Over $100")}</span>
                 </label>
               </div>
             </div>
@@ -353,8 +358,8 @@ export default function Navbar() {
           <img src="/img/icon/Frame 28.svg" alt="" aria-hidden="true" width={24} height={24} />
           <input
             type="text"
-            aria-label="Search products"
-            placeholder="Search products..."
+            aria-label={translate("Search products")}
+            placeholder={translate("Search products...")}
             id="category__input"
             className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
             value={searchTerm}
@@ -367,8 +372,7 @@ export default function Navbar() {
             className="rounded-[20px] bg-[#d73f98] px-4 py-1.5 text-[13px] font-semibold text-white transition hover:opacity-90"
             onClick={() => handleSearch()}
           >
-            Search
-          </button>
+            {translate("\r\n            Search\r\n          ")}</button>
 
           {showPastSearches && pastSearches.length > 0 && (
             <div className="absolute left-0 top-[calc(100%+8px)] z-30 w-full overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white py-2 shadow-[0_10px_25px_rgba(0,0,0,0.1)]">
@@ -396,7 +400,7 @@ export default function Navbar() {
                     <button
                       className="border-0 bg-transparent px-2 text-lg text-[#999] hover:text-[#d73f98]"
                       onClick={(e) => handleRemoveSearch(e, search)}
-                      aria-label="Remove search"
+                      aria-label={translate("Remove search")}
                     >
                       &times;
                     </button>
@@ -408,6 +412,11 @@ export default function Navbar() {
         </div>
 
         <div className="order-3 ml-2 hidden items-center gap-4 md:ml-auto md:mr-0 md:flex">
+          <label className="sr-only" htmlFor="site-language">{translate("Site language")}</label>
+          <select id="site-language" aria-label={translate("Site language")} value={language} onChange={(event) => setLanguage(event.target.value as "tr" | "en")} className="rounded-full border border-[#eee] bg-white px-2.5 py-2 text-sm font-semibold text-[#333] focus-visible:outline-2 focus-visible:outline-[#b6349a]">
+            <option value="tr">{translate("TR")}</option>
+            <option value="en">{translate("EN")}</option>
+          </select>
           <button
             type="button"
             className="flex cursor-pointer items-center gap-2 bg-transparent px-0 py-2 text-[13px] font-medium text-[#333] transition-colors hover:text-[#b6349a]"
@@ -431,7 +440,7 @@ export default function Navbar() {
                 </p>
               )}
             </div>
-            <p>Cart</p>
+            <p>{translate("Cart")}</p>
           </Link>
 
           {isLoggedIn && user ? (
@@ -447,7 +456,7 @@ export default function Navbar() {
                 className="h-8 w-8 rounded-full object-cover"
               />
               <span className="hidden md:inline">
-                Merhaba, {user.firstName}
+                {translate("\r\n                Merhaba, ")}{user.firstName}
               </span>
             </Link>
           ) : (
@@ -456,7 +465,7 @@ export default function Navbar() {
               onClick={handleLoginClick}
             >
               <img src="/img/icon/2 User.svg" alt="" aria-hidden="true" width={24} height={24} />
-              <p>Login</p>
+              <p>{translate("Login")}</p>
             </button>
           )}
         </div>

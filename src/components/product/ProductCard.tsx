@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { Link } from "react-router-dom";
 import { cleanImageUrl, FALLBACK_IMG } from "../../services/api/productApi";
 import { useCart } from "../../features/cart/CartContext";
@@ -21,7 +22,7 @@ export default function ProductCard({ product, className = defaultCardClassName 
   // Fake old price and stock for UI purposes to match design
   const oldPrice = (product.price * 1.2).toFixed(2);
   const stockLeft = (product.id % 15) + 1; // Fake stock just for visual
-  const brand = product.category || "Zelle";
+  const brand = translate(product.category || "Zelle");
 
   return (
     <article className={`${className} flex flex-col`}>
@@ -43,14 +44,14 @@ export default function ProductCard({ product, className = defaultCardClassName 
       </div>
       <div className="flex grow flex-col justify-between px-1">
         <p className="mb-5 overflow-hidden text-ellipsis whitespace-nowrap text-[16px] font-bold text-[#111]">{product.title}</p>
-        <p className="mb-2 text-[11px] text-[#999]">By {brand}</p>
+        <p className="mb-2 text-[11px] text-[#999]">{translate("By ")}{brand}</p>
         <div className="mb-[6px] flex items-baseline gap-2">
           <span className="text-[18px] font-extrabold text-black">${product.price}</span>
           <span className="text-[13px] text-[#aaa] line-through">${oldPrice}</span>
         </div>
         <div className="hidden items-center gap-2 text-[12px]">
-          <span className="font-bold text-[#b6349a]">{stockLeft} Left</span>
-          <span className="text-[#bbb]">13 Left</span>
+          <span className="font-bold text-[#b6349a]">{stockLeft} {translate(" Left")}</span>
+          <span className="text-[#bbb]">{translate("13 Left")}</span>
         </div>
       </div>
       </Link>
@@ -62,8 +63,7 @@ export default function ProductCard({ product, className = defaultCardClassName 
             addToCart(product);
           }}
         >
-          Add to Cart
-      </button>
+          {translate("\r\n          Add to Cart\r\n      ")}</button>
     </article>
   );
 }

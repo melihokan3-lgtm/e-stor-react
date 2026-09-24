@@ -5,7 +5,8 @@ interface LoadingStateProps {
 export default function LoadingState({ message = "Loading..." }: LoadingStateProps) {
   return (
     <main className="app-loading-state flex min-h-32 items-center justify-center" aria-live="polite" aria-busy="true">
-      <p>{message}</p>
+      <p>{translate(message)}</p>
     </main>
   );
 }
+import { translate } from "../../features/i18n/LanguageContext";

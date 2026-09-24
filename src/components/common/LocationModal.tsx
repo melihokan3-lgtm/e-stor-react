@@ -1,3 +1,4 @@
+import { translate } from "../../features/i18n/LanguageContext";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useLocation } from "../../features/addresses/LocationContext";
 import Button from "./ui/Button";
@@ -342,10 +343,10 @@ export default function LocationModal() {
     >
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#b6349a]">Delivery location</p>
-            <h2 id="location-modal-title" className="m-0 text-xl font-semibold text-[#222]">Choose your delivery point</h2>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.08em] text-[#b6349a]">{translate("Delivery location")}</p>
+            <h2 id="location-modal-title" className="m-0 text-xl font-semibold text-[#222]">{translate("Choose your delivery point")}</h2>
           </div>
-          <Button type="button" tone="ghost" className="h-9 w-9 rounded-full text-xl text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" aria-label="Close location dialog" onClick={closeLocationModal}>×</Button>
+          <Button type="button" tone="ghost" className="h-9 w-9 rounded-full text-xl text-[#777] hover:bg-[#fff5fc] hover:text-[#b6349a]" aria-label={translate("Close location dialog")} onClick={closeLocationModal}>×</Button>
         </div>
 
         <div className="my-5">
@@ -360,8 +361,8 @@ export default function LocationModal() {
             <img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={17} height={17} className="h-[17px] w-[17px]" />
             {mapStatus === "locating" ? "Konumunuz bulunuyor..." : mapStatus === "geocoding" ? "Adresiniz hazırlanıyor..." : "Mevcut konumumu kullan"}
           </Button>
-          <p className="mb-3 text-xs leading-5 text-[#777]">Konum izni yalnızca adresinizi bulmak için istenir. Adres eşleştirme sırasında koordinatlar OpenStreetMap adres servisine gönderilir; siz kaydetmediğiniz sürece kayıtlı adreslerinize eklenmez.</p>
-          <div ref={mapElementRef} className="h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label="OpenStreetMap location picker" />
+          <p className="mb-3 text-xs leading-5 text-[#777]">{translate("Konum izni yalnızca adresinizi bulmak için istenir. Adres eşleştirme sırasında koordinatlar OpenStreetMap adres servisine gönderilir; siz kaydetmediğiniz sürece kayıtlı adreslerinize eklenmez.")}</p>
+          <div ref={mapElementRef} className="h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label={translate("OpenStreetMap location picker")} />
         </div>
         <p className="m-0 text-xs text-[#777]">
           {mapStatus === "loading" && "Harita yükleniyor..."}
@@ -373,16 +374,16 @@ export default function LocationModal() {
         {mapError && <p className="mt-2 text-xs text-[#c0395f]">{mapError}</p>}
 
         <form className="mb-[22px] grid gap-[7px]" onSubmit={handleSave}>
-          <label className="text-xs font-semibold text-[#444]" htmlFor="location-label">Adres adı</label>
-          <Input className="w-full rounded-[10px] border border-[#e7dfe7] px-3 py-2 text-sm outline-none focus:border-[#b6349a]" id="location-label" value={label} onChange={(event) => setLabel(event.target.value)} placeholder="Ev, İş..." />
-          <label className="mt-2 text-xs font-semibold text-[#444]" htmlFor="location-address">Sokak, mahalle, ilçe ve il</label>
-          <Input className="w-full rounded-[10px] border border-[#e7dfe7] px-3 py-2 text-sm outline-none focus:border-[#b6349a]" id="location-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder="Haritadan bir nokta seç" required />
-          <Button type="submit" className="mt-3 w-full rounded-[10px] bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#98277f]">Konumu kaydet</Button>
+          <label className="text-xs font-semibold text-[#444]" htmlFor="location-label">{translate("Adres adı")}</label>
+          <Input className="w-full rounded-[10px] border border-[#e7dfe7] px-3 py-2 text-sm outline-none focus:border-[#b6349a]" id="location-label" value={label} onChange={(event) => setLabel(event.target.value)} placeholder={translate("Ev, İş...")} />
+          <label className="mt-2 text-xs font-semibold text-[#444]" htmlFor="location-address">{translate("Sokak, mahalle, ilçe ve il")}</label>
+          <Input className="w-full rounded-[10px] border border-[#e7dfe7] px-3 py-2 text-sm outline-none focus:border-[#b6349a]" id="location-address" value={address} onChange={(event) => setAddress(event.target.value)} placeholder={translate("Haritadan bir nokta seç")} required />
+          <Button type="submit" className="mt-3 w-full rounded-[10px] bg-[#b6349a] px-4 py-2.5 text-sm font-semibold text-white hover:bg-[#98277f]">{translate("Konumu kaydet")}</Button>
         </form>
 
         {addresses.length > 0 && (
-          <div className="grid gap-2.5" role="listbox" aria-label="Saved locations">
-            <p className="m-0 text-sm font-semibold text-[#333]">Kayıtlı adresler</p>
+          <div className="grid gap-2.5" role="listbox" aria-label={translate("Saved locations")}>
+            <p className="m-0 text-sm font-semibold text-[#333]">{translate("Kayıtlı adresler")}</p>
             {addresses.map((item) => (
               <button key={item.id} type="button" role="option" aria-selected={location === item.address} className={`flex min-h-[52px] items-center gap-3 rounded-xl border px-3 py-2 text-left transition ${location === item.address ? "border-[#b6349a] bg-[#fff5fc]" : "border-[#eee7ee] bg-white hover:border-[#d4a2ca]"}`} onClick={() => selectLocation(item.address)}>
                 <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#fff0fa]" aria-hidden="true"><img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={16} height={16} className="h-4 w-4" /></span>
