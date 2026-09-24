@@ -456,7 +456,7 @@ export default function Navbar() {
                 className="h-8 w-8 rounded-full object-cover"
               />
               <span className="hidden md:inline">
-                {translate("\r\n                Merhaba, ")}{user.firstName}
+                {language === "tr" ? "Merhaba, " : "Hello, "}{user.firstName}
               </span>
             </Link>
           ) : (

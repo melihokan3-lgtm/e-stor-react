@@ -359,17 +359,17 @@ export default function LocationModal() {
             aria-busy={mapStatus === "locating" || mapStatus === "geocoding"}
           >
             <img src="/img/icon/Location.svg" alt="" aria-hidden="true" width={17} height={17} className="h-[17px] w-[17px]" />
-            {mapStatus === "locating" ? "Konumunuz bulunuyor..." : mapStatus === "geocoding" ? "Adresiniz hazırlanıyor..." : "Mevcut konumumu kullan"}
+            {translate(mapStatus === "locating" ? "Konumunuz bulunuyor..." : mapStatus === "geocoding" ? "Adresiniz hazırlanıyor..." : "Mevcut konumumu kullan")}
           </Button>
           <p className="mb-3 text-xs leading-5 text-[#777]">{translate("Konum izni yalnızca adresinizi bulmak için istenir. Adres eşleştirme sırasında koordinatlar OpenStreetMap adres servisine gönderilir; siz kaydetmediğiniz sürece kayıtlı adreslerinize eklenmez.")}</p>
           <div ref={mapElementRef} className="h-[260px] w-full overflow-hidden rounded-[14px] border border-[#eee7ee]" aria-label={translate("OpenStreetMap location picker")} />
         </div>
         <p className="m-0 text-xs text-[#777]">
-          {mapStatus === "loading" && "Harita yükleniyor..."}
-          {mapStatus === "locating" && "Tarayıcıdan mevcut konumunuz isteniyor..."}
-          {mapStatus === "geocoding" && "Adres bulunuyor..."}
-          {mapStatus === "ready" && "Haritada bir noktaya tıklayarak adresi seç."}
-          {mapStatus === "error" && "Harita yüklenemedi."}
+          {mapStatus === "loading" && translate("Harita yükleniyor...")}
+          {mapStatus === "locating" && translate("Tarayıcıdan mevcut konumunuz isteniyor...")}
+          {mapStatus === "geocoding" && translate("Adres bulunuyor...")}
+          {mapStatus === "ready" && translate("Haritada bir noktaya tıklayarak adresi seç.")}
+          {mapStatus === "error" && translate("Harita yüklenemedi.")}
         </p>
         {mapError && <p className="mt-2 text-xs text-[#c0395f]">{mapError}</p>}
 
